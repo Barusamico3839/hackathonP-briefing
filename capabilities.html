@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solist-AI できること・できないこと大全 — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 🧠 Solist-AI 大全</span><a class="sim-link" href="simulator.html">🐾 シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">🧠</div>
+  <span class="kicker">技術大全 ・ 一次資料精読の全記録 ・ 2026-07-20〜23</span>
+  <h1>Solist-AI<br>できること・できないこと大全</h1>
+  <p class="sub">データシート・アルゴリズム資料・LEXIDEチュートリアル・MaAI論文・公式FAQを精読した結果を、楽観抜きで全部載せる。</p>
+</header>
+
+<nav class="toc">
+  <a href="#summary">結論</a>
+  <a href="#what">正体</a>
+  <a href="#mcu">マイコン実力</a>
+  <a href="#audio">音声系</a>
+  <a href="#accel">加速度</a>
+  <a href="#maai">MaAI×Pi</a>
+  <a href="#system">システム統合</a>
+  <a href="#rules">ルール</a>
+  <a href="#exp">実験リスト</a>
+</nav>
+
+<div class="wrap">
+
+  <section id="summary">
+    <div class="sec-head"><span class="n">◆</span><h2>結論サマリ（30秒版）</h2></div>
+    <div class="callout">
+      <b>構想の骨子は制度・原理の両面で「成立する」。</b>勝負どころは2つ: <b>①ELMの表現力の弱さを前処理と少数サンプルでどこまで補えるか</b>（＝Sim/実機での要実験）と<b>②サーボ騒音のマイク混入</b>。デバイスが無くても Solist-AI Sim でPC先行検証できるのが最大の保険。
+    </div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>二脳構成（Solist-AI=常時ONの小脳 ／ Raspberry Pi=会話の大脳）はルール上OK</b>。FAQ明記+SPI連携作品の前例あり。ただし審査軸「Solist-AI活用度」があるので小脳を主役に</li>
+        <li><b>お手教示・なで叩く分類・異常音検知は構造的に実現可能</b>。教師あり/教師なし両対応+追加学習がサンプルコード付き公式サポート</li>
+        <li><b>最大リスク</b>: ELM（ランダム射影+線形読み出し）で子供の発話・音種識別が所望精度に届くか ／「やさしくなでる」は<b>加速度センサ単体では検出困難</b>（感圧/静電容量パッチ追加が必要）</li>
+        <li><b>MaAI（相槌・頷き）は MIT ライセンス版（_kyoto）が Pi で動く見込み</b>。ただし実機レイテンシは要実測</li>
+      </ul>
+    </div>
+    <div class="legend">
+      <span><span class="chip ok">✅ できる</span></span>
+      <span><span class="chip maybe">🟡 たぶんできる（要検証）</span></span>
+      <span><span class="chip no">❌ できない</span></span>
+      <span><span class="chip unknown">❔ 不明</span></span>
+    </div>
+  </section>
+
+  <section id="what">
+    <div class="sec-head"><span class="n">1</span><h2>Solist-AI の正体</h2></div>
+    <p class="lead"><b>会話AIは動かない。動くのは3層ニューラルネットの学習・推論。</b>センサ信号の分類・異常検知・パターン学習に特化した「常時ONの小さな脳」。</p>
+    <div class="card">
+      <h3>学習の仕組み = ELM（エクストリーム・ラーニング・マシン）</h3>
+      <ul class="clean">
+        <li>3層NN。入力→隠れ層の重みは<b>ランダム固定</b>、学習するのは<b>出力層だけ</b> → だから超軽量で「その場で学習」できる（誤差逆伝播を回す普通のNNと根本的に違う）</li>
+        <li><b>教師なし学習</b>（異常検知: 「正常」を現場学習→「いつもと違う」を検出）と<b>教師あり学習</b>（クラス識別・予測）の両対応。Simも両方用意されている</li>
+        <li><b>現場学習+追加学習</b>が公式サポートのフロー。「なでられた＝正解ラベル」に変換すれば<b>「使うほどその子仕様に育つ」を教師あり追加学習で実現できる</b>（素の強化学習は非対応）</li>
+        <li>隠れ層が固定ゆえ<b>表現力は限定的</b> → FFT/窓/正規化などの前処理で「線形分離しやすい特徴量」に落とす設計が前提</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>スペック（ML63Q2557）</h3>
+      <ul class="clean">
+        <li>CPU: Arm <b>Cortex-M0+ / 最大48MHz</b>（超省電力・超低スペック。LLMは論外）</li>
+        <li>AIアクセラレータ <b>AxlCORE-ODL</b>（ローム独自）: 3層NNの学習・推論+<b>FFT等の前処理をハードウェアで実行</b>。ソフト方式比 約1000倍高速、CPU負荷ほぼゼロ</li>
+        <li>メモリ: Flash 256KB ／ <b>RAM 16KB</b> ／ DataFlash 8KB — 大入力×多クラス×多モデル同時はRAMが律速</li>
+        <li>消費電力: 48MHz動作で10mA、STOP時2µA → 低速+HALT待機、イベント時だけ全力の運用でぬいぐるみの電池と整合</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="mcu">
+    <div class="sec-head"><span class="n">2</span><h2>マイコンの実力と制約</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>判定</th><th>要点</th></tr>
+        <tr><td class="item">教師あり学習（クラス識別）</td><td class="v"><span class="chip ok">✅</span></td><td>公式に4クラス物体識別の完全事例あり。「なで/叩く/抱っこ/放置」分類、「声パターン→動作クラス」に直接対応。出力はクラス番号で、動作生成は自前ファーム</td></tr>
+        <tr><td class="item">教師なし学習（異常検知）</td><td class="v"><span class="chip maybe">🟡</span></td><td>自己符号化型で「正常を学習→逸脱を異常度で検出」。泣き声/悲鳴に使えるが特定音種の識別精度は前処理次第で要実験</td></tr>
+        <tr><td class="item">HW前処理（FFT/窓/正規化）</td><td class="v"><span class="chip ok">✅</span></td><td>AxlCORE-ODLがCPU負荷ほぼゼロで実行。ELMの弱さをこれで補うのが定石</td></tr>
+        <tr><td class="item">追加学習API</td><td class="v"><span class="chip ok">✅</span></td><td>公式サンプル AnomalyDetectionDemo に初期学習・推論・逐次学習が実装済み。API詳細はMyROHM配下</td></tr>
+        <tr><td class="item">入力次元の上限</td><td class="v"><span class="chip maybe">🟡</span></td><td>実質目安 約512点。256点×3軸=768を扱う事例あり。正確な最大値は非公開</td></tr>
+        <tr><td class="item">隠れ層/出力クラス数の上限</td><td class="v"><span class="chip unknown">❔</span></td><td>公開資料に明記なし。RAM16KBとβサイズ依存と推定 → MyROHM資料 or ローム問い合わせ</td></tr>
+        <tr><td class="item">センサ入力I/F</td><td class="v"><span class="chip ok">✅</span></td><td>12bit ADC×12ch（最大1Msps → 16kHz音声は余裕）、I2C/SPI/UART。マイクはアナログ前段（アンプ）を外付け</td></tr>
+        <tr><td class="item">サーボ駆動</td><td class="v"><span class="chip ok">✅</span></td><td>PWMでホビーサーボ(50Hz)を直接駆動可 →「自分でお手」をMCU単独でも動かせる（評価ボードのピン引き出しは要確認）</td></tr>
+        <tr><td class="item">Solist-AI Sim でPC先行検証</td><td class="v"><span class="chip ok">✅</span></td><td>デバイスなしでOK。CSV投入→学習/推論が1回約1秒。要MyROHM（無料）</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="audio">
+    <div class="sec-head"><span class="n">3</span><h2>音声系（声コマンド・泣き声/悲鳴検知）</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>判定</th><th>要点</th></tr>
+        <tr><td class="item">M0+単体のソフトMFCC</td><td class="v"><span class="chip no">❌</span></td><td>FPU/SIMD無し。キーワード検出で秒オーダーかかり、常時ストリーミング不可</td></tr>
+        <tr><td class="item">RAM16KBに音声バッファ</td><td class="v"><span class="chip no">❌</span></td><td>1秒16kHz PCM=32KBで丸ごと入らない → フレーム単位のストリーミング特徴抽出が必須</td></tr>
+        <tr><td class="item">AxlCORE HW-FFT + HW-ELM経由</td><td class="v"><span class="chip maybe">🟡</span></td><td><b>これが唯一の現実解</b>。ただし公式FFT前処理は振動/〜10kHz帯前提で、音声16kHz/256点FFTが想定内かは未確認。mel/DCTはHWに無く、スペクトログラムをそのままELMへ</td></tr>
+        <tr><td class="item">小語彙・話者依存の声コマンド（お手/おかわり）</td><td class="v"><span class="chip maybe">🟡</span></td><td>ELMは少クラスに強い（研究: 2クラス~100%、5クラス97.6%、10クラス75%）。<b>2〜5語に絞る本構想はELMの得意領域</b>。「その子の声を現場で追加学習」はELM逐次学習と本質一致。AxlCORE実機での再現は未実証→実験1</td></tr>
+        <tr><td class="item">泣き声/悲鳴/呼びかけ検知</td><td class="v"><span class="chip maybe">🟡</span></td><td>(A)教師なし=実装容易だが誤検知大 (B)教師あり2クラス=研究でbaby cry 92%等。M0+級での再現性は要実験→実験3</td></tr>
+        <tr><td class="item">マイク入力経路</td><td class="v"><span class="chip ok">✅</span></td><td>ADCで16kHz収録は余裕。I2S/PDMは無いので<b>アナログMEMSマイク+プリアンプ→ADC</b>が素直</td></tr>
+        <tr><td class="item">会話側の音声認識（参考）</td><td class="v"><span class="chip ok">✅</span></td><td>会話はPi側の仕事。Pico2(M33/FPU)級なら標準の音声認識がリアルタイムで動く=解決済み領域</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="accel">
+    <div class="sec-head"><span class="n">4</span><h2>加速度センサ（なで/叩く/教示動作）</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>判定</th><th>要点</th></tr>
+        <tr><td class="item">ぬいぐるみ×IMU動作分類の前例</td><td class="v"><span class="chip ok">✅</span></td><td>PlushPal（MIT・子供が実演で教える）、慶應の研究、修論（RF 81.7%）など作例が複数実在</td></tr>
+        <tr><td class="item">叩く/抱っこ/放置/腕を動かされた</td><td class="v"><span class="chip maybe">🟡</span></td><td>加速度の得意領域（叩く=インパルス、抱っこ=重力軸変化、放置=DC）。全身ジェスチャ研究で13クラス77%。叩く強度の個人差は要検証</td></tr>
+        <tr><td class="item">やさしく「なでる」</td><td class="v"><span class="chip no">❌</span></td><td><b>加速度単体では困難</b>。高精度な撫で識別の先行研究は全て感圧/静電容量/毛皮センサ使用。綿の詰め物が振動を減衰 → <b>静電容量(MPR121)や感圧(Velostat)パッチの追加が必要</b></td></tr>
+        <tr><td class="item">その子への追加学習（パーソナライズ）</td><td class="v"><span class="chip maybe">🟡</span></td><td>「特徴抽出は凍結し出力層だけ追加学習」に強い前例（3ショット83%）。<b>ELM=出力層のみ更新なので原理的に適合</b>。1ショットは55%と低く数ショット必要。破壊的忘却は要検証</td></tr>
+        <tr><td class="item">3層NN(ELM)で足りる特徴量</td><td class="v"><span class="chip maybe">🟡</span></td><td>HW-FFT or 時間特徴（RMS/ゼロ交差/軸間相関）。5クラス程度なら77-85%級は妥当。感圧+深層CNN級(94-98%)には届かない見込み</td></tr>
+        <tr><td class="item">教示UI（お手を実演で覚えさせる）</td><td class="v"><span class="chip ok">✅</span></td><td>PlushPal等で「腕を動かして数回実演→登録」は子供向けに成立実績あり</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="maai">
+    <div class="sec-head"><span class="n">5</span><h2>MaAI（相槌・頷き）× Raspberry Pi</h2></div>
+    <p class="lead">京大のOSS。相槌タイミング・頷き角度（30fps）・ターンテイキングを音声から予測する。「大きな脳」の中核候補。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>判定</th><th>要点</th></tr>
+        <tr><td class="item">入手・コードのライセンス</td><td class="v"><span class="chip ok">✅</span></td><td><code>pip install maai</code>。コードはMIT。0.2.11（2026-07更新）と活発</td></tr>
+        <tr><td class="item">モデルのライセンス</td><td class="v"><span class="chip ok">✅</span></td><td><b>末尾 _kyoto 版がMIT</b>（無印はCC-BY-NC-ND=非商用・改変不可）。最初から _kyoto を使う</td></tr>
+        <tr><td class="item">頷き出力→サーボ</td><td class="v"><span class="chip ok">✅</span></td><td>pitch/yaw/roll角度の時系列@30fpsが出る → そのままサーボ角に写像。相槌タイミング p_bc も出る</td></tr>
+        <tr><td class="item">Pi 4/5 でリアルタイム</td><td class="v"><span class="chip maybe">🟡</span></td><td>公式実証はサーバCPUで14.6ms/frame。Piの実測値は世界に無い。frame_rate=10に落とせばPi5で間に合う見込み十分 → 実験4で実測</td></tr>
+        <tr><td class="item">素のPiインストール</td><td class="v"><span class="chip maybe">🟡</span></td><td>onnxruntime-gpuにARM64ホイールが無く素のpipは失敗見込み。torch先入れ+--no-deps等で回避（normalモデルはonnxruntime不要）</td></tr>
+        <tr><td class="item">相槌「音声」の合成</td><td class="v"><span class="chip maybe">🟡</span></td><td>MaAIはタイミング/種類の予測まで。相槌音声そのものは別途TTS/録音が必要</td></tr>
+        <tr><td class="item">子供の発話での精度</td><td class="v"><span class="chip maybe">🟡</span></td><td>学習は成人対話コーパス(76%)。子供・泣き声はドメイン外。韻律ベースで話者非依存性はあるが未検証</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="system">
+    <div class="sec-head"><span class="n">6</span><h2>システム統合(2つの脳+サーボ+電源+通知)</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>判定</th><th>要点</th></tr>
+        <tr><td class="item">Pi↔MCU通信</td><td class="v"><span class="chip ok">✅</span></td><td>UART/SPI/I2C/GPIO、両者3.3Vで直結可。イベント通知は115200bps UARTで十分</td></tr>
+        <tr><td class="item">評価ボードでの実配線</td><td class="v"><span class="chip maybe">🟡</span></td><td>外部I/FはUSB-Cとセンサ用14ピン中心。付属ソフトはWindows専用で<b>LinuxのPiから話せるかは要検証</b>。基板125×66mmと大きめ。カスタムはブレークアウト版DT-BBML63Q2557が素直</td></tr>
+        <tr><td class="item">サーボ制御</td><td class="v"><span class="chip ok">✅</span></td><td>Pi+PCA9685(I2C 16ch)が定番。<b>サーボは別5V電源+共通GND必須</b>。腕上げトルクはMG90S(2.2kg·cm)推奨</td></tr>
+        <tr><td class="item">静音サーボ（マイク混入対策）</td><td class="v"><span class="chip maybe">🟡</span></td><td>「音を聴く」製品なので<b>サーボ音のマイク混入が本質リスク</b>。アナログ+プラギア小型+動作時以外トルクオフが現実解。実測必須 → 実験7</td></tr>
+        <tr><td class="item">マイク2系統</td><td class="v"><span class="chip maybe">🟡</span></td><td>独立2本が無難（Pi用=USB/I2S、MCU用=アナログ→ADC）。評価ボードのADC/フィルタが音声帯域に適合するかが最大の不確実点</td></tr>
+        <tr><td class="item">バッテリー駆動</td><td class="v"><span class="chip maybe">🟡</span></td><td>Pi4主体5〜6Wで10,000mAh≈5〜6時間。<b>Pi5は5V/5A給電がバッテリーで困難 → Pi4かPi Zero 2 W推奨</b>。MCUは40mWで無視できる</td></tr>
+        <tr><td class="item">オフライン親通知（クラウドゼロ）</td><td class="v"><span class="chip ok">✅</span></td><td>自己ホストntfy + Android(F-Droid版) + ローカルWi-Fi(hostapd)でクラウド一切なしの即時push可。<b>iOSはAPNs必須で例外</b></td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <div class="sec-head"><span class="n">7</span><h2>ルール・スケジュール・デバイス入手（確定情報）</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>外部コンピュート併用OK</b>（FAQ明記）。ただしSolist-AIを中核に。FAQ「異常検知専用ではなく状態判定・動作認識・習慣学習にも応用可」→ お手教示・なで叩く分類は活用度アピールに好適</li>
+        <li><b>スケジュール</b>: 応募7/1〜9/28 → 一次審査（審査員3名+事務局+10/1〜一般投票）で10組 → 結果〜10/14 → <b>最終審査会10/24(土)オンライン</b> → EdgeTech+ 2026（11/18-20）出展</li>
+        <li><b>一次審査員</b>: 福野泰介/湯村翼/からあげ ／ <b>最終審査員</b>: 西村真里子/栗原一貴(イグノーベル賞)/からあげ</li>
+        <li><b>デバイス入手</b>: 無償キャンペーンは6/30終了。<b>キット自費購入でも応募可</b>。詳細 → <a href="kit-and-handson.html">キット購入資料</a></li>
+        <li><b>Pico2版/gene版</b>: 「対応予定・開発初期で実物未定」→ 現状はDT-EBML63Q2557前提で進めるのが安全</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="exp">
+    <div class="sec-head"><span class="n">8</span><h2>実験しないとわからないことリスト（優先順）</h2></div>
+    <p class="lead">Sim系（1・3・5）はデバイス無しで今すぐ着手できる。</p>
+    <div class="card">
+      <ol class="exp">
+        <li><span class="eh">Solist-AI Sim で「声→動作クラス」PoC <span class="mini now">デバイス不要</span></span><span class="em">ELM+FFTで2〜5語コマンドが実用精度(&gt;90%)に届くか。PCマイクで各10-30発話→FFT特徴→教師あり版で交差検証（2-3日）</span></li>
+        <li><span class="eh">加速度4-5クラス分類オフライン検証</span><span class="em">なで/叩く/抱っこ/放置/腕動かしが分離できるか。MPU6050等で収集→RF/小型MLP→混同行列。なでは静電容量/感圧併用も比較（2-3日）</span></li>
+        <li><span class="eh">泣き声/悲鳴のanomaly検知PoC <span class="mini now">デバイス不要</span></span><span class="em">生活音を正常学習→泣き/悲鳴で異常度が上がり誤検知が許容内か。Sim異常検知版でROC評価（2-3日）</span></li>
+        <li><span class="eh">MaAI を Pi にインストール&レイテンシ実測</span><span class="em">Pi4/5でnormal/_kyotoが起動するか、frame_rate=5/10/20でリアルタイムに間に合うか（1-2日）</span></li>
+        <li><span class="eh">隠れ層/クラス上限・追加学習API・メモリ収支 <span class="mini now">デバイス不要</span></span><span class="em">16KB RAMで「声3-5語+加速度4分類+異常音1」同時搭載できるか。MyROHM配下の資料精読+不足はローム問い合わせ（半日+回答待ち）</span></li>
+        <li><span class="eh">デバイス見積・二脳構成の事務局確認</span><span class="em">キットが9/28に間に合うか、二脳構成が活用度で不利にならないか。EC見積 or データ・テクノ直電（半日+回答待ち）</span></li>
+        <li><span class="eh">サーボ騒音のマイク混入テスト</span><span class="em">SG90/MG90S/コアレスを実装しPiマイクで録音、トルクオフ効果も比較（1日・部品入手後）</span></li>
+        <li><span class="eh">オフライン親通知E2E</span><span class="em">ネット遮断でPi自己ホストntfy→Androidへ数秒で届くか（半日-1日）</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head"><span class="n">🔗</span><h2>主要ソース（一次資料）</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li>Solist-AI: <a href="https://fscdn.rohm.com/lapis/jp/products/databook/applinote/ic/micon/solist-ai_algorithm_axlcore-odl_an-j.pdf">AxlCORE-ODLアルゴリズム app note</a> ／ <a href="https://fscdn.rohm.com/lapis/en/products/databook/datasheet/ic/micon/FEDL63Q2500.pdf">データシート FEDL63Q2500</a> ／ <a href="https://fscdn.rohm.com/lapis/jp/products/databook/applinote/ic/micon/FJXT63Q2500_LEXIDE_TUTORIAL.pdf">LEXIDEチュートリアル</a> ／ <a href="https://www.rohm.co.jp/lapis-tech/product/micon/solistai-software">Sim/ツール</a></li>
+        <li>MaAI: <a href="https://github.com/MaAI-Kyoto/MaAI">GitHub(MIT)</a> ／ <a href="https://arxiv.org/abs/2401.04868">論文 arXiv:2401.04868</a> ／ <a href="https://huggingface.co/maai-kyoto">HuggingFace</a></li>
+        <li>評価ボード: <a href="https://www.datatecno.co.jp/prod_info/solistai_board_spec/">DT-EBML63Q2557 仕様</a> ／ <a href="https://www.datatecno.co.jp/product_order/">購入先</a></li>
+        <li>ルール: <a href="https://rehc.jp/">rehc.jp FAQ</a> ／ <a href="https://mashupawards.connpass.com/event/395935/">ハンズオン② connpass</a></li>
+        <li>作例: <a href="https://tifftseng.com/papers/plushpal.pdf">PlushPal(PDF)</a> ／ 通知: <a href="https://docs.ntfy.sh/">ntfy</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 調査: 2026-07-20 dynamic workflow 6角度並列 + 2026-07-23 追補 ／ ひかる + Claude</footer>
+</div>
+</body>
+</html>

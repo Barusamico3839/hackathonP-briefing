@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REHC 2026 チーム基地 — ひかる & けいと</title>
+<meta property="og:title" content="REHC 2026 チーム基地 — おしゃべり見守りぬいぐるみ作戦本部">
+<meta property="og:description" content="調査・戦略・シミュレーター、成果物はぜんぶここから。">
+<meta property="og:image" content="https://barusamico3839.github.io/hackathonP-briefing/assets/hero.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html" aria-current="page">🏠 基地</a>
+  <a href="simulator.html" class="sim-link" style="margin-left:0">🐾 シミュレーター</a>
+  <a href="platform.html">🔌 開通ガイド</a>
+  <a href="kit-and-handson.html">🛒 キット&ハンズオン</a>
+  <a href="capabilities.html">🧠 技術大全</a>
+  <a href="automation.html">🤖 API調査</a>
+</nav>
+
+<header class="hero textured">
+  <img src="assets/mascot.png" alt="マスコット: ぬいぐるみの柴犬" style="width:112px;height:112px;border-radius:50%;box-shadow:var(--shadow);border:3px solid var(--surface);">
+  <span class="kicker">ROHM EDGE HACK CHALLENGE 2026 ・ チーム基地</span>
+  <h1>おしゃべり見守りぬいぐるみ<br>作戦本部</h1>
+  <p class="sub">調査・戦略・意思決定の成果物はぜんぶここから。ブックマークはこのページだけでOK。</p>
+  <div class="countdown">
+    <b>67</b><span class="lbl">日で応募締切<br>9/28（月）／ 内部目標 9/21</span>
+  </div>
+  <p class="meta-note">ひかる & けいと の2人チーム ／ 🎯 目指すは最優秀賞（50万円） ／ 最終更新 2026-07-23</p>
+  <img src="assets/hero.jpg" alt="コンセプトアート: 子供部屋のラグに座る、縫い目のあるぬいぐるみの柴犬。耳の中にかすかに回路模様"
+       style="display:block; width:min(620px,100%); margin:26px auto 0; border-radius:18px;
+              box-shadow: var(--shadow); border:1px solid var(--line);">
+  <p class="meta-note" style="margin-top:8px">コンセプトアート（AI生成・2026-07-23）</p>
+</header>
+
+<div class="wrap">
+
+  <section id="agenda">
+    <div class="sec-head"><span class="n">📌</span><h2>今日のMTGアジェンダ（7/23 木）</h2></div>
+    <p class="lead">最低限この2つを決めて終わる。詳細資料は各リンク先に。</p>
+    <div class="card">
+      <ol class="agenda">
+        <li>
+          <span class="ah">けいとも Solist-AI プラットフォームを使えるようにする</span>
+          <span class="am">MyROHM 無料登録 → Sim ダウンロード → 起動確認まで（15〜30分・その場でできる）→ <a href="platform.html">開通ガイド</a></span>
+        </li>
+        <li>
+          <span class="ah">どのキットを何台買うか決める</span>
+          <span class="am">結論候補: 加速度センサ版評価キット。価格は非公開なので<b>今日中にデータ・テクノへ電話（075-313-3275・17:30まで）</b>して見積と納期を確認 → <a href="kit-and-handson.html">購入&ハンズオン資料</a></span>
+        </li>
+        <li>
+          <span class="ah">（納期次第）7/25(土) ハンズオン②に参加するか</span>
+          <span class="am">キット保有者限定・残り8枠。<b>録画のYouTube公開が見込める</b>ので無理はしない。connpass申込（無料・キャンセル可）で公式Discordの案内が届く可能性が高い → <a href="kit-and-handson.html#handson">詳細</a></span>
+        </li>
+        <li>
+          <span class="ah">余裕があれば: 議事録ツール並走比較（tl;dv vs Fireflies）／ チーム名 ／ ProtoPedia アカウント</span>
+          <span class="am">前回MTGからの持ち越しタスク</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="pubs">
+    <div class="sec-head"><span class="n">📚</span><h2>成果物ライブラリ</h2></div>
+    <p class="lead">新しい調査が終わるたびにここへ追加していく。</p>
+
+    <h3 style="margin:18px 0 10px">2026-07-23 — なでなでシミュレーター 🆕</h3>
+    <div class="pubs">
+      <a class="pub wide hot" href="simulator.html">
+        <span class="emoji">🐾</span>
+        <span class="date">2026-07-23 ・ 触って遊べるWebアプリ</span>
+        <h3>なでなでシミュレーター — さわると、おぼえる。</h3>
+        <p>マウスや指で犬をなでる・たたく・ゆらす → 本物のSolist-AIと同じ仕組み（ELM）がブラウザ内でその場学習して、触りかたを当てる。「お手」も教えられる。集めたデータはCSVで持ち出して elmkit → 公式Sim に流せる。</p>
+        <span class="go">あそぶ →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">2026-07-23 — プラットフォーム開通パック</h3>
+    <div class="pubs">
+      <a class="pub hot" href="platform.html">
+        <span class="emoji">🔌</span>
+        <span class="date">2026-07-23 ・ 今日やること①</span>
+        <h3>Solist-AI プラットフォーム開通ガイド</h3>
+        <p>MyROHM 無料登録 → Sim ダウンロード → 起動確認の手順書。費用調査の結果（全部無料！）と、開通後すぐ回す最初の実験も。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub hot" href="kit-and-handson.html">
+        <span class="emoji">🛒</span>
+        <span class="date">2026-07-23 ・ 今日やること②</span>
+        <h3>キット購入 & ハンズオン参加判断</h3>
+        <p>DT-EBML63Q2557 のキット2種類の違い、買える場所、見積の取り方、そして公式ハンズオンとは何か・出るべきか。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="capabilities.html">
+        <span class="emoji">🧠</span>
+        <span class="date">2026-07-23 ・ 技術大全</span>
+        <h3>Solist-AI できること・できないこと大全</h3>
+        <p>データシート・アルゴリズム資料・公式FAQ精読の全結果。マイコンの実力、音声系、加速度、MaAI、システム統合、実験リスト8本。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="automation.html">
+        <span class="emoji">🤖</span>
+        <span class="date">2026-07-23 ・ 開発効率</span>
+        <h3>プラットフォームはAPIで操作できる？</h3>
+        <p>結論: Sim に公開APIは無い（MATLAB製GUIアプリ）。でも CSV 入出力と Python 再現実装で Claude Code がほぼ全部自動化できる。その戦略。</p>
+        <span class="go">開く →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">2026-07-20 — キックオフ調査</h3>
+    <div class="pubs">
+      <a class="pub wide" href="briefing.html">
+        <span class="emoji">🎯</span>
+        <span class="date">2026-07-20 ・ 作戦ブリーフィング</span>
+        <h3>REHC 2026 作戦ブリーフィング — おしゃべり見守りぬいぐるみ</h3>
+        <p>コンセプト（2つの脳を持つ犬）、歴代優勝の勝ち筋分析、技術実現可能性、ぬいぐるみ候補18案、次にやること。最初にけいとに読んでほしい1本。</p>
+        <span class="go">開く →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="facts">
+    <div class="sec-head"><span class="n">⚡</span><h2>いつでも効く最重要ファクト</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>締切 9/28（月）</b>。提出物 = ProtoPedia 一般公開ページ + 3分以内デモ動画 + 実動プロトタイプ</li>
+        <li><b>審査軸は3つ</b>: 独創性 ／ 完成度（動作デモの精度）／ Solist-AI 活用度</li>
+        <li>一次審査に<b>一般投票（10/1〜・1人3票）</b>が入る → ProtoPedia ページと動画の質も勝負</li>
+        <li>最終審査会は <b>10/24（土）オンラインプレゼン</b> → ライブで安定動作すること</li>
+        <li>勝ち筋: <b>体験の面白さ × 完成度</b>（事業性単独では頂点は取れない）</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    REHC 2026 チーム基地 ／ ひかる & けいと ／ このページはチーム用の非公開運用（検索エンジン除外設定済み）
+  </footer>
+</div>
+</body>
+</html>

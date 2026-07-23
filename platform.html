@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solist-AI プラットフォーム開通ガイド — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 🔌 プラットフォーム開通ガイド</span><a class="sim-link" href="simulator.html">🐾 シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">🔌</div>
+  <span class="kicker">今日やること① ・ 2026-07-23</span>
+  <h1>Solist-AI プラットフォーム<br>開通ガイド</h1>
+  <p class="sub">デバイスが無くても、今日からPCでAIの学習・推論を試せる。二人とも15〜30分で開通できる手順書。</p>
+  <div class="countdown"><b>0</b><span class="lbl">円で始められる<br>（登録もツールも全部無料）</span></div>
+</header>
+
+<div class="wrap">
+
+  <section id="steps">
+    <div class="sec-head"><span class="n">1</span><h2>開通手順（15〜30分／人）</h2></div>
+    <p class="lead">ひかる・けいと<b>それぞれ自分のアカウント</b>が必要。MTG中にその場でやってしまうのが早い。</p>
+    <div class="card">
+      <ol class="exp">
+        <li>
+          <span class="eh">MyROHM に無料登録</span>
+          <span class="em"><a href="https://www.rohm.co.jp/registration">rohm.co.jp/registration</a> — 登録無料・メール認証あり。個人でも登録できる想定（会社名欄は所属 or 個人名でOK）</span>
+        </li>
+        <li>
+          <span class="eh">ログインしてダウンロードページへ</span>
+          <span class="em"><a href="https://www.rohm.co.jp/products/micon/solist-ai#softwaresubmenu">Solist-AI 製品ページのソフトウェア欄</a>（一覧: <a href="https://www.rohm.co.jp/lapis-tech/product/micon/solistai-software">開発支援システム</a>）</span>
+        </li>
+        <li>
+          <span class="eh">Solist-AI Sim を2種類ともダウンロード</span>
+          <span class="em">「教師あり学習版」（声→動作クラスのPoCに使う）と「教師なし学習版」（泣き声・悲鳴の異常検知に使う）。ついでに Solist-AI Scope とサンプルソフト・アプリケーションノートも落としておく</span>
+        </li>
+        <li>
+          <span class="eh">Windows にインストールして起動確認</span>
+          <span class="em">⚠️ ツール群は <b>Windows 専用</b>。ひかるは WSL じゃなく Windows ホスト側に入れること。CSV を読ませて学習→推論が1周したら開通完了 🎉</span>
+        </li>
+      </ol>
+    </div>
+    <div class="callout">
+      <b>なんで今日やるの？</b> デバイスの納期リスクと切り離して、<b>アイデアの最大の技術リスク（ELMの表現力で精度が出るか）を先に検証できる</b>から。Sim は1回約1秒で回るので、条件を変えてサクサク試せる。
+    </div>
+  </section>
+
+  <section id="cost">
+    <div class="sec-head"><span class="n">2</span><h2>費用まとめ（調査完了）</h2></div>
+    <p class="lead">「プラットフォームにいくらかかるの？」の答え: <b>0円</b>。お金がかかるのは実機キットだけ。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>項目</th><th>費用</th><th>根拠</th></tr>
+        <tr><td class="item">MyROHM 登録</td><td class="v"><span class="chip ok">無料</span></td><td>ログインページに「無料」明記</td></tr>
+        <tr><td class="item">Solist-AI Sim（両版）</td><td class="v"><span class="chip ok">無料</span></td><td>MyROHM ログインのみでダウンロード可</td></tr>
+        <tr><td class="item">Solist-AI Scope ／ LEXIDE-Ω IDE ／ サンプル</td><td class="v"><span class="chip ok">無料</span></td><td>同上</td></tr>
+        <tr><td class="item">評価キット DT-EBML63Q2557</td><td class="v"><span class="chip maybe">要見積</span></td><td>実売非公開。公式キャンペーンで「税抜12,000円分の電子部品」とされていた → <b>1台 1.2万円前後と推定</b>。詳細は <a href="kit-and-handson.html">キット購入資料</a></td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="first">
+    <div class="sec-head"><span class="n">3</span><h2>開通したら最初に回す実験</h2></div>
+    <p class="lead">デバイス不要でできる3本。どれも「作るか作らないか」の判断に直結する。</p>
+    <div class="card">
+      <ol class="exp">
+        <li>
+          <span class="eh">声→動作クラス PoC <span class="mini now">教師あり版</span></span>
+          <span class="em">PCマイクで「お手」「おかわり」等 2〜5語を各10〜30回録音 → FFT特徴量 → 交差検証。<b>子供の声コマンドが実用精度(&gt;90%)に届くかは本案の最大リスク</b>。ここが白黒つくと一気に進む（工数2〜3日）</span>
+        </li>
+        <li>
+          <span class="eh">泣き声・悲鳴の異常検知 PoC <span class="mini now">教師なし版</span></span>
+          <span class="em">生活音を「正常」として学習 → 泣き声・悲鳴で異常度が上がるか、誤検知率は許容内か（工数2〜3日）</span>
+        </li>
+        <li>
+          <span class="eh">スペック上限の確認 <span class="mini now">資料精読</span></span>
+          <span class="em">MyROHM 配下のアプリケーションノート／APIマニュアルで、隠れ層・クラス数上限と追加学習APIの仕様を確認。<b>RAM16KBに「声3〜5語＋加速度4分類＋異常音1」が同居できるか</b>が知りたいこと（半日）</span>
+        </li>
+      </ol>
+    </div>
+    <div class="callout gold">
+      <b>Claude Code との分担。</b> 録音データの収集スクリプト・CSV整形・結果の集計は Claude が自動化できる（→ <a href="automation.html">API・自動化調査</a>）。人間がやるのは録音とSimのポチポチだけ。
+    </div>
+  </section>
+
+  <section id="links">
+    <div class="sec-head"><span class="n">🔗</span><h2>リンク集</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li>MyROHM 新規登録: <a href="https://www.rohm.co.jp/registration">rohm.co.jp/registration</a>（ログイン: <a href="https://www.rohm.co.jp/login">rohm.co.jp/login</a>）</li>
+        <li>Solist-AI 製品ページ: <a href="https://www.rohm.co.jp/products/micon/solist-ai">rohm.co.jp/products/micon/solist-ai</a></li>
+        <li>開発支援システム（Sim / Scope / LEXIDE-Ω）: <a href="https://www.rohm.co.jp/lapis-tech/product/micon/solistai-software">rohm.co.jp/lapis-tech/...</a></li>
+        <li>アルゴリズム解説（AxlCORE-ODL）: <a href="https://fscdn.rohm.com/lapis/jp/products/databook/applinote/ic/micon/solist-ai_algorithm_axlcore-odl_an-j.pdf">公式アプリケーションノート(PDF)</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 調査: 2026-07-23 ひかる + Claude</footer>
+</div>
+</body>
+</html>

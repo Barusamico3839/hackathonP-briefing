@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プラットフォームはAPIで操作できる？ — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 🤖 API・自動化調査</span><a class="sim-link" href="simulator.html">🐾 シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">🤖</div>
+  <span class="kicker">開発効率調査 ・ 2026-07-23</span>
+  <h1>Solist-AI プラットフォームは<br>APIで操作できる？</h1>
+  <p class="sub">答え: 公開APIは無い。でも入出力がファイルベースだから、Claude Code がまわりを全部自動化できる。</p>
+</header>
+
+<div class="wrap">
+
+  <section id="verdict">
+    <div class="sec-head"><span class="n">1</span><h2>まず結論</h2></div>
+    <div class="qa">
+      <p class="q">Q. Solist-AI Sim を API や CLI から叩ける？</p>
+      <p class="a"><b>A. 叩けない。</b>Sim の正体は <b>MATLAB App Designer で作られ MATLAB Compiler でアプリ化された Windows GUI アプリ</b>（ローム自身が2024年の講演資料で製造方法を解説している）。公開API・CLI・SDKは存在せず、操作はGUIのポチポチのみ。クラウドサービスでもないのでWeb APIも無い。</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. じゃあ自動化は無理？</p>
+      <p class="a"><b>A. 入口と出口がファイルなので、実は大部分を自動化できる。</b>Sim のワークフローは「CSV読み込み → 前処理設定（窓関数/FFT/正規化/エンベロープ）→ AI設定（隠れ層/活性化関数/誤差関数/学習・推論範囲）→ 実行（約1秒）→ 結果確認・閾値検討 → AIモデルファイル保存 → 実機に反映」。<b>太字以外のGUI操作を挟む前後、つまりCSVの生成・整形と、出てきた結果・モデルファイルの解析は全部プログラムで自動化できる</b> = Claude Code の担当領域。</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. Claude Code は Solist-AI のことを分かって開発できる？</p>
+      <p class="a"><b>A. できる状態にした。</b>アルゴリズム（ELM）の公開資料・データシート・講演資料を精読済みで、リポジトリの research/ に全部記録してある。さらに下の「Python再現実装」戦略で、Sim を介さずに Claude 自身がAIの挙動を再現・実験できるようにする。</p>
+    </div>
+  </section>
+
+  <section id="strategy">
+    <div class="sec-head"><span class="n">2</span><h2>本命戦略: Python で ELM を再現して実験を回す</h2></div>
+    <p class="lead">AxlCORE-ODL のアルゴリズムは公式アプリケーションノートで公開されている。中身は「ランダム射影 + 出力層のみ学習」のELM — <b>Pythonで数十行で書ける</b>。</p>
+    <div class="card">
+      <ol class="exp">
+        <li><span class="eh">Claude が Python で ELM 再現実装を書く</span><span class="em">入力→隠れ層はランダム固定、出力層は最小二乗で解く。FFT前処理も numpy で同等品を用意</span></li>
+        <li><span class="eh">パラメータスイープを全自動で回す</span><span class="em">隠れ層数 × 入力次元 × 前処理の組合せを Claude Code が一晩で総当たり。交差検証・混同行列・ROC も自動生成。GUIのSimでは1条件ずつ手作業になるところ</span></li>
+        <li><span class="eh">有望な条件だけ公式 Sim で追試</span><span class="em">提出物で語る精度は公式ツール/実機の数字を使う（審査対策としても「実測データの説得力」に直結）</span></li>
+        <li><span class="eh">最終的に実機で確認して締める</span><span class="em">Sim → AIモデルファイル → 実機反映 → Scope で波形確認、という公式チェーンに乗せる</span></li>
+      </ol>
+    </div>
+    <div class="callout">
+      <b>なぜこれが効くか。</b>ELMは学習が軽い代わりに<b>前処理と条件設計が精度のすべて</b>。人間がGUIで数十条件を試すのと、Claudeが数千条件を回すのとでは勝負にならない。「実験1（声→動作クラス）」の成否判定が数日→数時間に縮む。
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="sec-head"><span class="n">3</span><h2>できる・できない早見表</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>やりたいこと</th><th>可否</th><th>方法・備考</th></tr>
+        <tr><td class="item">Sim を API/CLI で実行</td><td class="v"><span class="chip no">❌</span></td><td>公開APIなし。MATLAB Compiler製のGUIアプリ</td></tr>
+        <tr><td class="item">入力データ(CSV)の生成・整形の自動化</td><td class="v"><span class="chip ok">✅</span></td><td>Claude Code が録音→特徴量→CSVまでスクリプト化</td></tr>
+        <tr><td class="item">Sim の結果・モデルファイルの解析</td><td class="v"><span class="chip ok">✅</span></td><td>保存されるファイルをプログラムで読んで集計・可視化</td></tr>
+        <tr><td class="item">AI実験そのものの自動化</td><td class="v"><span class="chip ok">✅</span></td><td><b>Python ELM再現実装</b>でSimの外で回す（本命戦略）</td></tr>
+        <tr><td class="item">GUI操作の自動化</td><td class="v"><span class="chip maybe">🟡</span></td><td>Windows UIオートメーション（PowerShell+UIA等）で理論上可能だが壊れやすい。再現実装があるので優先度低</td></tr>
+        <tr><td class="item">実機のプログラム制御</td><td class="v"><span class="chip maybe">🟡</span></td><td>ファームはC APIライブラリ（初期学習/推論/逐次学習のサンプルあり・LEXIDE-Ωでビルド）。PCからはUSBシリアル経由 — 公式ホストアプリはWindows専用で、<b>プロトコルを自前実装すればPi/Pythonから叩ける可能性</b>（IOドライバのソース公開あり・要検証）</td></tr>
+        <tr><td class="item">macOS / Linux でツールを動かす</td><td class="v"><span class="chip no">❌</span></td><td>Sim/Scope/LEXIDE-Ω はWindows専用。WSLも不可、Windowsホスト側に入れる</td></tr>
+        <tr><td class="item">MATLAB/Simulink 連携</td><td class="v"><span class="chip maybe">🟡</span></td><td>ロームは社内でSimulinkの機械システムモデルを使って開発（講演資料）。<b>一般提供のツールボックスは確認できず</b>。MATLABライセンスが要るのでうちの規模では非現実的</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="division">
+    <div class="sec-head"><span class="n">4</span><h2>人間とClaudeの分担（実験1を例に）</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>工程</th><th>担当</th><th>内容</th></tr>
+        <tr><td class="item">録音</td><td class="v">👤 人間</td><td>「お手」「おかわり」等を各10〜30回、PCマイクで発話（Claudeが録音スクリプトを用意）</td></tr>
+        <tr><td class="item">特徴量化・CSV生成</td><td class="v">🤖 Claude</td><td>FFT/窓/正規化を何パターンも自動生成</td></tr>
+        <tr><td class="item">粗い探索</td><td class="v">🤖 Claude</td><td>Python ELM で数千条件スイープ→上位条件を報告</td></tr>
+        <tr><td class="item">公式Simで追試</td><td class="v">👤 人間</td><td>上位条件だけGUIで再現（数回のポチポチで済む）</td></tr>
+        <tr><td class="item">集計・グラフ・記録</td><td class="v">🤖 Claude</td><td>混同行列・精度表を作って research/ とこのサイトに反映</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="callout gold">
+      <b>次のアクション:</b> 二人のSim開通（<a href="platform.html">開通ガイド</a>）が済んだら、Claude が①録音スクリプト ②Python ELM再現実装 ③スイープハーネス を作る。MyROHM配下のAPIマニュアル（追加学習の仕様）が読めたら再現精度をさらに上げられるので、<b>ダウンロードした資料は リポジトリ外の共有フォルダに置いて Claude に読ませてほしい</b>（再配布NGの可能性があるためコミットはしない）。
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head"><span class="n">🔗</span><h2>ソース</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li>Sim の正体（MATLAB App Designer / Compiler 製）: ローム講演資料「エッジラーニングAIソリューション Solist-AI のモデルベース開発と市場展開」2024-08-28, 文書番号 CTD_MBDG_67_037（<a href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/videos-download-code/3-rohm-edge-learning-ai-solution-solist-ai.pdf">MathWorks掲載PDF</a>・p.29-45）</li>
+        <li>アルゴリズム公開資料: <a href="https://fscdn.rohm.com/lapis/jp/products/databook/applinote/ic/micon/solist-ai_algorithm_axlcore-odl_an-j.pdf">AxlCORE-ODL app note(PDF)</a></li>
+        <li>実機ホストアプリ・IOドライバ: <a href="https://www.datatecno.co.jp/prod_info/solistai_board_download/">データ・テクノ ダウンロードページ</a>（AIVibrationInferenceHost = Windows用、IOドライバソース公開）</li>
+        <li>開発ツール一覧: <a href="https://www.rohm.co.jp/lapis-tech/product/micon/solistai-software">ローム開発支援システム</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 調査: 2026-07-23 ひかる + Claude</footer>
+</div>
+</body>
+</html>

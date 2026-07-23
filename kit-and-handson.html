@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>キット購入 & ハンズオン参加判断 — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 🛒 キット購入 & ハンズオン</span><a class="sim-link" href="simulator.html">🐾 シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">🛒</div>
+  <span class="kicker">今日やること② ・ 2026-07-23</span>
+  <h1>どのキットを買う？<br>ハンズオンは出る？</h1>
+  <p class="sub">今日のMTGで決める2つの意思決定のための材料を全部まとめた。</p>
+</header>
+
+<div class="wrap">
+
+  <section id="kit">
+    <div class="sec-head"><span class="n">1</span><h2>キットの選択肢は3つ</h2></div>
+    <p class="lead">コンテスト基準デバイスはデータ・テクノ社の DT-EBML63Q2557（Solist-AI マイコン ML63Q2557 搭載）。買い方は3通りある。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>選択肢</th><th>中身</th><th>うちの構想との相性</th></tr>
+        <tr>
+          <td class="item">🥇 評価キット<br>加速度センサ版</td>
+          <td>ボード + ローム製MEMS加速度センサボード（40cmケーブル）+ 樹脂筐体</td>
+          <td><span class="chip ok">✅ 本命</span> なで/叩く/抱っこ識別・「お手」教示はぜんぶ加速度。公式サンプル（異常検知デモ）も加速度センサ前提なので、ハンズオンや資料がそのまま使える</td>
+        </tr>
+        <tr>
+          <td class="item">評価キット<br>温度センサ版</td>
+          <td>ボード + サーモパイルアレイセンサモジュール（100cmケーブル）+ 樹脂筐体</td>
+          <td><span class="chip no">❌ 見送り</span> 人の存在検知には使えるが、ぬいぐるみ案の中核機能に絡まない</td>
+        </tr>
+        <tr>
+          <td class="item">ボード単体</td>
+          <td>DT-EBML63Q2557 のみ</td>
+          <td><span class="chip maybe">🟡 2台目用</span> センサを自前調達できるなら安く済むかも。ただし初手はキット版が安全</td>
+        </tr>
+      </table>
+      </div>
+    </div>
+    <div class="callout">
+      <b>台数のおすすめ: まず加速度版キット×1台を今日発注、精度検証が通ったら2台目を追加。</b> 理由: ①Simで先行検証できるので2台同時はまだ要らない ②壊した時・並行開発したくなった時に2台目を判断すればいい ③予算温存（1台推定1.2万円）。
+    </div>
+  </section>
+
+  <section id="buy">
+    <div class="sec-head"><span class="n">2</span><h2>どこで・いくらで買える？</h2></div>
+    <p class="lead">結論: <b>実売価格はどこにも公開されていない</b>（EC 2社とも要ログイン/bot遮断で価格非表示、メーカーページにも記載なし）。目安は公式キャンペーンの「税抜12,000円分」。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>購入経路</th><th>状態</th><th>備考</th></tr>
+        <tr><td class="item">データ・テクノ直接</td><td class="v"><span class="chip ok">最速・確実</span></td><td>☎ 075-313-3275（平日9:00〜17:30）／ <a href="https://www.datatecno.co.jp/contact/">問い合わせフォーム</a>。<b>今日電話して「価格・在庫・最短納期」を聞くのが一番早い</b></td></tr>
+        <tr><td class="item">チップワンストップ</td><td class="v"><span class="chip maybe">Arrow に統合</span></td><td>chip1stop.com は arrow.com にリダイレクトされるようになっていた。データ・テクノ取扱い（メーカーコード DTTC）</td></tr>
+        <tr><td class="item">コアスタッフ（zaikostore）</td><td class="v"><span class="chip maybe">価格は要ログイン</span></td><td><a href="https://www.zaikostore.com/">zaikostore.com</a> で「DATATECNO」検索。プログラムからの価格取得は不可だった（ブラウザで要確認）</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="callout gold">
+      <b>電話で聞くことリスト（3分で終わる）:</b> ①加速度センサ版評価キットの価格（税込）②在庫の有無 ③今日発注した場合の最短着日（<b>7/25(土)朝までに届くか</b>）④個人購入の可否と支払方法 ⑤ボード単体の価格（2台目の参考）
+    </div>
+  </section>
+
+  <section id="handson">
+    <div class="sec-head"><span class="n">3</span><h2>ハンズオンって何？出るべき？</h2></div>
+    <p class="lead">運営（一般社団法人MA）が開く<b>公式の使い方講習会</b>。Zoomオンライン・参加無料。Solist-AI マイコンをコンテストで使うための実践講座で、質疑の時間がたっぷりある。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>回</th><th>日時</th><th>状態</th><th>条件</th></tr>
+        <tr><td class="item">ハンズオン①</td><td>7/16(木) 19:30〜</td><td class="v"><span class="chip no">終了</span></td><td>満員だった（10/10名）。<b>「録画し、後日YouTubeにて公開（予定）」と明記あり</b>（7/23夜時点で動画は未発見・公開待ち）</td></tr>
+        <tr><td class="item">ハンズオン②</td><td><b>7/25(土) 13:00〜15:00</b></td><td class="v"><span class="chip ok">空きあり（2/10名）</span></td><td><b>キット保有者限定</b>（DT-EBML63Q2557 が手元にある人向け）。<a href="https://mashupawards.connpass.com/event/395935/">connpass で申込</a></td></tr>
+        <tr><td class="item">ハンズオン③以降</td><td>—</td><td class="v"><span class="chip unknown">❔ 予定なし</span></td><td>connpass 上では②が最後。今後追加される可能性はあるが未定</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin:10px 0 0">タイムテーブル: 13:00 オープニング → 13:10 ハンズオン実施・質疑（100分）→ 14:50 クロージング</p>
+    </div>
+    <div class="card">
+      <h3>録画と公式 Discord（7/23 夜 追加調査）</h3>
+      <ul class="clean">
+        <li><b>録画は期待できる</b>: ①は「録画し後日YouTube公開（予定）」と明記。前例として 5/16 アイデアソンは<a href="https://www.youtube.com/watch?v=nYnsPPgYJTY">当日動画</a>と<a href="https://drive.google.com/file/d/1le6pRp3kNXtx4146cJZBgxtGnJeKwd-M/view?usp=sharing">スライド資料</a>が公開済み → <b>ライブ参加できなくても致命傷ではない</b></li>
+        <li><b>公式 Discord は実在する</b>（技術サポート・参加者Q&A用。「実装に向けた細かなご相談等は、別途ご案内をしておりますDiscord等で」）</li>
+        <li><b>招待リンクは非公開（別途案内方式）</b>。入手経路の最有力は <b>connpass イベント申込者への参加者連絡</b>。次点はイベントページの「お問い合わせ」から直接質問</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <b>参加判断のロジック（更新版）。</b> ①<b>キットは今夜発注</b>（ハンズオンに関係なく9/28までに必要）。②<b>connpass のハンズオン②に今夜のうちに申込</b>（無料・キャンセル可・残り8枠。申込者connect経由で Discord 案内が届く可能性が高い）。③土曜朝までにキットが届かなければ早めにキャンセルして録画公開を待つ。<b>どのルートでも Discord と録画で内容はキャッチアップできる</b>。
+    </div>
+  </section>
+
+  <section id="decision">
+    <div class="sec-head"><span class="n">4</span><h2>今日のMTGで埋める意思決定シート</h2></div>
+    <div class="card">
+      <ol class="agenda">
+        <li><span class="ah">買うキット</span><span class="am">案: 加速度センサ版評価キット × 1台（2台目は精度検証後に判断）→ 承認する？</span></li>
+        <li><span class="ah">発注担当と期限</span><span class="am">案: ひかるが今日17:30までにデータ・テクノへ電話 → 見積次第で即発注</span></li>
+        <li><span class="ah">ハンズオン②</span><span class="am">納期が7/25朝に間に合う → 参加申込（誰が出る？両方？）／ 間に合わない → 不参加確定、Discord資料を追う</span></li>
+        <li><span class="ah">決まったら</span><span class="am">decisions/ に ADR として記録（Claude がやる）</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="links">
+    <div class="sec-head"><span class="n">🔗</span><h2>ソース</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li>製品ページ: <a href="https://www.datatecno.co.jp/prod_info/solistai_board/">データ・テクノ DT-EBML63Q2557</a> ／ <a href="https://www.datatecno.co.jp/prod_info/solistai_board_spec/">仕様情報</a> ／ <a href="https://www.datatecno.co.jp/product_order/">購入案内</a></li>
+        <li>ハンズオン②: <a href="https://mashupawards.connpass.com/event/395935/">connpass イベントページ</a></li>
+        <li>キャンペーン価値の根拠: <a href="https://we-are-ma.jp/blog/rehc_idea/">MA公式ブログ（税抜12,000円分の記載）</a></li>
+        <li>ハードウェアマニュアル: <a href="https://www.datatecno.co.jp/datatecno_core/content/uploads/2025/06/DT-EBML63Q2557_hardware_users_manual_Rev.20250527.pdf">DT-EBML63Q2557 ユーザーズマニュアル(PDF)</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 調査: 2026-07-23 ひかる + Claude</footer>
+</div>
+</body>
+</html>
