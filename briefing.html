@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>REHC 2026 作戦ブリーフィング — おしゃべり見守りぬいぐるみ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --surface: #fffdf9;
+    --surface-2: #efe9df;
+    --ink: #2a2320;
+    --ink-soft: #6b615a;
+    --line: #ddd3c6;
+    --accent: #c8462f;        /* 柴犬の赤茶 */
+    --accent-soft: #e8a48c;
+    --gold: #b8892b;
+    --ok: #3f7d54;
+    --maybe: #b8892b;
+    --no: #b23b2e;
+    --unknown: #8a8078;
+    --shadow: 0 1px 2px rgba(60,45,35,.06), 0 6px 20px rgba(60,45,35,.08);
+    --r: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1613; --surface: #241f1b; --surface-2: #2e2823;
+      --ink: #f0e9e0; --ink-soft: #b3a89d; --line: #3a332c;
+      --accent: #ec6a4f; --accent-soft: #7a4433; --gold: #d9ab54;
+      --ok: #6bbf88; --maybe: #d9ab54; --no: #e57a6b; --unknown: #9c9187;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f1ec; --surface: #fffdf9; --surface-2: #efe9df;
+    --ink: #2a2320; --ink-soft: #6b615a; --line: #ddd3c6;
+    --accent: #c8462f; --accent-soft: #e8a48c; --gold: #b8892b;
+    --ok: #3f7d54; --maybe: #b8892b; --no: #b23b2e; --unknown: #8a8078;
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1613; --surface: #241f1b; --surface-2: #2e2823;
+    --ink: #f0e9e0; --ink-soft: #b3a89d; --line: #3a332c;
+    --accent: #ec6a4f; --accent-soft: #7a4433; --gold: #d9ab54;
+    --ok: #6bbf88; --maybe: #d9ab54; --no: #e57a6b; --unknown: #9c9187;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+    line-height: 1.75; font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 20px 100px; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  a:hover { border-bottom-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  /* hero */
+  header.hero {
+    text-align: center; padding: 68px 20px 40px; max-width: 940px; margin: 0 auto;
+  }
+  .paw { font-size: 40px; line-height: 1; }
+  .kicker {
+    display: inline-block; margin: 14px 0 0; font-size: 12px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--accent); font-weight: 700;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 46px); line-height: 1.2; margin: 10px 0 6px;
+    text-wrap: balance; font-weight: 800; letter-spacing: -.01em;
+  }
+  .sub { color: var(--ink-soft); font-size: 17px; margin: 0 auto; max-width: 620px; text-wrap: balance; }
+  .countdown {
+    display: inline-flex; align-items: baseline; gap: 10px; margin-top: 26px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 100px;
+    padding: 10px 22px; box-shadow: var(--shadow); font-variant-numeric: tabular-nums;
+  }
+  .countdown b { font-size: 30px; color: var(--accent); font-weight: 800; }
+  .countdown .lbl { font-size: 13px; color: var(--ink-soft); }
+  .meta-note { margin-top: 14px; font-size: 12.5px; color: var(--ink-soft); }
+
+  /* nav */
+  nav.toc {
+    position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+    display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; padding: 10px;
+    margin-bottom: 8px;
+  }
+  nav.toc a {
+    font-size: 13px; font-weight: 600; color: var(--ink-soft); border: none;
+    padding: 6px 13px; border-radius: 100px;
+  }
+  nav.toc a:hover { background: var(--surface-2); color: var(--ink); }
+
+  section { margin-top: 56px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .sec-head .n {
+    font-size: 13px; font-weight: 800; color: var(--surface); background: var(--accent);
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  }
+  h2 { font-size: clamp(21px, 3.4vw, 28px); margin: 0; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
+  .lead { color: var(--ink-soft); margin: 4px 0 24px; font-size: 15.5px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 22px 24px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .card h3 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+
+  /* concept pills */
+  .brains { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .brains { grid-template-columns: 1fr; } }
+  .brain { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); }
+  .brain .tag { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .brain.small .tag { color: var(--gold); }
+  .brain.big .tag { color: var(--accent); }
+  .brain h4 { margin: 6px 0; font-size: 16px; }
+  .brain p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  /* verdict chips */
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700;
+    padding: 3px 11px; border-radius: 100px; white-space: nowrap;
+  }
+  .chip.ok { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+  .chip.maybe { background: color-mix(in srgb, var(--maybe) 18%, transparent); color: var(--maybe); }
+  .chip.no { background: color-mix(in srgb, var(--no) 16%, transparent); color: var(--no); }
+  .chip.unknown { background: color-mix(in srgb, var(--unknown) 18%, transparent); color: var(--unknown); }
+
+  /* feasibility rows */
+  .feat { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); align-items: flex-start; }
+  .feat:first-of-type { border-top: none; }
+  .feat .v { flex: none; width: 128px; padding-top: 1px; }
+  @media (max-width: 560px) { .feat { flex-direction: column; gap: 5px; } .feat .v { width: auto; } }
+  .feat .body b { font-weight: 700; }
+  .feat .body { font-size: 14.5px; }
+  .feat .body .t { font-weight: 700; display: block; margin-bottom: 1px; }
+
+  /* candidate grid */
+  .cands { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .cands { grid-template-columns: 1fr; } }
+  .cand { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .cand.top { border-color: var(--accent); border-width: 1.5px; }
+  .cand .badge { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
+  .cand h4 { margin: 0 0 2px; font-size: 16px; line-height: 1.4; }
+  .cand .price { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+  .cand .price b { color: var(--ink); font-size: 15px; }
+  .cand .scores { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .score { font-size: 11.5px; background: var(--surface-2); border-radius: 8px; padding: 3px 8px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .score b { color: var(--ink); }
+  .cand p.ap { font-size: 13px; color: var(--ink-soft); margin: 0 0 10px; }
+  .cand .foot { margin-top: auto; font-size: 12.5px; }
+  details { margin-top: 8px; }
+  summary { cursor: pointer; font-size: 12.5px; color: var(--accent); font-weight: 600; }
+  details ul { margin: 8px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-soft); }
+  details li { margin-bottom: 3px; }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-soft); margin-bottom: 18px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+  ul.clean { list-style: none; padding: 0; margin: 0; }
+  ul.clean li { padding: 7px 0 7px 26px; position: relative; font-size: 14.5px; border-top: 1px solid var(--line); }
+  ul.clean li:first-child { border-top: none; }
+  ul.clean li::before { content: "🐾"; position: absolute; left: 0; top: 7px; font-size: 13px; }
+
+  .callout { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 16px 0; font-size: 14.5px; }
+  .callout b { color: var(--accent); }
+
+  table.win { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.win td { padding: 10px 8px; border-top: 1px solid var(--line); vertical-align: top; }
+  table.win tr:first-child td { border-top: none; }
+  table.win .yr { font-weight: 800; color: var(--accent); white-space: nowrap; width: 82px; font-variant-numeric: tabular-nums; }
+  table.win .nm { font-weight: 700; white-space: nowrap; }
+
+  /* experiments */
+  ol.exp { counter-reset: e; list-style: none; padding: 0; margin: 0; }
+  ol.exp li { counter-increment: e; position: relative; padding: 12px 0 12px 44px; border-top: 1px solid var(--line); font-size: 14px; }
+  ol.exp li:first-child { border-top: none; }
+  ol.exp li::before { content: counter(e); position: absolute; left: 0; top: 12px; width: 28px; height: 28px; background: var(--surface-2); border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: var(--accent); }
+  ol.exp .eh { font-weight: 700; }
+  ol.exp .em { color: var(--ink-soft); font-size: 13px; }
+  .tagrow { display: inline-flex; gap: 6px; margin-left: 6px; }
+  .mini { font-size: 11px; padding: 2px 7px; border-radius: 6px; background: var(--surface-2); color: var(--ink-soft); font-weight: 600; }
+  .mini.now { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
+</style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:10;border-bottom:1px solid #ddd3c680;backdrop-filter:blur(8px);padding:10px 20px;font-size:13px;"><a href="index.html" style="font-weight:700;border:none;">🐕‍🦺 チーム基地に戻る</a><span style="opacity:.6"> ／ 🎯 作戦ブリーフィング (2026-07-20)</span></nav>
+
+
+<header class="hero">
+  <div class="paw">🐕‍🦺</div>
+  <span class="kicker">ROHM EDGE HACK CHALLENGE 2026 ・ チーム作戦ブリーフィング</span>
+  <h1>おしゃべり見守りぬいぐるみ</h1>
+  <p class="sub">話しかけると相槌を打ち、「お手」を教えると覚える。子供の声はクラウドに出さない、育つ・寄り添う・守る、ともだち。</p>
+  <div class="countdown">
+    <b>70</b><span class="lbl">日で締切<br>9/28（月）</span>
+  </div>
+  <p class="meta-note">ひかる & けいと の2人チーム ／ 🎯 目指すは最優秀賞（50万円） ／ 調査まとめ 2026-07-20</p>
+</header>
+
+<nav class="toc">
+  <a href="#concept">コンセプト</a>
+  <a href="#winners">歴代優勝の勝ち筋</a>
+  <a href="#feasibility">技術で何ができる</a>
+  <a href="#hardware">ぬいぐるみ候補18案</a>
+  <a href="#next">次にやること</a>
+</nav>
+
+<div class="wrap">
+
+  <section id="concept">
+    <div class="sec-head"><span class="n">◆</span><h2>コンセプト：2つの脳を持つ犬</h2></div>
+    <p class="lead">Solist-AIマイコン単体では会話AIは動かない。だから役割を分ける。この分担こそが「Solist-AIをちゃんと主役に使ってる」という審査への回答になる。</p>
+    <div class="brains">
+      <div class="brain small">
+        <span class="tag">🧠 小さな脳 ・ 常時ON</span>
+        <h4>Solist-AI マイコン</h4>
+        <p>省電力でずっと起きてる。なで/叩く/抱っこの識別、泣き声・呼びかけの検知、そして<b>「お手」をその場で覚えるオンデバイス学習</b>。ロームが推す"その場で動くAI"の主役。</p>
+      </div>
+      <div class="brain big">
+        <span class="tag">🧠 大きな脳 ・ 必要時だけ</span>
+        <h4>Raspberry Pi + MaAI</h4>
+        <p>京大のOSS「MaAI」で相槌のタイミングと<b>首の頷き（30fpsの角度が出る→サーボへ）</b>を生成。会話が要る時だけ起きる。将来はローカルLLMで雑談まで。</p>
+      </div>
+    </div>
+    <div class="callout">
+      <b>この作品の一番の強み。</b> 子供が何を話してもクラウドに出ない ＝ プライバシー。そして「使うほどその子仕様に育つ」＝ オンデバイス学習に必然性がある。デモで<b>Wi-Fiルーターの電源を抜いても動く</b>のがエッジAIの最強の証明画になる。
+    </div>
+  </section>
+
+  <section id="winners">
+    <div class="sec-head"><span class="n">1</span><h2>歴代優勝の「勝ち筋」</h2></div>
+    <p class="lead">前身コンテスト ROHM OPEN HACK CHALLENGE（2016〜2019）の全優勝作を分析。頂点を取る条件が見えた。</p>
+    <div class="card">
+      <table class="win">
+        <tr><td class="yr">2016</td><td class="nm">けん玉楽器</td><td>センサ内蔵けん玉で音楽/VJ。ほぼ満場一致。</td></tr>
+        <tr><td class="yr">2018</td><td class="nm">winOpen</td><td>気圧差だけで窓開け検知。<b>実測データの説得力で満場一致優勝</b>。「製品化を期待」。</td></tr>
+        <tr><td class="yr">2018</td><td class="nm">きんとん</td><td>デバイスを余さず統合した筋斗雲モビリティ。整合性と完成度。</td></tr>
+        <tr><td class="yr">2019</td><td class="nm">未来ゴミ箱</td><td>自走+LINE Pay決済で開く。アイデアの新鮮さと一連デモ。</td></tr>
+        <tr><td class="yr">2019</td><td class="nm">musime</td><td>虫視点体験おもちゃ。<b>パッケージング・外装の完成度</b>で受賞。</td></tr>
+      </table>
+    </div>
+    <div class="callout">
+      <b>4つの勝ち筋</b> ①アイデアの新鮮さ　②エンドツーエンドで実動する体験型デモ　③<b>外装・パッケージングの仕上げ</b>　④<b>実測データの説得力</b><br>
+      <b>そして罠：</b>「一番ビジネスになりそう」と言われた作品は優秀賞止まり。<b>頂点は「体験の面白さ × 完成度」が取る。</b> ぬいぐるみは外装・体験の両方で構造的に有利。
+    </div>
+    <div class="card">
+      <h3>審査のしくみ（今回・確定情報）</h3>
+      <ul class="clean">
+        <li><b>審査軸は3つ</b>：独創性 ／ 完成度（＝動作デモの精度）／ Solist-AI活用度</li>
+        <li><b>一次審査</b>：審査員3名＋事務局＋<b>一般投票（1人3票・10/1〜）</b>で10組選出 → だから ProtoPedia ページと3分動画の質、SNS拡散も効く</li>
+        <li><b>最終審査会 10/24（土）</b>：質疑ありオンラインプレゼン → ライブで安定動作することが必須</li>
+        <li>最終10組に残れば受賞枠9つ。<b>本当の勝負は最優秀賞1枠（50万円）</b></li>
+        <li>最終審査員に<b>栗原一貴氏（イグノーベル賞受賞者）</b>→ ユーモア・意外性が刺さる可能性</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="feasibility">
+    <div class="sec-head"><span class="n">2</span><h2>技術で、どこまで何ができる？</h2></div>
+    <p class="lead">一次資料（データシート・アルゴリズム資料・MaAI論文・公式FAQ）を精読。楽観抜きで判定した。</p>
+    <div class="legend">
+      <span><span class="chip ok">✅ できる</span></span>
+      <span><span class="chip maybe">🟡 たぶん（要検証）</span></span>
+      <span><span class="chip no">❌ できない</span></span>
+      <span><span class="chip unknown">❔ 不明</span></span>
+    </div>
+
+    <div class="card">
+      <h3>🖐 機能1：「お手」を教えて覚える</h3>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">追加学習の仕組み自体</span>Solist-AIは出力層だけ更新するELM方式。「その場で覚える」は公式サンプルコード付きでサポート。<b>ロームが推す使い方そのもの</b>で、活用度でも好適。</div></div>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">声コマンド認識（お手/おかわり）</span>ELMは少クラス（2〜5語）に強い。話者依存（その子の声）なら難度は下がる。ただし小さな脳の表現力で実用精度が出るかは Sim/実機で要実験。</div></div>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">腕を動かして教える → サーボでお手</span>加速度センサで教示動作を記録するUIは子供向けに前例あり（PlushPal等）。サーボ駆動もMCU/Piどちらからも可能。</div></div>
+    </div>
+
+    <div class="card">
+      <h3>🫳 機能2：なで／叩く／抱っこの識別</h3>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">叩く・抱っこ・放置・腕を動かされた</span>加速度センサの得意領域（叩く=衝撃、抱っこ=持ち上げ、放置=無動）。全身ジェスチャ研究で実現例あり。</div></div>
+      <div class="feat"><div class="v"><span class="chip no">❌ できない</span></div><div class="body"><span class="t">やさしく「なでる」を加速度だけで</span><b>これは重要。</b> 綿が振動を吸うため加速度単体では困難。高精度な撫で識別の研究は全て感圧/静電容量センサ使用。<b>→ 頭・背中に静電容量パッチ（MPR121等）を足す設計が要る。</b></div></div>
+    </div>
+
+    <div class="card">
+      <h3>🔊 機能3：泣き声・悲鳴の検知 → 親に通知</h3>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">異常音の検知</span>「平常の生活音を学習→逸脱を検知」で組める。ただし特定音種の識別精度・誤検知率は要実験。</div></div>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">クラウドを一切使わない親通知</span>Piを家庭内Wi-Fiにして自己ホストのntfy→Android(F-Droid版)でLAN内push。<b>完全オフラインを正当に主張できる</b>（iOSはApple経由になるので例外）。</div></div>
+    </div>
+
+    <div class="card">
+      <h3>💬 機能4：相槌と頷き（MaAI）</h3>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">ライセンスと頷き出力</span>コード＋`_kyoto`版モデルは<b>MITライセンス</b>（製品化・改変OK）。<b>頷きは pitch/yaw/roll 角度@30fpsで出る</b>→そのままサーボへ。</div></div>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">Raspberry Piで動くか</span>CPU動作は実証済みだが実測はサーバCPU。Pi実機値は無い。frame_rateを10Hzに下げればPi5で間に合う見込みだが<b>要実機計測</b>。onnxruntimeのARM問題の回避も要る。</div></div>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">相槌の"声"</span>MaAIはタイミング/種類の予測まで。相槌音声そのものは別途TTS/録音が要る。子供の声はMaAIの学習ドメイン外な点も注意。</div></div>
+    </div>
+
+    <div class="card">
+      <h3>⚙️ 土台：ルール・統合・電源</h3>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">二脳構成はルールOK</span>FAQで「Solist-AIを活用した上での外部連携は問題なし」と明記。ただしSolist-AIを中核に据えること。</div></div>
+      <div class="feat"><div class="v"><span class="chip ok">✅ できる</span></div><div class="body"><span class="t">デバイス無しで先行検証</span><b>Solist-AI Sim（PC・要MyROHM）で学習/推論を試せる。</b> デバイス到着前に動けるし、締切リスクの保険になる。</div></div>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">サーボ音のマイク混入</span>「音を聴く」製品なのでサーボのうなりが会話マイクに乗る本質リスク。静音サーボ＋動作時以外トルクオフで対策、要実測。</div></div>
+      <div class="feat"><div class="v"><span class="chip maybe">🟡 要検証</span></div><div class="body"><span class="t">バッテリー駆動</span>Pi4主体5〜6W運用で10,000mAh≈5〜6時間。サーボは別電源+共通GND必須。Pi5はバッテリ給電が難しく非推奨。</div></div>
+    </div>
+  </section>
+
+  <section id="hardware">
+    <div class="sec-head"><span class="n">3</span><h2>ぬいぐるみ、どう作る？ — 18案</h2></div>
+    <p class="lead">「かわいさ🐾／お手のやりやすさ🖐／改造の楽さ🔧（★多いほど楽）」でスコア化。まず打ち合わせで方向性を決めよう。全案の詳細はリポジトリ research/plushie-base-candidates.md に。</p>
+
+    <div class="cands">
+      <div class="cand top">
+        <span class="badge">◎ 本命候補</span>
+        <h4>CUTE 豆柴 座りL を改造</h4>
+        <div class="price"><b>3,300円</b> ／ 総額 約5,500〜7,000円</div>
+        <div class="scores"><span class="score">かわいさ <b>4</b>/5</span><span class="score">お手 <b>5</b>/5</span><span class="score">改造 <b>★★★</b></span></div>
+        <p class="ap">最初から座り姿勢で前脚が柱状＝お手が最も自然。柴犬×風呂敷の和の物語性が日本の審査員に刺さる。基板は座布団型ベースに逃がす。</p>
+        <div class="foot"><a href="https://store.shopping.yahoo.co.jp/manbouya/cu-d0010.html" target="_blank" rel="noopener">商品ページ ↗</a>（在庫わずか・要確保）</div>
+      </div>
+
+      <div class="cand top">
+        <span class="badge">◎ 本命候補</span>
+        <h4>オリジナルキャラを自作（着ぐるみ方式）</h4>
+        <div class="price"><b>約1.3〜1.6万円</b>（生地+3Dプリント骨格）</div>
+        <div class="scores"><span class="score">かわいさ <b>4</b>/5</span><span class="score">お手 <b>5</b>/5</span><span class="score">改造 <b>★</b></span></div>
+        <p class="ap">3Dプリント骨格に外皮を着せる。<b>著作権・意匠リスクがゼロ</b>で受賞後の展開も自由。勝ちパターン「手作り統合×外装仕上げ」に正面から乗れる。時間はかかる。</p>
+        <div class="foot"><a href="https://shop.nuigurumi-fabric.com/categories/5172908" target="_blank" rel="noopener">ぬい生地専門店 ↗</a></div>
+      </div>
+
+      <div class="cand">
+        <span class="badge">◯ 王道・低リスク</span>
+        <h4>IKEA GOSIG GOLDEN を大改造</h4>
+        <div class="price"><b>999円</b>〜 ／ 総額 約3,500〜5,000円</div>
+        <div class="scores"><span class="score">かわいさ <b>5</b>/5</span><span class="score">お手 <b>4</b>/5</span><span class="score">改造 <b>★★★★</b></span></div>
+        <p class="ap">999円で失敗前提の複数買いができる。万人受けの顔で一般投票に強い。寝そべり体型なので座り姿勢には内部骨格の自作が要る。</p>
+        <div class="foot"><a href="https://www.ikea.com/jp/ja/p/gosig-golden-soft-toy-dog-golden-retriever-50169341/" target="_blank" rel="noopener">IKEA商品ページ ↗</a></div>
+      </div>
+
+      <div class="cand">
+        <span class="badge">◯ 賢い進め方</span>
+        <h4>ダイソー素材で超低コスト試作</h4>
+        <div class="price"><b>700〜1,500円</b>/体</div>
+        <div class="scores"><span class="score">かわいさ <b>2</b>/5</span><span class="score">お手 <b>4</b>/5</span><span class="score">改造 <b>★★★</b></span></div>
+        <p class="ap">まずこれでお手機構と外装を高速に試作 → ノウハウを掴んで本番機へ、の2段構え。今日買える。</p>
+        <div class="foot"><a href="https://jp.daisonet.com/products/4550480638317" target="_blank" rel="noopener">ダイソーねっとストア ↗</a></div>
+      </div>
+
+      <div class="cand">
+        <span class="badge">🤖 ロボット改造</span>
+        <h4>Stack-chan（スタックチャン）</h4>
+        <div class="price"><b>約9,500円</b>（部品一式）</div>
+        <div class="scores"><span class="score">かわいさ <b>3</b>/5</span><span class="score">お手 <b>4</b>/5</span><span class="score">改造 <b>★★★★</b></span></div>
+        <p class="ap"><b>首2軸が標準＝頷き相槌が改造なしで即出せる。</b> AI対話の実装例が超豊富。ただし箱型なので犬にするには外装自作が前提。</p>
+        <div class="foot"><a href="https://www.switch-science.com/products/8905" target="_blank" rel="noopener">スイッチサイエンス ↗</a></div>
+      </div>
+
+      <div class="cand">
+        <span class="badge">🧸 抱き心地重視</span>
+        <h4>ねむねむ柴犬 抱き枕（Qoobo流）</h4>
+        <div class="price"><b>2,500円</b>〜 ／ 総額 約0.9〜1.1万円</div>
+        <div class="scores"><span class="score">かわいさ <b>5</b>/5</span><span class="score">お手 <b>2</b>/5</span><span class="score">改造 <b>★★★★</b></span></div>
+        <p class="ap">抱き心地が最強で一般投票に強い。機構は尻尾・首・前脚1軸ずつに割り切る。お手の可動域は小さめ。</p>
+        <div class="foot"><a href="https://store.shopping.yahoo.co.jp/dragon-bee/lh0001-48769-44.html" target="_blank" rel="noopener">商品ページ ↗</a></div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:18px">
+      <b>💡 一番きれいな組み合わせ：</b> かわいい外装は上の市販改造/自作から選び、中のサーボ制御は <b>Adafruit か SparkFun のサーボHAT（2,800〜3,700円）で Raspberry Pi に直結</b>。他にPetit Qoobo（尻尾ユニット移植）、甘噛みハムハム（口機構）、パペット型など全12＋6案を調査済み。
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="sec-head"><span class="n">4</span><h2>次にやること（実験リスト）</h2></div>
+    <p class="lead"><span class="mini now">今すぐ着手可</span> はデバイス無しで動ける実験。デバイス見積と並行して進めよう。</p>
+    <div class="card">
+      <ol class="exp">
+        <li><span class="eh">Solist-AI Sim で「声→動作」PoC</span><span class="tagrow"><span class="mini now">今すぐ</span><span class="mini">2-3日</span></span><br><span class="em">子供の2〜5語コマンドが実用精度で分類できるか。ELMの表現力の見極め。</span></li>
+        <li><span class="eh">加速度でなで/叩く/抱っこ分類</span><span class="tagrow"><span class="mini now">今すぐ</span><span class="mini">2-3日</span></span><br><span class="em">特に「なでる」が加速度単体で取れるか。取れなければ感圧/静電容量パッチを追加。</span></li>
+        <li><span class="eh">泣き声/悲鳴の異常検知PoC</span><span class="tagrow"><span class="mini now">今すぐ</span><span class="mini">2-3日</span></span><br><span class="em">生活音を正常学習して泣き/悲鳴で反応、誤検知が許容内か。</span></li>
+        <li><span class="eh">MaAIをPiに入れてレイテンシ実測</span><span class="tagrow"><span class="mini">1-2日</span></span><br><span class="em">Pi4/5でframe_rate10Hzのとき頷きが自然な遅延で出るか。</span></li>
+        <li><span class="eh">デバイス見積・入手</span><span class="tagrow"><span class="mini">最優先</span></span><br><span class="em">DT-EBML63Q2557 をチーム分、9/28に間に合う納期で。データ・テクノ 075-313-3275。</span></li>
+        <li><span class="eh">二脳構成を事務局に確認</span><span class="tagrow"><span class="mini">半日</span></span><br><span class="em">Discord（7/1開設）で活用度上の懸念がないか。ハンズオン②は7/25(土)。</span></li>
+      </ol>
+    </div>
+    <div class="callout">
+      <b>今日の打ち合わせで決めたいこと：</b> ①ぬいぐるみの方向性（本命は「座り豆柴」か「オリジナル自作」）②何を学習させ、どんな体験にするか（お手・名前・なつき・見守り…）③まずデバイス見積とSim検証に動くか。
+    </div>
+  </section>
+
+  <footer>
+    調査：Claude Code（dynamic workflow・全リンク2026-07-20検証）／ 詳細は GitHub リポジトリ hackathonP の research/ 各ファイル参照<br>
+    🎯 目指すは最優秀賞。頂点は「体験の面白さ × 完成度」が取る。
+  </footer>
+
+</div>
+
+</body>
+</html>

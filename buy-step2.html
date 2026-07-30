@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>購入詳細: 作成物②ブースト機DSP版（ADAU1701）</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <span class="here">／ ② DSP版ブースト機の部品</span>
+</nav>
+
+<header class="hero">
+  <span class="kicker">BUY — STEP 2 (ADAU1701 DSP)</span>
+  <h1>作成物② ブースト機DSP版の買い物</h1>
+  <p class="sub">主音路のPGA2311をDSPボードに置き換えて、ノッチEQ+ゲインを自在に。遅延は実測1.07ms＝マイクから34cm離れたのと同じ。</p>
+  <p class="meta-note">2026-07-30調査（価格・納期は当日実ブラウザ確認含む）／ 詳細原本: research/sakimimi-step2-dsp-parts.md</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-head"><span class="n">🎯</span><h2>結論 — 今夜ポチるもの</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>買うもの</th><th>どこで</th><th>価格</th><th>届く日</th><th>ポチり方</th></tr>
+      <tr><td class="item">Wondom APM2<br>（DSPボード本命）</td><td><a href="https://www.amazon.co.jp/dp/B07HHNQ74B">Amazon.co.jp</a></td><td><b>¥5,183</b> ✅在庫あり<br><span style="font-size:12px">（7/30実確認）</span></td><td><b>8/8(土)〜8/11(火)</b><br><span style="font-size:12px">出品者Amazon US・プライム翌日ではない</span></td><td>リンク→カート→注文確定。配達日をカートで再確認</td></tr>
+      <tr><td class="item">Wondom ICP1<br>（書込機）</td><td><a href="https://store.sure-electronics.com/product/710">Sure直販</a></td><td>参考 €16.90級<br>（カートで確認）</td><td>Express 7〜15日<br>Standard 20〜30日</td><td>Sureでアカウント作成→Express選択。<b>送料実額はカートで判明</b>（高すぎたらArduinoルートで開発開始し後日再検討）</td></tr>
+      <tr><td class="item">（0円の保険）<br>Arduino書込みルート</td><td><a href="https://github.com/MCUdude/SigmaDSP">GitHub</a></td><td>¥0（手持ちマイコン）</td><td>即</td><td>ICP1到着前の開発つなぎ+ML63Q2557実装の写経元</td></tr>
+    </table></div>
+    <div class="callout"><b>青基板DSPmini（激安保険）はAmazonでは全滅（7/30確認: 3ASINとも在庫切れ・再入荷未定）。</b>AliExpressなら$10前後・1〜3週。急がないなら不要 — APM2+Arduinoルートで十分。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🔍</span><h2>ボード比較 — なぜAPM2か</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>候補</th><th>価格/納期</th><th>判定</th></tr>
+      <tr><td class="item">Wondom APM2（AA-AP23122）</td><td>Amazon ¥5,183・8/8〜11着</td><td><span class="chip ok">本命</span></td></tr>
+      <tr><td class="item">Wondom JAB系（アンプ一体）</td><td>€42.65〜</td><td><span class="chip no">不採用</span> 出力がスピーカー用BTL＝ライン出力でない。アンプ部が死荷重</td></tr>
+      <tr><td class="item">青基板DSPmini（ADAU1401A）</td><td>Amazon在庫切れ／AliExpress $10前後</td><td><span class="chip maybe">保険のみ</span> 品質ロット差・ドキュメント皆無</td></tr>
+      <tr><td class="item">freeDSP CLASSIC</td><td>集中販売なし</td><td><span class="chip no">見送り</span> 自作基板は残り8週では割に合わない</td></tr>
+      <tr><td class="item">ADI純正USBi＋純正評価ボード</td><td>USBiだけで$70超</td><td><span class="chip no">割高</span></td></tr>
+    </table></div>
+    <details><summary>APM2の詳細スペック（寸法・端子・音質）</summary>
+      <ul>
+        <li>ADAU1701搭載・2in/4out・24bit・48kHz・ダイナミックレンジ98.5dB（ADC THD -83dB／DAC -90dB）</li>
+        <li>寸法: <b>50.8×50.8mm（2×2インチ）</b> — YM18-4-13ケースに余裕で入る</li>
+        <li>電源: USB Type-C 5V・約1W（モバイルバッテリー駆動可＝電池運用と相性◎）</li>
+        <li>J11（PH 6pin）にI2C+RESET露出 → <b>ML63Q2557からの係数書換はここに3線つなぐだけ</b></li>
+        <li>デモファームのポット4個（低音/高音/ゲイン）は本番スキマティックで置換して無効化</li>
+        <li>⚠️ 未確認: 最大入出力レベル（Vrms）はデータシート表が画像で読めず → 実機到着後に実測。マイクプリ後(+4dBu≈1.23Vrms)の受けはレベル調整前提で設計</li>
+        <li>⚠️ 自己ブートEEPROMの物理位置（ボード側/ICP1側）は資料内で矛盾 → 実機確認。ML63Q2557が起動毎にI2Cでプログラムをロードする方式なら回避可能</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">✍️</span><h2>書込機の選択肢 — ICP1本命＋Arduino保険</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>手段</th><th>価格</th><th>納期</th><th>判定</th></tr>
+      <tr><td class="item">Wondom ICP1</td><td>参考€16.90（Sure直販）</td><td>Express 7〜15日</td><td><span class="chip ok">本命</span> 6pinケーブル付属でAPM2のJ11に無加工直結。SigmaStudioから純正USBiとして認識</td></tr>
+      <tr><td class="item">Arduino + MCUdude/SigmaDSPライブラリ</td><td>¥0</td><td>即</td><td><span class="chip ok">保険+写経元</span> EEPROM書込みまで完結可。欠点=GUIリアルタイム試聴調整ができない</td></tr>
+      <tr><td class="item">互換USBi</td><td>Amazon ¥7,699〜9,118（7/30確認）／AliExpress $33〜67</td><td>即〜3週</td><td><span class="chip maybe">高い</span> ICP1より割高。ドライバ・個体差リスク</td></tr>
+      <tr><td class="item">ADI純正USBi（EVAL-ADUSB2EBZ）</td><td>歴史的に$70超</td><td>2〜4日</td><td><span class="chip no">割高</span> 10pin IDCでピン変換も必要</td></tr>
+    </table></div>
+    <div class="callout gold"><b>運用の分業:</b> 開発中=ICP1でライブ調整（音を流したままGUIでノッチを動かして試聴）→ 確定後=EEPROMに書いて自己ブート化 → 本番=ML63Q2557が係数だけI2C safeloadで書換。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🛠️</span><h2>SigmaStudio 開発フロー（初めてでも5ステップ）</h2></div>
+  <div class="card">
+    <ol class="exp">
+      <li><span class="eh">環境構築</span><span class="em">myAnalog無料登録 → SigmaStudio <b>4.7（クラシック版）</b>をDL（Windows 10/11）。⚠️新しい「SigmaStudio+」はADAU1701非対応 — 必ず4.x系</span></li>
+      <li><span class="eh">ハード構成</span><span class="em">ICP1をUSB接続（PROGRAM側）→ Hardware Configurationで USBi+ADAU1701+E2Prom をドラッグ結線（USBアイコン緑=認識OK）。Wondomのデモプロジェクトをベースに</span></li>
+      <li><span class="eh">信号処理を描く</span><span class="em">入力→高Qナローノッチ（Q≈10〜100・7/30仕様明確化）×1〜3→ゲイン→出力 を結線して「Link-Compile-Download」。<b>音を流したままGUIのツマミで周波数・Q・深さを動かして即試聴できる</b>。300Hz未満の高QはダブルプレシジョンbiquadでOK</span></li>
+      <li><span class="eh">自己ブート化+係数アドレス取得</span><span class="em">E2Promへ書込み→ICP1を外して単体起動確認。「Export System Files」で各ブロックのパラメータRAMアドレスを控える</span></li>
+      <li><span class="eh">マイコンから動作中書換</span><span class="em">safeloadレジスタにI2C書込み→次フレーム境界でノークリック反映。Arduino+SigmaDSPライブラリで検証→同じI2CシーケンスをML63Q2557に移植。biquad係数はマイコン側でf0/深さから計算</span></li>
+    </ol>
+    <details><summary>チップの余力（なぜ楽勝と言えるか）</summary>
+      <ul>
+        <li>28/56bitコア・50MIPS・1024命令/サンプル@48kHz — 高Qノッチはbiquad1本=数命令。8本バンク+ゲインでも余裕（Qを上げても命令数は増えない）</li>
+        <li>ADC×2 SNR100dB・DAC×4 SNR104dB・GPIO12本・補助ADCでポット直読</li>
+        <li>遅延実測: ループバック<b>1.07ms@48kHz</b>（ADI EngineerZone実測・diyAudioの52サンプル≈1.1msと一致）。知覚しきい値（ウェッジ10ms）に約10倍の余裕</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">📌</span><h2>ポチる直前チェック</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li>Amazon APM2のカートで配達予定日を再確認（7/30時点: 8/8〜11）</li>
+      <li>Sure直販カートで日本向け送料の実額を確認してからICP1確定（高すぎたらArduinoルートで開発開始し後日再検討）</li>
+      <li>SigmaStudio 4.7を今夜のうちにDL開始（無料・要myAnalog登録・数GB）</li>
+      <li>実機到着後の最初の確認: EEPROM位置／J11のI2Cプルアップ／最大入出力レベル実測</li>
+    </ul>
+  </div>
+  <p class="src">出典・全詳細: リポジトリ research/sakimimi-step2-dsp-parts.md（一次資料URL 20本以上）</p>
+</section>
+
+<footer>サキミミ購入パーティー資料 ②DSP版 ／ 2026-07-30</footer>
+</div>
+</body>
+</html>

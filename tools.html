@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工作工具リスト — 7/26 買い出し・組み立て — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .chk{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:10px;cursor:pointer;transition:background .15s}
+  .chk:hover{background:rgba(128,128,128,.08)}
+  .chk input{margin-top:3px;width:17px;height:17px;flex:none;accent-color:var(--accent,#c96f2f)}
+  .chk.done span{opacity:.45;text-decoration:line-through}
+  .chk b{font-weight:700}
+  .chk-note{font-size:12.5px;color:var(--ink-soft);margin:2px 0 10px 39px}
+  .progress{font-size:13px;color:var(--ink-soft);margin:4px 0 8px}
+</style>
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 🧰 工作工具リスト</span><a class="sim-link" href="simulator.html">🐾 シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">🧰</div>
+  <span class="kicker">7/26(日) 買い出し & 組み立て準備 ・ 2026-07-25</span>
+  <h1>試作機1号の<br>工作工具リスト</h1>
+  <p class="sub">チェックボックスはこの端末に保存される（スマホで開けば買い物中もそのまま使える）。<br>⚠️ センサー・マイコン等の<b>部品</b>はこのリスト対象外 — けいとの買い物リスト & 要件会議で確定。</p>
+</header>
+
+<div class="wrap">
+
+  <section id="work">
+    <div class="sec-head"><span class="n">0</span><h2>想定している作業</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li>加速度センサーモジュールへの<b>ピンヘッダはんだ付け</b>（秋月のモジュールはヘッダ未実装が多い）</li>
+        <li>ブレッドボードでマイコンと配線 → PC/スマホへデータを出して動作確認</li>
+        <li>センサーの<b>延長配線</b>（ぬいぐるみ/筐体の中に仕込む。切る・むく・はんだ・絶縁）</li>
+        <li>外装への固定（縫う・貼る・結束・面ファスナー）、テスターで導通チェック</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="keito">
+    <div class="sec-head"><span class="n">1</span><h2>けいと持参チェックリスト（はんだ系一式）</h2></div>
+    <p class="lead">7/23 MTG で「けいとが工具持参」と決定済み。<b>前日夜（今夜！）にチェック → 無いものは Discord へ</b>。明日の買い足しに回す。</p>
+    <div class="card" data-group="keito">
+      <p class="progress"></p>
+      <label class="chk"><input type="checkbox"><span>はんだごて（温度調節付きだとベター。こて先 B型 or C型）</span></label>
+      <label class="chk"><input type="checkbox"><span>こて台 + こて先クリーナー（スポンジ or 金属ウール）</span></label>
+      <label class="chk"><input type="checkbox"><span>糸はんだ（ヤニ入り・φ0.6〜0.8mm が細かい作業に楽）</span></label>
+      <label class="chk"><input type="checkbox"><span>はんだ吸取線（失敗リカバリ用）</span></label>
+      <label class="chk"><input type="checkbox"><span>ニッパー</span></label>
+      <label class="chk"><input type="checkbox"><span>ラジオペンチ</span></label>
+      <label class="chk"><input type="checkbox"><span>ワイヤーストリッパー（無ければニッパー代用可。あると速い）</span></label>
+      <label class="chk"><input type="checkbox"><span>ピンセット（先曲がりだとなお良し）</span></label>
+      <label class="chk"><input type="checkbox"><span>テスター（マルチメーター）— <b>無ければ明日秋月で ¥1,000前後</b></span></label>
+      <label class="chk"><input type="checkbox"><span>耐熱作業マット（無ければ段ボール+アルミホイルで代用）</span></label>
+    </div>
+  </section>
+
+  <section id="hikaru">
+    <div class="sec-head"><span class="n">2</span><h2>ひかる宅で用意しておくもの</h2></div>
+    <p class="lead">家にある率が高いもの。無いものは明日ダイソーで補完（ほぼ全部100均で揃う）。</p>
+    <div class="card" data-group="hikaru">
+      <p class="progress"></p>
+      <label class="chk"><input type="checkbox"><span>はさみ・カッター・カッターマット（or 厚手の段ボール）</span></label>
+      <label class="chk"><input type="checkbox"><span>両面テープ・マスキングテープ・ビニールテープ（絶縁にも使う）</span></label>
+      <label class="chk"><input type="checkbox"><span>精密ドライバーセット（＋／−）</span></label>
+      <label class="chk"><input type="checkbox"><span>定規・油性ペン</span></label>
+      <label class="chk"><input type="checkbox"><span>裁縫セット（針・糸・まち針）— <b>ぬいぐるみ形態なら必須</b></span></label>
+      <label class="chk"><input type="checkbox"><span>延長コード・電源タップ（はんだごて＋PC＋充電で口が足りなくなる）</span></label>
+      <label class="chk"><input type="checkbox"><span>換気できる作業場所（はんだの煙対策）</span></label>
+      <label class="chk"><input type="checkbox"><span>ノートPC + 各種USBケーブル（データ収集・シリアルモニタ）</span></label>
+      <label class="chk"><input type="checkbox"><span>スマホ — <b>内蔵加速度センサーで先行検証にそのまま使える</b>（シミュレーターのセンサー入力版）</span></label>
+      <label class="chk"><input type="checkbox"><span>ウェットティッシュ・ゴミ袋（はんだ作業後は手洗い）</span></label>
+    </div>
+  </section>
+
+  <section id="buy">
+    <div class="sec-head"><span class="n">3</span><h2>明日買うもの（工具・汎用消耗品）</h2></div>
+    <p class="lead">目安予算 <b>¥3,000〜5,000</b>（テスター購入なら +¥1,000）。部品代は別途。</p>
+    <div class="card" data-group="buy">
+      <p class="progress"></p>
+      <label class="chk"><input type="checkbox"><span><b>ブレッドボード ×2</b>（¥300〜500/枚・秋月）— 「実験用」「組込み用」で分けられる</span></label>
+      <label class="chk"><input type="checkbox"><span><b>ジャンパワイヤ オス-オス セット</b>（〜¥400・秋月）</span></label>
+      <label class="chk"><input type="checkbox"><span><b>ジャンパワイヤ オス-メス セット</b>（〜¥400・秋月）— センサーモジュール接続用。<b>忘れると詰みがち</b></span></label>
+      <label class="chk"><input type="checkbox"><span><b>ピンヘッダ 1×40 ×2〜3本</b>（〜¥100/本・秋月）— 折って使う</span></label>
+      <label class="chk"><input type="checkbox"><span><b>耐熱電子ワイヤ（赤・黒・白 各1巻）</b>（〜¥300/巻・秋月/千石）— センサー延長用 AWG24〜28</span></label>
+      <label class="chk"><input type="checkbox"><span><b>熱収縮チューブ 詰め合わせ</b>（〜¥500・秋月/千石）— 接続部の絶縁</span></label>
+      <label class="chk"><input type="checkbox"><span><b>結束バンド（小）</b>（〜¥200・秋月/ダイソー）</span></label>
+      <label class="chk"><input type="checkbox"><span><b>面ファスナー（縫えるタイプ）</b>（〜¥300・ダイソー）— センサー脱着式固定、実験が捗る</span></label>
+      <label class="chk"><input type="checkbox"><span><b>USBケーブル</b>（〜¥500・秋月）— 買うマイコンのコネクタに合わせる。<b>「充電専用」NG・データ通信対応を確認</b></span></label>
+      <label class="chk"><input type="checkbox"><span><b>電池ボックス（単3×3〜4・スイッチ付き）+ 電池</b>（〜¥400・秋月）— 「線が無くても動く」はエッジAIの画になる</span></label>
+      <label class="chk"><input type="checkbox"><span><b>テスター</b>（¥1,000前後・秋月）— けいと未所持の場合のみ</span></label>
+      <label class="chk"><input type="checkbox"><span>（任意）グルーガン + スティック（〜¥600・ダイソー）— 外装固定の定番</span></label>
+      <label class="chk"><input type="checkbox"><span>（任意）ヘルピングハンズ「第三の手」（〜¥1,000・千石）— 一人はんだが安定</span></label>
+    </div>
+  </section>
+
+  <section id="forms">
+    <div class="sec-head"><span class="n">4</span><h2>形態別の追加（要件会議の結果で分岐）</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>🧸 ぬいぐるみ形態なら</th><th>🤖 筐体（ロボ/ケース）形態なら</th></tr>
+        <tr>
+          <td>
+            ・<b>リッパー（縫い目ほどき）</b>— ぬいぐるみを開ける必需品（ダイソー裁縫コーナー）<br>
+            ・手芸綿（詰め直し用）<br>
+            ・安全ピン（仮止め）<br>
+            ・ぬいぐるみ本体（ヨドバシ7F／ドンキ／ダイソー大型店）
+          </td>
+          <td>
+            ・M3 ネジ・ナット・スペーサー詰め合わせ（〜¥500）<br>
+            ・タッパー or 百均ケース（筐体流用の定番）<br>
+            ・ピンバイス + ドリル刃（穴あけ・〜¥800）<br>
+            ・棒やすり（仕上げ・ダイソー）
+          </td>
+        </tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="route">
+    <div class="sec-head"><span class="n">5</span><h2>買い出しルート（7/26 日曜）</h2></div>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx">
+        <tr><th>店</th><th>何を買う</th><th>メモ</th></tr>
+        <tr><td class="item">秋月電子 秋葉原店</td><td>電子系ほぼ全部（③の上段）</td><td><b>11:00 開店</b>・ひかる 11:30〜12:00 着。日曜は混むのでリスト順に即決で回る</td></tr>
+        <tr><td class="item">千石電商</td><td>工具・ワイヤ・ネジ類の補完</td><td>秋月から徒歩1分。秋月に無かったらここ</td></tr>
+        <tr><td class="item">ダイソー</td><td>グルーガン・裁縫系・結束バンド・ケース</td><td>100均で済むものは100均で（アキバ周辺 or 地元）</td></tr>
+        <tr><td class="item">ヨドバシAkiba</td><td>ぬいぐるみ（7F おもちゃ）・最終手段</td><td>工具は割高なので基本使わない</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="callout gold">
+      <b>安全メモ:</b> はんだ作業は換気 + 火傷注意、終わったら手洗い（鉛入りはんだが多い）。バッテリーはリポを避けて電池ボックス or モバイルバッテリーで（安全・十分）。
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 作成: 2026-07-25 ひかる + Claude（原本: research/build-tools-list.md）</footer>
+</div>
+
+<script>
+(function(){
+  var KEY='rehc-tools-check-v1';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  document.querySelectorAll('[data-group]').forEach(function(card){
+    var g=card.getAttribute('data-group');
+    var boxes=card.querySelectorAll('.chk input');
+    var prog=card.querySelector('.progress');
+    function refresh(){
+      var done=0;
+      boxes.forEach(function(b,i){
+        b.closest('.chk').classList.toggle('done',b.checked);
+        if(b.checked)done++;
+      });
+      if(prog)prog.textContent=done+' / '+boxes.length+' チェック済み';
+    }
+    boxes.forEach(function(b,i){
+      var k=g+':'+i;
+      b.checked=!!saved[k];
+      b.addEventListener('change',function(){
+        saved[k]=b.checked;
+        try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+        refresh();
+      });
+    });
+    refresh();
+  });
+})();
+</script>
+</body>
+</html>

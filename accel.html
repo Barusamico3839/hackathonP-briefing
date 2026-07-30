@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>なでなで加速度ラボ（センサー入力版）— REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .bigbtn{width:100%;font-size:17px;padding:14px;border-radius:14px;cursor:pointer;font-family:var(--font-display);
+    font-weight:700;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink)}
+  .bigbtn.on{background:color-mix(in srgb,var(--gold) 14%,var(--surface));border-color:var(--gold);color:var(--gold)}
+  .bigbtn:disabled{opacity:.45;cursor:not-allowed}
+  .lab-chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .lab-chips button{font-size:14px;padding:8px 14px;border-radius:100px;border:1.5px solid var(--line);
+    background:var(--surface-2);color:var(--ink);cursor:pointer;font-family:var(--font-display);font-weight:700}
+  .lab-chips button.sel{border-color:var(--gold);color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--surface))}
+  .telem{font-family:var(--font-mono);font-size:12px;line-height:1.9;color:var(--ink-soft)}
+  .telem b{color:var(--ink);font-weight:600}
+  #wave{width:100%;height:64px;display:block;background:var(--surface-2);border-radius:10px}
+  .verdict2{font-family:var(--font-display);font-weight:800;font-size:24px;min-height:40px;margin:8px 0}
+  .verdict2 small{display:block;font-size:12px;color:var(--ink-soft);font-family:var(--font-mono);font-weight:400}
+  .bar-row{display:grid;grid-template-columns:70px 1fr 52px;gap:8px;align-items:center;font-size:13px;margin:4px 0}
+  .bar-row .bt{height:12px;background:var(--surface-2);border-radius:100px;overflow:hidden}
+  .bar-row .bf{display:block;height:100%;background:var(--gold);border-radius:100px;transition:width .2s}
+  .bar-row .bv{font-family:var(--font-mono);font-size:12px;text-align:right;color:var(--ink-soft)}
+  .cnt{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft)}
+  .recflash{animation:recpulse 0.6s infinite}
+  @keyframes recpulse{50%{background:color-mix(in srgb,#e05555 22%,var(--surface))}}
+</style>
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ 📳 加速度ラボ</span><a class="sim-link" href="simulator.html">🐾 マウス版シミュレーター</a></nav>
+
+<header class="hero">
+  <div class="paw">📳</div>
+  <span class="kicker">センサー入力版 ・ 2026-07-25 ・ 試作機1号の前哨戦</span>
+  <h1>なでなで加速度ラボ</h1>
+  <p class="sub"><b>スマホでこのページを開いて</b>、スマホ本体を「ぬいぐるみの中のセンサー」に見立てる。
+  手のひらのスマホを なでる／たたく／ゆらす → <b>実物の加速度データ</b>でその場学習・判定。
+  実機（Solist-AI + 加速度センサー）と同じ問題設定をきょう検証できる。</p>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <div class="sec-head"><span class="n">1</span><h2>センサーをつなぐ</h2></div>
+    <div class="card">
+      <button class="bigbtn" id="sensor-btn">📡 センサーを開始（タップ）</button>
+      <p class="note" id="sensor-note">iPhoneは許可ダイアログが出ます。PCには加速度センサーが無いので、このURLをスマホで開いてね（Discordに貼るのが早い）。</p>
+      <canvas id="wave"></canvas>
+      <div class="telem" id="telem">source: — ／ rate: — Hz ／ x — y — z — ／ |a|変動 —</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">2</span><h2>お手本をあつめる</h2></div>
+    <div class="card">
+      <p class="desc" style="margin-top:0">ラベルを選んで記録ボタン → <b>0.5秒後から1.5秒間</b>、スマホにその触りかたをする（バイブが鳴っている間）。各ラベル<b>5回以上</b>が目安。</p>
+      <div class="lab-chips" id="lab-chips"></div>
+      <div class="addclass" style="margin:0 0 10px">
+        <input id="newlab" type="text" maxlength="8" placeholder="ラベル追加（例: だっこ）" aria-label="新しいラベル名">
+        <button class="ghost" id="addlab">＋追加</button>
+      </div>
+      <button class="bigbtn" id="rec-btn" disabled>⏺ お手本を記録（1.5秒）</button>
+      <p class="cnt" id="cnt">記録したお手本: 0個</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">3</span><h2>おぼえさせる → ためす</h2></div>
+    <div class="card">
+      <button class="bigbtn" id="train-btn" disabled>🧠 おぼえさせる（ELM・出力層だけ一瞬で解く）</button>
+      <div class="acc-line" id="acc" hidden></div>
+      <div class="verdict2" id="verdict">…<small>学習するとここでリアルタイム判定</small></div>
+      <div id="bars"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">4</span><h2>データを持ち出す</h2></div>
+    <div class="card">
+      <div class="rowbtns" style="margin:0">
+        <button class="ghost" id="csv-feat">⬇ 特徴量CSV（elmkit用）</button>
+        <button class="ghost" id="csv-raw">⬇ 生波形CSV（公式Sim用・50Hz）</button>
+        <button class="ghost" id="reset">ぜんぶわすれる</button>
+      </div>
+      <p class="note">特徴量CSVはマウス版と同じ「label,特徴量…」形式。生波形CSVは sample,label,t_ms,ax,ay,az の時系列で、公式 Solist-AI Sim・elmkit の波形実験にそのまま使える。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">🔬</span><h2>これは何の検証？</h2></div>
+    <div class="card">
+      <ul class="clean" style="font-size:13.5px">
+        <li>実機の構成 = <b>加速度センサ → 特徴量 → ELM（Solist-AI のオンデバイス学習）</b>。このページはセンサーをスマホで代用した同型実験</li>
+        <li>マウス版シミュレーターとの違いは<b>入力だけ</b>（ポインタ軌跡 → 実加速度3軸）。学習アルゴリズムは同一実装（隠れ層48・リッジ回帰）</li>
+        <li>ここで「なでる/たたく/ゆらす」が実加速度で分離できれば、<b>明日組む試作機1号でも同じ特徴量設計が通る見込み</b>が立つ</li>
+        <li>特徴量23次元: 各軸の統計(平均/分散/振幅/ジャーク) + 合成加速度の変動・ピーク + 周波数4帯域 + 軸間相関</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer><a href="index.html">← チーム基地に戻る</a> ／ 作成: 2026-07-25 ひかる + Claude ／ <a href="simulator.html">🐾 マウス版はこちら</a></footer>
+</div>
+
+<script>
+"use strict";
+/* ================= ELM (マウス版 simulator.html と同一実装) ================= */
+function mulMT(A){ const n=A[0].length, m=A.length, R=Array.from({length:n},()=>new Float64Array(n));
+  for(let k=0;k<m;k++){ const r=A[k]; for(let i=0;i<n;i++){ const ri=r[i]; if(!ri) continue; for(let j=0;j<n;j++) R[i][j]+=ri*r[j]; } } return R; }
+function solve(A,B){ const n=A.length, c=B[0].length;
+  const M=A.map((r,i)=>[...r, ...B[i]]);
+  for(let col=0;col<n;col++){
+    let p=col; for(let r=col+1;r<n;r++) if(Math.abs(M[r][col])>Math.abs(M[p][col])) p=r;
+    [M[col],M[p]]=[M[p],M[col]];
+    const d=M[col][col]||1e-12;
+    for(let j=col;j<n+c;j++) M[col][j]/=d;
+    for(let r=0;r<n;r++){ if(r===col) continue; const f=M[r][col]; if(!f) continue;
+      for(let j=col;j<n+c;j++) M[r][j]-=f*M[col][j]; }
+  }
+  return M.map(r=>r.slice(n));
+}
+class ELM {
+  constructor(nHidden=48, seed=7, ridge=1e-2, act='sigmoid'){
+    this.h=nHidden; this.ridge=ridge; this.act=act; this.rng=this.mulberry(seed);
+    this.W=null; this.b=null; this.beta=null; this.labels=[]; this.mu=null; this.sd=null;
+  }
+  mulberry(a){ return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a);
+    t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  norm(X){ return X.map(x=>x.map((v,i)=>(v-this.mu[i])/(this.sd[i]||1))); }
+  actFn(z){ return 1/(1+Math.exp(-z)); }
+  hidden(X){ const d=X[0].length;
+    if(!this.W){ this.W=Array.from({length:d},()=>Float64Array.from({length:this.h},()=>this.rng()*2-1));
+      this.b=Float64Array.from({length:this.h},()=>this.rng()*2-1); }
+    return X.map(x=>{ const z=new Float64Array(this.h);
+      for(let i=0;i<d;i++){ const xi=x[i]; if(!xi) continue; const w=this.W[i]; for(let j=0;j<this.h;j++) z[j]+=xi*w[j]; }
+      for(let j=0;j<this.h;j++) z[j]=this.actFn(z[j]+this.b[j]);
+      return z; });
+  }
+  fit(X,y){
+    const d=X[0].length;
+    this.mu=Array.from({length:d},(_,i)=>X.reduce((s,x)=>s+x[i],0)/X.length);
+    this.sd=Array.from({length:d},(_,i)=>Math.sqrt(X.reduce((s,x)=>s+(x[i]-this.mu[i])**2,0)/X.length));
+    this.labels=[...new Set(y)];
+    const T=y.map(l=>this.labels.map(c=>c===l?1:0));
+    const H=this.hidden(this.norm(X));
+    const A=mulMT(H); for(let i=0;i<this.h;i++) A[i][i]+=this.ridge;
+    const HtT=Array.from({length:this.h},()=>new Float64Array(this.labels.length));
+    for(let k=0;k<H.length;k++) for(let i=0;i<this.h;i++){ const hv=H[k][i]; for(let c=0;c<this.labels.length;c++) HtT[i][c]+=hv*T[k][c]; }
+    this.beta=solve(A,HtT.map(r=>[...r]));
+    return this;
+  }
+  scores(x){
+    const H=this.hidden(this.norm([x]))[0];
+    const raw=this.labels.map((_,c)=>{ let s=0; for(let i=0;i<this.h;i++) s+=H[i]*this.beta[i][c]; return s; });
+    const m=Math.max(...raw), e=raw.map(v=>Math.exp((v-m)*3)), Z=e.reduce((a,b)=>a+b,0);
+    return { raw, probs: raw.map((_,i)=>e[i]/Z) };
+  }
+  predict(x){ const p=this.scores(x).probs; return this.labels[p.indexOf(Math.max(...p))]; }
+}
+function crossValAcc(X,y,k=4){
+  const idx=[...X.keys()]; let s=1234; const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  idx.sort(()=>rnd()-0.5);
+  const folds=Array.from({length:k},(_,i)=>idx.filter((_,j)=>j%k===i));
+  let ok=0,n=0;
+  for(const test of folds){ if(!test.length) continue;
+    const tr=idx.filter(i=>!test.includes(i));
+    if(new Set(tr.map(i=>y[i])).size<2) continue;
+    const m=new ELM().fit(tr.map(i=>X[i]), tr.map(i=>y[i]));
+    for(const i of test){ n++; if(m.predict(X[i])===y[i]) ok++; }
+  }
+  return n? ok/n : 0;
+}
+
+/* ================= 加速度の取り込み ================= */
+const FS=50, WIN_MS=1500, N=Math.round(FS*WIN_MS/1000); // 50Hz × 1.5s = 75点
+const FEAT_NAMES=["xMean","xStd","xP2p","xJerk","yMean","yStd","yP2p","yJerk","zMean","zStd","zP2p","zJerk",
+  "mStd","mP2p","mZcr","mPeaks","b0_2","b2_5","b5_10","b10_25","rXY","rYZ","rZX"];
+let buf=[]; // {t,x,y,z} 生イベント列（直近4秒）
+let sensorOn=false, srcName='—', evCount=0, evT0=0;
+function onMotion(ev){
+  const a=ev.acceleration && ev.acceleration.x!==null ? ev.acceleration : ev.accelerationIncludingGravity;
+  if(!a || a.x===null) return;
+  srcName=(ev.acceleration && ev.acceleration.x!==null)?'acceleration':'incl. gravity';
+  const t=performance.now();
+  buf.push({t, x:a.x||0, y:a.y||0, z:a.z||0});
+  const cut=t-4000; while(buf.length && buf[0].t<cut) buf.shift();
+  evCount++;
+}
+async function startSensor(){
+  try{
+    if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
+      const p=await DeviceMotionEvent.requestPermission();
+      if(p!=='granted'){ note('センサーの許可がもらえませんでした'); return; }
+    }
+    window.addEventListener('devicemotion', onMotion);
+    sensorOn=true; evT0=performance.now(); evCount=0;
+    document.getElementById('sensor-btn').classList.add('on');
+    document.getElementById('sensor-btn').textContent='📡 センサー動作中';
+    document.getElementById('rec-btn').disabled=false;
+    setTimeout(()=>{ if(evCount===0) note('⚠ イベントが来ていません。この端末に加速度センサーが無いかも（スマホで開いてね）'); }, 1500);
+  }catch(e){ note('開始できませんでした: '+e.message); }
+}
+function note(s){ document.getElementById('sensor-note').textContent=s; }
+
+/* ================= 特徴量 (23次元) ================= */
+function resample(win){
+  const t0=win[0].t, t1=win[win.length-1].t, out=[];
+  for(let i=0;i<N;i++){ const tt=t0+(t1-t0)*i/(N-1);
+    let j=0; while(j<win.length-2 && win[j+1].t<tt) j++;
+    const a=win[j], b=win[Math.min(j+1,win.length-1)];
+    const f=(b.t>a.t)?(tt-a.t)/(b.t-a.t):0;
+    out.push({x:a.x+(b.x-a.x)*f, y:a.y+(b.y-a.y)*f, z:a.z+(b.z-a.z)*f}); }
+  return out;
+}
+function stats(v){ const mean=v.reduce((a,b)=>a+b,0)/v.length;
+  const sd=Math.sqrt(v.reduce((a,b)=>a+(b-mean)**2,0)/v.length);
+  return {mean, sd, p2p:Math.max(...v)-Math.min(...v)}; }
+function jerkRMS(v){ let s=0; for(let i=1;i<v.length;i++) s+=(v[i]-v[i-1])**2; return Math.sqrt(s/(v.length-1))*FS; }
+function corr(a,b){ const ma=a.reduce((x,y)=>x+y,0)/a.length, mb=b.reduce((x,y)=>x+y,0)/b.length;
+  let num=0,da=0,db=0; for(let i=0;i<a.length;i++){ num+=(a[i]-ma)*(b[i]-mb); da+=(a[i]-ma)**2; db+=(b[i]-mb)**2; }
+  return num/Math.sqrt((da||1e-9)*(db||1e-9)); }
+function bandEnergy(v, f0, f1){ // 素朴DFT: f0..f1Hz のパワー合計
+  const n=v.length, mean=v.reduce((a,b)=>a+b,0)/n;
+  let e=0;
+  for(let k=Math.max(1,Math.round(f0*n/FS)); k<=Math.min(n/2, Math.round(f1*n/FS)); k++){
+    let re=0,im=0;
+    for(let i=0;i<n;i++){ const ph=2*Math.PI*k*i/n; re+=(v[i]-mean)*Math.cos(ph); im-=(v[i]-mean)*Math.sin(ph); }
+    e+=(re*re+im*im)/(n*n);
+  }
+  return Math.log1p(e*100);
+}
+function featurizeAccel(win){
+  const R=resample(win);
+  const xs=R.map(p=>p.x), ys=R.map(p=>p.y), zs=R.map(p=>p.z);
+  const f=[];
+  for(const v of [xs,ys,zs]){ const s=stats(v); f.push(s.mean, s.sd, s.p2p, jerkRMS(v)); }
+  const mRaw=R.map(p=>Math.hypot(p.x,p.y,p.z));
+  const mm=stats(mRaw); const mc=mRaw.map(v=>v-mm.mean);
+  let zc=0; for(let i=1;i<mc.length;i++) if((mc[i]>=0)!==(mc[i-1]>=0)) zc++;
+  let peaks=0; for(let i=1;i<mc.length-1;i++) if(mc[i]>mm.sd && mc[i]>=mc[i-1] && mc[i]>mc[i+1]) peaks++;
+  f.push(mm.sd, mm.p2p, zc/mc.length*FS, peaks);
+  f.push(bandEnergy(mRaw,0.5,2), bandEnergy(mRaw,2,5), bandEnergy(mRaw,5,10), bandEnergy(mRaw,10,25));
+  f.push(corr(xs,ys), corr(ys,zs), corr(zs,xs));
+  return f;
+}
+
+/* ================= アプリ状態 ================= */
+const PRESETS=[{name:'なでる',emoji:'🖐️'},{name:'たたく',emoji:'👊'},{name:'ゆらす',emoji:'🫨'}];
+let classes=[], selected=0, model=null;
+const $=id=>document.getElementById(id);
+function load(){ try{ const s=JSON.parse(localStorage.getItem('accel-lab-v1')||'null');
+    if(s&&s.classes&&!s.classes.some(c=>c.samples.some(x=>x.f.length!==FEAT_NAMES.length))) classes=s.classes; }catch(e){}
+  if(!classes.length) classes=PRESETS.map(p=>({...p,samples:[]})); }
+function save(){ try{ localStorage.setItem('accel-lab-v1', JSON.stringify({classes})); }catch(e){} }
+function renderChips(){
+  const el=$('lab-chips'); el.innerHTML='';
+  classes.forEach((c,i)=>{ const b=document.createElement('button');
+    b.className=i===selected?'sel':''; b.textContent=`${c.emoji||'✨'} ${c.name} (${c.samples.length})`;
+    b.onclick=()=>{ selected=i; renderChips(); }; el.appendChild(b); });
+  const tot=classes.reduce((a,c)=>a+c.samples.length,0);
+  $('cnt').textContent=`記録したお手本: ${tot}個`;
+  $('train-btn').disabled=!(classes.filter(c=>c.samples.length>=3).length>=2);
+}
+$('addlab').onclick=()=>{ const v=$('newlab').value.trim(); if(!v) return;
+  if(classes.some(c=>c.name===v)){ alert('同じ名前があります'); return; }
+  classes.push({name:v, emoji:'✨', samples:[]}); selected=classes.length-1; $('newlab').value=''; save(); renderChips(); };
+
+/* 記録: 0.5秒後から1.5秒間ぶんの buf を切り出す */
+let recording=false;
+function captureSample(){
+  const t1=buf.length?buf[buf.length-1].t:0;
+  const win=buf.filter(p=>p.t>=t1-WIN_MS);
+  if(win.length<N*0.4){ note('⚠ サンプル不足（'+win.length+'点）。センサーは動いてる？'); return null; }
+  const f=featurizeAccel(win);
+  const t0=win[0].t;
+  const raw=resample(win).map((p,i)=>({t:Math.round(i*1000/FS), x:+p.x.toFixed(4), y:+p.y.toFixed(4), z:+p.z.toFixed(4)}));
+  classes[selected].samples.push({f, raw});
+  save(); renderChips();
+  return f;
+}
+$('rec-btn').onclick=()=>{
+  if(recording||!sensorOn) return;
+  recording=true;
+  const btn=$('rec-btn'); btn.classList.add('recflash');
+  btn.textContent='⏳ 0.5秒後にスタート…';
+  setTimeout(()=>{
+    btn.textContent=`⏺ 記録中… 「${classes[selected].name}」をして！`;
+    if(navigator.vibrate) navigator.vibrate(WIN_MS);
+    setTimeout(()=>{
+      const f=captureSample();
+      btn.classList.remove('recflash'); btn.textContent='⏺ お手本を記録（1.5秒）'; recording=false;
+      if(f && navigator.vibrate) navigator.vibrate([40,60,40]);
+    }, WIN_MS);
+  }, 500);
+};
+
+/* 学習 */
+$('train-btn').onclick=()=>{
+  const X=[],y=[];
+  classes.forEach(c=>c.samples.forEach(s=>{X.push(s.f);y.push(c.name);}));
+  model=new ELM().fit(X,y);
+  const acc=crossValAcc(X,y,Math.min(4,Math.floor(X.length/2)));
+  $('acc').hidden=false;
+  $('acc').innerHTML=`交差検証 acc = <b>${(acc*100).toFixed(0)}%</b> ／ ${X.length}サンプル・${model.labels.length}クラス`;
+  $('verdict').innerHTML='さわってみて！<small>1.5秒窓・300ms間隔で判定中</small>';
+};
+
+/* ライブ判定（スライディングウィンドウ + 静止ゲート） */
+const GATE=0.25; // |a|変動(std)がこれ未満なら「しずか」
+function classifyWindow(){
+  if(!model||!buf.length) return null;
+  const t1=buf[buf.length-1].t;
+  const win=buf.filter(p=>p.t>=t1-WIN_MS);
+  if(win.length<N*0.4) return null;
+  const m=win.map(p=>Math.hypot(p.x,p.y,p.z));
+  const mean=m.reduce((a,b)=>a+b,0)/m.length;
+  const sd=Math.sqrt(m.reduce((a,b)=>a+(b-mean)**2,0)/m.length);
+  if(sd<GATE) return {quiet:true, sd};
+  const f=featurizeAccel(win);
+  const sc=model.scores(f);
+  return {quiet:false, sd, sc, label:model.labels[sc.probs.indexOf(Math.max(...sc.probs))]};
+}
+setInterval(()=>{
+  if(!model||!sensorOn||recording) return;
+  const r=classifyWindow(); if(!r) return;
+  if(r.quiet){ $('verdict').innerHTML='…しずか<small>|a|変動 '+r.sd.toFixed(2)+' m/s²（ゲート '+GATE+'）</small>'; renderBars(null); return; }
+  $('verdict').innerHTML=`これは「${r.label}」！<small>confidence ${(Math.max(...r.sc.probs)*100).toFixed(0)}%</small>`;
+  renderBars(r.sc.probs);
+}, 300);
+function renderBars(probs){
+  const el=$('bars'); if(!model){ el.innerHTML=''; return; }
+  el.innerHTML=model.labels.map((l,i)=>{
+    const p=probs?probs[i]:0;
+    return `<div class="bar-row"><span>${l}</span><span class="bt"><span class="bf" style="width:${(p*100).toFixed(0)}%"></span></span><span class="bv">${(p*100).toFixed(0)}%</span></div>`;
+  }).join('');
+}
+
+/* CSV */
+function dl(name, text){ const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'})); a.download=name; a.click(); }
+$('csv-feat').onclick=()=>{
+  const rows=[['label',...FEAT_NAMES].join(',')];
+  classes.forEach(c=>c.samples.forEach(s=>rows.push([c.name,...s.f.map(v=>v.toFixed(6))].join(','))));
+  dl('accel-features.csv', rows.join('\n'));
+};
+$('csv-raw').onclick=()=>{
+  const rows=['sample,label,t_ms,ax,ay,az']; let id=0;
+  classes.forEach(c=>c.samples.forEach(s=>{ id++;
+    (s.raw||[]).forEach(p=>rows.push(`${id},${c.name},${p.t},${p.x},${p.y},${p.z}`)); }));
+  dl('accel-raw-50hz.csv', rows.join('\n'));
+};
+$('reset').onclick=()=>{ if(!confirm('集めたお手本と学習結果をすべて消します。いい？')) return;
+  classes=PRESETS.map(p=>({...p,samples:[]})); selected=0; model=null;
+  save(); renderChips(); $('acc').hidden=true; $('verdict').innerHTML='…<small>学習するとここでリアルタイム判定</small>'; $('bars').innerHTML=''; };
+
+/* 波形表示 */
+const wave=$('wave'), wctx=wave.getContext('2d'); const wh=new Float64Array(240); let wp=0;
+setInterval(()=>{
+  const last=buf[buf.length-1];
+  const m=last?Math.hypot(last.x,last.y,last.z):0;
+  wh[wp%wh.length]=m; wp++;
+  const rate=sensorOn&&evT0?(evCount/((performance.now()-evT0)/1000)):0;
+  const t1=buf.length?buf[buf.length-1].t:0;
+  const w2=buf.filter(p=>p.t>=t1-WIN_MS).map(p=>Math.hypot(p.x,p.y,p.z));
+  let sd=0; if(w2.length>4){ const mn=w2.reduce((a,b)=>a+b,0)/w2.length; sd=Math.sqrt(w2.reduce((a,b)=>a+(b-mn)**2,0)/w2.length); }
+  $('telem').innerHTML=`source: <b>${srcName}</b> ／ rate: <b>${rate.toFixed(0)}</b> Hz ／ x <b>${last?last.x.toFixed(2):'—'}</b> y <b>${last?last.y.toFixed(2):'—'}</b> z <b>${last?last.z.toFixed(2):'—'}</b> ／ |a|変動 <b>${sd.toFixed(2)}</b> m/s²`;
+  const dpr=window.devicePixelRatio||1, w=wave.clientWidth, h=64;
+  if(wave.width!==w*dpr){ wave.width=w*dpr; wave.height=h*dpr; wctx.scale(dpr,dpr); }
+  wctx.clearRect(0,0,w,h);
+  const css=getComputedStyle(document.body);
+  wctx.strokeStyle=css.getPropertyValue('--gold').trim()||'#c9a227'; wctx.lineWidth=1.6; wctx.lineJoin='round';
+  wctx.beginPath();
+  for(let i=0;i<wh.length;i++){ const v=wh[(wp+i)%wh.length];
+    const x=i/(wh.length-1)*w, y=h-4-Math.min(v/25,1)*(h-8);
+    i?wctx.lineTo(x,y):wctx.moveTo(x,y); }
+  wctx.stroke();
+}, 60);
+
+$('sensor-btn').onclick=startSensor;
+load(); renderChips();
+
+/* ================= E2Eセルフテスト(開発用) ================= */
+window.__accelTest=function(){
+  // 合成加速度列 → 実パイプライン(featurizeAccel→ELM cv)を通す
+  const synth=(kind,seed)=>{ let s=seed; const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+    const w=[]; const t0=1000;
+    for(let i=0;i<100;i++){ const t=t0+i*20; let x,y,z;
+      if(kind==='stroke'){ x=0.4*Math.sin(2*Math.PI*1.2*i/50)+rnd()*0.1; y=0.3*Math.cos(2*Math.PI*1.2*i/50); z=0.15*Math.sin(2*Math.PI*0.8*i/50)+rnd()*0.05; }
+      else if(kind==='hit'){ const sp=(i%25)<2 ? 14 : 0; x=sp*(rnd()-0.3); y=sp*(rnd()-0.5); z=(i%25)<2?12+rnd()*4:rnd()*0.3; }
+      else { x=6*Math.sin(2*Math.PI*5*i/50)+rnd(); y=5*Math.cos(2*Math.PI*5*i/50); z=2*Math.sin(2*Math.PI*4.5*i/50); }
+      w.push({t,x,y,z}); }
+    return w; };
+  window.__accelSynth=synth;
+  const X=[],y=[];
+  [['なでる','stroke'],['たたく','hit'],['ゆらす','shake']].forEach(([lab,kind],ci)=>{
+    for(let i=0;i<8;i++){ X.push(featurizeAccel(synth(kind, 11+ci*77+i*13))); y.push(lab); } });
+  const acc=crossValAcc(X,y,4);
+  const m=new ELM().fit(X,y);
+  const pred=m.predict(featurizeAccel(synth('hit',9999)));
+  return {acc, pred, dim:X[0].length, ok: acc>0.85 && pred==='たたく' && X[0].length===FEAT_NAMES.length};
+};
+</script>
+</body>
+</html>

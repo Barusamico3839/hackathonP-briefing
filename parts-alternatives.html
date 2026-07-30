@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>互換・代替部品カタログ — 同じ働きをする別パーツ大全</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <span class="here">／ 🔩 互換部品カタログ</span>
+  <a href="hardware-verdict.html">⚖️ 最適解検証</a>
+</nav>
+
+<header class="hero">
+  <span class="kicker">PARTS ALTERNATIVES — 2026-07-31</span>
+  <h1>🔩 互換・代替部品カタログ</h1>
+  <p class="sub">7/30夜MTGのけいと宿題「買うパーツと同じ働きをする別のパーツ、互換品のバリエーションを増やしておいて」への回答。発注前にここでカートを最終確定する。</p>
+  <p class="meta-note">2026-07-31 Web調査3系統・並列実施（Amazon/AliExpressは実ページで価格・配達日を確認）／ 原本: research/sakimimi-parts-alternatives.md</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-head"><span class="n">🎯</span><h2>結論サマリ（先に答え）</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>カート</th><th>現行本命</th><th>7/31結論</th></tr>
+      <tr><td class="item">③ ICP1書込機</td><td><s>Sure直販（納期7〜15日・送料不明）</s></td><td><b>乗り換え: AliExpressのWondom公式ストアで正規ICP1が¥3,312・送料無料・着8/6〜14</b>。互換品（¥4,561〜）より正規品が安いという逆転。0円保険=ESP32書込機化OSS</td></tr>
+      <tr><td class="item">② DSPボード APM2</td><td>Amazon ¥5,183</td><td><b>維持</b>（¥5,181・競合ルートほぼ全滅）。<b>保険に同便でもう1枚=計2枚を推奨</b>（②一本化で単一障害点になったため）</td></tr>
+      <tr><td class="item">① プリIC等（DigiKey）</td><td>SSM2019BNZ ¥1,238</td><td><b>カート丸ごと不要に: 秋月がSSM2019BNZを¥730・在庫ありで販売中</b>（けいとの読み「SSMなんとかは秋月に売ってる」が正解！）。MCP6002はMCP6022-I/P ¥220（秋月在庫1,433）へ差し替え → DigiKey送料¥2,000問題が消滅</td></tr>
+      <tr><td class="item">④ 秋月・⑤ サウンドハウス</td><td>現行リスト</td><td>維持＋IC類を秋月に相乗り。XLRは外装重視ならNeutrik維持・実験用だけなら秋月¥120で代替可 → 下の③章</td></tr>
+    </table></div>
+    <p class="src"><b>新・必須カート合計の目安: 約20,000〜22,000円</b>（APM2 1枚時。DigiKey ¥4,700が消えてMTG時点の21,000〜24,000からさらに減額）。保険APM2 2枚目は+¥5,181（推奨・任意）。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">✍️</span><h2>① 書込機 — ICP1の互換・代替（けいと最重視ポイント）</h2></div>
+  <div class="card">
+    <p><b>答え: 「互換品で安く」の正解は「正規品の方が安い」だった。</b>AliExpressの<b>Wondom公式ストア</b>に正規ICP1が<b>¥3,312・送料無料・着8/6〜8/14表示</b>（7/31実ページ確認）。</p>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>手段</th><th>価格</th><th>納期</th><th>難易度</th><th>判定</th></tr>
+      <tr><td class="item"><b><a href="https://ja.aliexpress.com/item/1005003221109697.html">ICP1正規（AliExpress Wondom公式ストア）</a></b></td><td><b>¥3,312</b>・送料無料</td><td><b>8/6〜8/14</b>（77%が10日以内）</td><td>ゼロ（純正）</td><td><span class="chip ok">本命・即発注</span></td></tr>
+      <tr><td class="item"><a href="https://github.com/rarranzb/ADAU1701-TCPi-ESP32">ESP32 TCPiブリッジ（OSS）</a></td><td>手持ちESP32なら<b>0円</b></td><td><b>即日</b>（Webインストーラ）</td><td>低〜中</td><td><span class="chip ok">保険・並走推奨</span> GUIリアルタイム調整+EEPROM書込まで可＝Arduino旧保険の上位互換</td></tr>
+      <tr><td class="item">ICP1正規（Sure直販）</td><td>$17.91+送料不明</td><td>Express 7〜15日</td><td>ゼロ</td><td><span class="chip maybe">次点</span> 送料事故リスク</td></tr>
+      <tr><td class="item">ICP1（Amazon.co.jp・7/31新出品発見）</td><td>¥6,737〜7,706+送料</td><td>8/13〜8/20（中国発）</td><td>ゼロ</td><td><span class="chip no">非推奨</span> 価格2倍・納期メリットなし</td></tr>
+      <tr><td class="item">USBi互換機（Amazon ¥7,699〜／AliExpress ¥4,561〜）</td><td>正規ICP1より高い</td><td>8/2〜23</td><td>低</td><td><span class="chip no">選ぶ理由消滅</span></td></tr>
+      <tr><td class="item">CY7C68013Aボード自作USBi化</td><td>¥892〜1,600+送料</td><td>8/11以降</td><td>中（ドライバの沼）</td><td><span class="chip no">ESP32案がある以上不要</span>（手順自体は確立済み）</td></tr>
+      <tr><td class="item">純正EVAL-ADUSB2EBUZ（ADI）</td><td>$103.98〜</td><td>数日</td><td>ゼロ</td><td><span class="chip no">価格が論外</span></td></tr>
+    </table></div>
+    <p class="src">国内ショップ（秋月・スイッチサイエンス・千石）は0件確認 = 国内即納のUSBi互換品は存在しない。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🎛️</span><h2>② DSPボード — APM2の入手性再確認と代替</h2></div>
+  <div class="card">
+    <p><b>本命維持: Amazon.co.jp APM2 ¥5,181</b>（7/31価格トラッカー実測・「過去最安値!」表示）。競合ルートは軒並み消滅 — 青基板DSPmini在庫切れ継続・TinySine TSA1701公式Sold out・国内店頭は秋月/共立とも0件。<b>1週間強で届くADAU1701ボードは実質これ一択。</b></p>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>ボード</th><th>価格</th><th>納期</th><th>判定</th></tr>
+      <tr><td class="item"><a href="https://www.amazon.co.jp/dp/B07HHNQ74B">Wondom APM2（Amazon）</a></td><td>¥5,181</td><td>8/8〜8/11目安（発注前に在庫・配達日を目視確認）</td><td><span class="chip ok">本命・<b>2枚買い推奨</b></span> 同便なら追加納期ゼロの最確実な保険</td></tr>
+      <tr><td class="item"><a href="https://www.audiophonics.fr/en/dsp-modules/wondom-adau1701-dsp-audio-digital-signal-processor-kernel-board-p-11212.html">同（Audiophonics 仏）</a></td><td>€19.90+送料</td><td>未確認・残数僅少</td><td><span class="chip maybe">Amazon便が飛んだ時の次点</span></td></tr>
+      <tr><td class="item">同（Sure直販）</td><td>$17.91〜19.90+送料</td><td>Express 7〜15日</td><td><span class="chip maybe">送料次第</span></td></tr>
+      <tr><td class="item">青基板DSPmini（ADAU1401A）</td><td>AliExpress $25〜36（従来相場$10の出品は消滅）</td><td>7〜20日</td><td><span class="chip maybe">安い遅い保険</span> Amazonの2 ASINは在庫切れ継続を7/31再確認</td></tr>
+      <tr><td class="item">TinySine TSA1701／国内Amazon変種¥13,308／公式評価ボード¥29,000</td><td>—</td><td>—</td><td><span class="chip no">Sold out／割高／過大</span></td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section id="analog">
+  <div class="sec-head"><span class="n">🎙️</span><h2>③ アナログ入力段IC・XLR・小物 — 互換品と発注先集約</h2></div>
+
+  <div class="card">
+    <h3>マイクプリIC — 本命は秋月のSSM2019BNZ ¥730</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>型番</th><th>店・価格</th><th>在庫</th><th>判定</th></tr>
+      <tr><td class="item"><b><a href="https://akizukidenshi.com/catalog/g/g113301/">SSM2019BNZ（秋月 113301）</a></b></td><td><b>¥730</b></td><td><b>在庫あり</b>（通販可100個）</td><td><span class="chip ok">本命+予備の2個確保</span> DigiKey比▲¥508</td></tr>
+      <tr><td class="item"><a href="https://www.garrettaudio.com/OPamp.html">THAT1512P08U（ギャレットオーディオ）</a></td><td>¥660 + ネコポス¥250</td><td>在庫あり</td><td><span class="chip maybe">聴き比べ枠</span> 同ピン配置だが<b>ゲイン式が G=0.5+5kΩ/RG</b>（+30dBはRG≈160Ωに変更）。1510より低雑音で上位</td></tr>
+      <tr><td class="item">NJM2122D + NJM4580DD の2段差動プリ（秋月）</td><td>計¥130</td><td>在庫あり</td><td><span class="chip maybe">最安保険</span> CMRRは抵抗マッチング依存（1%抵抗で40dB級）— ハム環境ではSSM2019優先</td></tr>
+      <tr><td class="item">SSM2019BNZ（共立 ¥1,100・在庫1／DigiKey ¥1,238／RS ¥774未確認）</td><td>—</td><td>—</td><td><span class="chip no">秋月がある以上不要</span></td></tr>
+      <tr><td class="item">INA217（国内在庫ルートなし）／AD620 ¥1,680／AD623 ¥900（雑音不利）／LT1167（10月入荷）</td><td>—</td><td>—</td><td><span class="chip no">除外</span></td></tr>
+      <tr><td class="item">秋月「AE-SSM2167」</td><td>—</td><td><b>カタログに存在せず</b>（0件）</td><td><span class="chip no">—</span> AE-MICAMP¥500はエレクトレット用・バランス入力不可で不適</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>分析路バッファ（MCP6002が入荷未定のままの代替）</h3>
+    <p><b>第一代替: <a href="https://akizukidenshi.com/catalog/g/g116187/">MCP6022-I/P（秋月 ¥220・在庫1,433）</a></b> — RRIO・GBW 10MHz・2.5〜5.5V。3.3V系はそのまま差し替え可。次点: NJU7062D ¥80（在庫4,717・最低3V・帯域低め）。LMC6482/MCP6072は秋月取扱なし。</p>
+  </div>
+
+  <div class="card">
+    <h3>XLRパネルコネクタ</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>品</th><th>価格</th><th>備考</th></tr>
+      <tr><td class="item">Neutrik NC3FD-LX / NC3MD-LX（サウンドハウス・現行）</td><td>¥450 / ¥390</td><td><span class="chip ok">外装完成度重視なら維持</span>（勝ち筋③パッケージング）</td></tr>
+      <tr><td class="item"><a href="https://akizukidenshi.com/catalog/g/g115761/">MPJ-8004-3P メス（秋月）</a></td><td><b>¥120</b>・在庫1,884</td><td>Neutrikの1/4弱。実験用に十分。オスはケーブル型MPC-601A-3P ¥260（パネルオスは秋月になし）</td></tr>
+      <tr><td class="item">Camon XLR3 パネル型（千石）</td><td>¥168〜260</td><td>パネルオス最安ルート・型番/送料は動的確認要</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>発注先集約シナリオ（送料込み比較）</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>案</th><th>構成</th><th>総額</th><th>妥協点</th></tr>
+      <tr><td class="item"><b>A案: 秋月1店集約（推奨ベース）</b></td><td>SSM2019 ¥730 + MCP6022 ¥220 + 2段差動保険 ¥130 + XLRメス ¥120 + XLRオスケーブル型 ¥260 + 送料¥500</td><td><b>約¥1,960</b>（予備SSM2019+1でも¥2,690）</td><td>パネルオスXLRなし・コネクタが業務用グレードでない</td></tr>
+      <tr><td class="item">B案: 秋月 + サウンドハウス</td><td>秋月IC類 + SH Neutrik ¥840（他の音響用品と同梱で送料無料化）</td><td>約¥2,420〜2,970</td><td>2店管理。外装完成度は上</td></tr>
+      <tr><td class="item">C案: A案 + ギャレット</td><td>+THAT1512 ¥660 + ネコポス¥250〜</td><td>約¥3,070</td><td>差し替え聴き比べができて一番面白い</td></tr>
+      <tr><td class="item">参考: 旧計画（DigiKey+SH）</td><td>¥2,700 + 送料¥2,000 + ¥840</td><td>約¥5,540〜</td><td>→ A案で6割減</td></tr>
+    </table></div>
+    <p class="src">マルツ経由DigiKey取寄（送料¥240・¥3,300以上無料）は「DigiKeyにしかない部品が今後出た場合」の切り札として温存。発注前の動的確認: Mouser THAT1510現在価・SH送料無料ライン・千石の個別型番。</p>
+  </div>
+</section>
+
+<footer>サキミミ 互換・代替部品カタログ ／ 2026-07-31 ／ 原本: research/sakimimi-parts-alternatives.md</footer>
+</div>
+</body>
+</html>

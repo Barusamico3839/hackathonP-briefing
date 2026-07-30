@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REHC 2026 チーム基地 — ひかる & けいと</title>
+<meta property="og:title" content="REHC 2026 チーム基地 — サキミミ作戦本部">
+<meta property="og:description" content="ハウリングを、鳴る前に止める。調査・戦略・成果物はぜんぶここから。">
+<meta property="og:image" content="https://barusamico3839.github.io/hackathonP-briefing/assets/hero-sakimimi.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html" aria-current="page">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <a href="sakimimi-specs.html">📐 要件と設計</a>
+  <a href="hardware-verdict.html">⚖️ 最適解検証</a>
+  <a href="ideas.html" class="sim-link" style="margin-left:auto">💡 131案</a>
+  <a href="capabilities.html">🧠 技術大全</a>
+</nav>
+
+<header class="hero textured">
+  <img src="assets/mascot-sakimimi.png" alt="マスコット: 耳のついた小さな箱・サキミミ" style="width:112px;height:112px;border-radius:50%;box-shadow:var(--shadow);border:3px solid var(--surface);object-fit:cover;">
+  <span class="kicker">ROHM EDGE HACK CHALLENGE 2026 ・ チーム基地</span>
+  <h1>サキミミ 作戦本部</h1>
+  <p class="sub">ハウリングを、鳴る前に止める。マイクとミキサーの間に挟む「現場で育つ音響番人」。調査・戦略・意思決定の成果物はぜんぶここから。</p>
+  <div class="countdown">
+    <b>60</b><span class="lbl">日で応募締切<br>9/28（月）／ 内部目標 9/21</span>
+  </div>
+  <p class="meta-note">ひかる & けいと の2人チーム ／ 🎯 目指すは最優秀賞（50万円） ／ 最終更新 2026-07-30</p>
+  <img src="assets/hero-sakimimi.jpg" alt="コンセプトアート: 小さなライブハウスで、マイクとミキサーの間に座る耳のついた小さな箱"
+       style="display:block; width:min(620px,100%); margin:26px auto 0; border-radius:18px;
+              box-shadow: var(--shadow); border:1px solid var(--line);">
+  <p class="meta-note" style="margin-top:8px">コンセプトアート（AI生成・2026-07-30）〜 ぬいぐるみ犬からピボットしました 🧸→🦻</p>
+</header>
+
+<div class="wrap">
+
+  <section id="agenda">
+    <div class="sec-head"><span class="n">📌</span><h2>きょうの作戦（7/31 金）— 発注実行の日！🚀</h2></div>
+    <p class="lead">7/30夜MTG（2部・計2時間）でサキミミ②一本化を最終確認、役割分担も確定（ひかる=分析器側／けいと=主回路側・つなぎはI2C）。きょうは互換部品カタログで最終カートを固めて、ポチる。</p>
+    <div class="card">
+      <ol class="agenda">
+        <li>
+          <span class="ah">🔩 互換・代替部品カタログを見てカート最終確定</span>
+          <span class="am">けいと宿題「同じ働きをする別パーツのバリエーション」への回答が納品済み。ICP1書込機の代替・発注先の集約案・保険ボードの判断まで → <a href="parts-alternatives.html">互換部品カタログ</a></span>
+        </li>
+        <li>
+          <span class="ah">🛒 ②本番機部品の発注実行（→けいと宅へ配送）</span>
+          <span class="am"><a href="buy.html">購入リスト</a>を上から順に。必須カート約21,000〜24,000円。<b>保険でAPM2を2枚</b>が7/31の新推奨</span>
+        </li>
+        <li>
+          <span class="ah">📞 Solist-AIキットの購入判断（→ひかる宅へ）</span>
+          <span class="am">運営フォームの返信が今日来なければ購入に進む（データ・テクノ 075-313-3275・平日9-17:30）→ <a href="kit-and-handson.html">キットページ</a></span>
+        </li>
+        <li>
+          <span class="ah">⚖️ ②一本化後も「ハードの最適解」かの再検証結果</span>
+          <span class="am">結論: ADAU1701構成は最適のまま変更不要。10〜20本可変ノッチも部品変更ゼロで対応可。宿題はUSB→±9V電源設計と保険ボードの2点だけ → <a href="hardware-verdict.html">検証ページ（7/31追記）</a></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="pubs">
+    <div class="sec-head"><span class="n">📚</span><h2>成果物ライブラリ</h2></div>
+    <p class="lead">新しい調査が終わるたびにここへ追加していく。</p>
+
+    <h3 style="margin:18px 0 10px">2026-07-31 — MTGの宿題への回答 🆕</h3>
+    <div class="pubs">
+      <a class="pub wide hot" href="parts-alternatives.html">
+        <span class="emoji">🔩🔁</span>
+        <span class="date">2026-07-31 ・ けいと宿題への回答</span>
+        <h3>互換・代替部品カタログ — 同じ働きをする別パーツ大全</h3>
+        <p>7/30夜MTGの依頼「買うパーツの互換品のバリエーションを増やしておいて」に回答。ICP1書込機の代替（0円Arduinoルート含む）・APM2の入手性再確認と保険ボード・プリICの互換3兄弟・発注先の集約シナリオ。<b>発注前にこれを見てカートを最終確定する。</b></p>
+        <span class="go">カタログを開く →</span>
+      </a>
+      <a class="pub hot" href="hardware-verdict.html">
+        <span class="emoji">🔁⚖️</span>
+        <span class="date">2026-07-31 ・ 再検証を追記</span>
+        <h3>②一本化+新要件でも最適解か？— 再検証</h3>
+        <p>7/30夜MTGの新要件（10〜20本可変ノッチ・USB電源・ダイナミックマイク限定・I2C分担）を現行構成に当て直した。結論: ADAU1701構成は最適のまま変更不要。けいと疑問「SCF⇔デジポットは繋がるのか」への回答も収録。</p>
+        <span class="go">再検証を読む →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">2026-07-30 — 購入パーティーパック</h3>
+    <div class="pubs">
+      <a class="pub wide hot" href="buy.html">
+        <span class="emoji">🛒🎉</span>
+        <span class="date">2026-07-30 ・ 今夜のMTGで使うメイン資料</span>
+        <h3>サキミミ 購入リスト — 見て、ポチるだけ。</h3>
+        <p>3つの作成物に必要な部品ぜんぶ。主要部品は1つずつ「スペック・寸法・メリデメ・現在価格・在庫・納期・買い方」まで掘ってある。店別カートの組み方・小物と工具・秋葉原実店舗ルートつき。<b>今日注文したらいつ届くかも記載。</b></p>
+        <span class="go">ポチりに行く →</span>
+      </a>
+      <a class="pub hot" href="sakimimi-specs.html">
+        <span class="emoji">📐</span>
+        <span class="date">2026-07-30 ・ 設計の正</span>
+        <h3>要件と設計 — 3つの作成物</h3>
+        <p>作成物①見守り機・②ブースト機DSP版・③真アナログ版。ブロック図・信号レベル計画・完成条件（DoD）・受け入れテスト・リスク表。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub hot" href="hardware-verdict.html">
+        <span class="emoji">⚖️</span>
+        <span class="date">2026-07-30 ・ けいとの宿題と答え合わせ</span>
+        <h3>この構成はハードの最適解か？— 敵対的検証</h3>
+        <p>Teensy全ソフト処理・ESP32・ラズパイ・上位DSP・アナログVCAなど対抗案と本気で比較。判断基準→評価→結論の思考過程を全部見せる。「既製品組み合わせ」批判への回答つき。</p>
+        <span class="go">検証を読む →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">2026-07-27 — アイデア決めMTG</h3>
+    <div class="pubs">
+      <a class="pub wide" href="wazanoko-vs-sakimimi.html">
+        <span class="emoji">🛠️🆚🦻</span>
+        <span class="date">2026-07-27 ・ サキミミ主軸が決まった資料</span>
+        <h3>ワザノコ vs サキミミ — 徹底比較</h3>
+        <p>けいと発案「技を道具に宿すAIペット」vs ひかる発案「ハウリングを鳴る前に止める音響番人」。技術実現性・競合と差別化・アーキテクチャ図・検証実験プラン。<b>2案は同じ核を持つ兄弟——「教えて育てる」DNAはサキミミに生きている</b>（※7/30 なでUIは廃止・教示はボタン/スイッチに）。</p>
+        <span class="go">読む →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">2026-07-26 — アイデア大量発散</h3>
+    <div class="pubs">
+      <a class="pub wide" href="ideas.html">
+        <span class="emoji">💡🏆</span>
+        <span class="date">2026-07-26 ・ 14:00 アイデア固め会議の資料</span>
+        <h3>131案ランキング — 勝てるのはどれだ？</h3>
+        <p>6つの視点のAIエージェント並列ブレストで計131案を5軸採点。Sティア8案からサキミミ（当時はサキヨミ+ハウリング番人）が勝ち上がった記録。B/Cティアの落選理由も全部残してある。</p>
+        <span class="go">ランキングを見る →</span>
+      </a>
+    </div>
+
+    <h3 style="margin:26px 0 10px">🧸 ぬいぐるみ時代のアーカイブ（7/20〜7/25・技術資産は今も現役）</h3>
+    <div class="pubs">
+      <a class="pub" href="simulator.html">
+        <span class="emoji">🐾</span>
+        <span class="date">2026-07-23 ・ ELMその場学習のWebデモ</span>
+        <h3>なでなでシミュレーター</h3>
+        <p>ブラウザ内ELMその場学習のデモ。<b>この学習エンジンの知見はサキミミの「ボタンで誤検知を矯正」にそのまま使う</b>（※7/30 なでUIは廃止）。</p>
+        <span class="go">あそぶ →</span>
+      </a>
+      <a class="pub" href="accel.html">
+        <span class="emoji">📳</span>
+        <span class="date">2026-07-25 ・ スマホ実センサー版</span>
+        <h3>なでなで加速度ラボ</h3>
+        <p>スマホの実加速度でその場学習・判定。特徴量CSV（elmkit用）と生波形CSV（公式Sim用）で持ち出せる。</p>
+        <span class="go">スマホで開く →</span>
+      </a>
+      <a class="pub" href="tools.html">
+        <span class="emoji">🧰</span>
+        <span class="date">2026-07-25 ・ 工作工具リスト</span>
+        <h3>工作工具リスト（チェックリスト）</h3>
+        <p>工具・消耗品のチェックリスト。サキミミ用の追加分は<a href="buy-tools.html" style="border:none">小物・工具ページ</a>へ。</p>
+        <span class="go">チェックする →</span>
+      </a>
+      <a class="pub" href="proto-plans.html">
+        <span class="emoji">🧸</span>
+        <span class="date">2026-07-25 ・ 歴史的資料</span>
+        <h3>試作機1号 設計提案（ぬい3案比較）</h3>
+        <p>ぬいぐるみ路線の試作3案比較。7/25夜に「アイデア確定前に買わない」でピボット。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="platform.html">
+        <span class="emoji">🔌</span>
+        <span class="date">2026-07-23 ・ 今も現役</span>
+        <h3>Solist-AI プラットフォーム開通ガイド</h3>
+        <p>MyROHM 無料登録 → Sim ダウンロード → 起動確認の手順書。<b>ひかるはまだ未開通 — 今週やる。</b></p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="kit-and-handson.html">
+        <span class="emoji">🛒</span>
+        <span class="date">2026-07-23 ・ 今も現役</span>
+        <h3>キット購入 & ハンズオン</h3>
+        <p>DT-EBML63Q2557 のキット2種の違い・見積の取り方。<b>データ・テクノへの見積電話が全工程の律速。</b></p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="capabilities.html">
+        <span class="emoji">🧠</span>
+        <span class="date">2026-07-23 ・ 今も現役</span>
+        <h3>Solist-AI できること・できないこと大全</h3>
+        <p>データシート精読の全結果。<b>HW-FFT（サキミミの心臓）の根拠はここ。</b>音声系・実験リスト8本。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub" href="automation.html">
+        <span class="emoji">🤖</span>
+        <span class="date">2026-07-23 ・ 開発効率</span>
+        <h3>プラットフォームはAPIで操作できる？</h3>
+        <p>Simに公開APIは無い→CSV入出力+Python再現実装（elmkit）で自動化する戦略。</p>
+        <span class="go">開く →</span>
+      </a>
+      <a class="pub wide" href="briefing.html">
+        <span class="emoji">🎯</span>
+        <span class="date">2026-07-20 ・ 歴史的スナップショット</span>
+        <h3>REHC 2026 作戦ブリーフィング（キックオフ時点）</h3>
+        <p>最初の作戦。歴代優勝の勝ち筋分析はサキミミ戦略にも生きている。</p>
+        <span class="go">開く →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="facts">
+    <div class="sec-head"><span class="n">⚡</span><h2>いつでも効く最重要ファクト</h2></div>
+    <div class="card">
+      <ul class="clean">
+        <li><b>締切 9/28（月）</b>。提出物 = ProtoPedia 一般公開ページ + 3分以内デモ動画 + 実動プロトタイプ</li>
+        <li><b>審査軸は3つ</b>: 独創性 ／ 完成度（動作デモの精度）／ Solist-AI 活用度</li>
+        <li>一次審査に<b>一般投票（10/1〜・1人3票）</b>が入る → ProtoPedia ページと動画の質も勝負</li>
+        <li>最終審査会は <b>10/24（土）オンラインプレゼン</b> → ライブで安定動作すること</li>
+        <li>勝ち筋: <b>体験の面白さ × 完成度</b>（事業性単独では頂点は取れない）</li>
+        <li>サキミミの差別化4本柱: <b>①予兆で先回り ②現場で育つ ③その場で教えて矯正（ボタン） ④マイクの音しか触らない</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    REHC 2026 チーム基地 ／ ひかる & けいと ／ このページはチーム用の非公開運用（検索エンジン除外設定済み）
+  </footer>
+</div>
+</body>
+</html>

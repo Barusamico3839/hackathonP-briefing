@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>購入詳細: 作成物③真アナログ版（SCF）— ストレッチゴール</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <span class="here">／ ③ 真アナログ版（SCF）の部品</span>
+</nav>
+
+<header class="hero">
+  <span class="kicker">BUY — STEP 3 (ANALOG SCF) — STRETCH GOAL</span>
+  <h1>作成物③ 真アナログ版の買い物</h1>
+  <p class="sub"><b>🔄 7/30通話: 買い物を「②本番機用のみ」に絞ったため、このページの部品は今回買わない</b>（資料として保存。将来③に着手するなら再確認して発注）。主音路をアナログに保ったまま、横道（サイドチェーン）のSCFで「引き算ノッチ」を作る挑戦枠。<a href="hardware-verdict.html">最適解検証</a>の提案により<b>「全部終わってからのご褒美」に降格</b>済み。<s>部品は安いうちに押さえる価値あり</s>（唯一の例外: DigiKeyカートの送料無料調整にLTC1060を任意同梱するテクは<a href="buy.html">buy.html</a>参照）。</p>
+  <p class="meta-note">2026-07-30調査（DigiKey・秋月は当日実ページ確認）／ 詳細原本: research/sakimimi-step3-parts.md</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-head"><span class="n">🚨</span><h2>重大訂正: LMF100は廃番 → 本命はLTC1060に交代</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li><b>LMF100はTI廃番・DigiKey購入不可</b>（CIWM/CIWM-NOPB/CIWMX全滅・DIP版も廃番）。ブローカーに在庫はあるが$10〜80/個の高値+真贋リスク</li>
+      <li>途中経過で「LMF100在庫468・現行」と見えたのは<b>検索結果の代替品行MF10CCWM/NOPB（¥4,850・実はラストバイ在庫）の誤読</b>でした — 訂正します</li>
+      <li>朗報: 同じMF10系の <b>LTC1060（ADI）が現行生産中</b>。しかも<b>DIP-20版がある＝SOICハンダという最大リスクが消える</b>。「f0=クロック÷100・校正不要」の物語もそのまま</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🎯</span><h2>結論 — 押さえておく部品（合計約¥9,000）</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>買うもの</th><th>どこで</th><th>価格</th><th>メモ</th></tr>
+      <tr><td class="item"><a href="https://www.digikey.jp/ja/products/detail/analog-devices-inc/LTC1060CN-PBF/888722">LTC1060CN#PBF</a>（DIP-20）×2〜3</td><td>DigiKey</td><td>¥2,205/個（税込¥2,425.50）・<b>在庫126</b></td><td>×3で¥6,615=単独で送料無料ライン超え。STEP1のICと同カートに</td></tr>
+      <tr><td class="item">NJU72343V（8ch電子VR・深さk制御）×2</td><td><a href="https://akizukidenshi.com/catalog/g/g117100/">秋月 117100</a></td><td>¥280・通販在庫193</td><td>±4.5〜7.5V両電源専用 → <b>±5Vレール統一構成と好相性</b></td></tr>
+      <tr><td class="item">SSOP32変換基板 ×2</td><td>秋月 111414</td><td>¥50</td><td>NJU72343V用（公式案内の適合品）</td></tr>
+      <tr><td class="item">NJM2732D（3.3VレールtoレールOPA）×3</td><td>秋月 104723</td><td>¥100・在庫441</td><td>分析路バッファ用。<b>MCP6002が秋月入荷未定のため繰上げ</b></td></tr>
+      <tr><td class="item">BAT43ショットキー10本</td><td>秋月 113907</td><td>¥150</td><td>ADC保護クランプ</td></tr>
+      <tr><td class="item">LPF用フィルムコン・抵抗</td><td>秋月</td><td>〜¥500</td><td>F2D 1000pF/2200pF等 + 15k/10k/1k各100本袋（Sallen-Key fc≈7.2kHz定数込み）</td></tr>
+      <tr><td class="item">（検証用・任意）MCP4018T+変換基板</td><td>秋月 127077+115167</td><td>¥140</td><td>秋月にMCP41010は無い。5V系デジポットは±5V信号に直接入らない点に注意</td></tr>
+    </table></div>
+    <div class="callout gold"><b>電源設計のキモ:</b> アナログレールを<b>±5Vに統一</b>（±9V電池→78L05/79L05）すると、LTC1060・NJU72343V・PGA2311が全部同居できる。STEP1の電源設計と共通化。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🔍</span><h2>SCFチップ比較（全候補）</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>型番</th><th>状態</th><th>パッケージ</th><th>価格・在庫（DigiKey 7/30）</th><th>判定</th></tr>
+      <tr><td class="item">LTC1060CN#PBF</td><td><b>現行(Active)</b></td><td><b>DIP-20＝ブレッドボード直挿し可</b></td><td>¥2,205・126個</td><td><span class="chip ok">本命</span></td></tr>
+      <tr><td class="item">LTC1060CSW#PBF</td><td>現行</td><td>SOIC-20ワイド（変換基板要）</td><td>¥2,448・1,870個</td><td><span class="chip maybe">枯渇なしの予備</span></td></tr>
+      <tr><td class="item">MAX7490EEE+</td><td>現行</td><td>QSOP-16（0.635mm=ハンダ難）</td><td><b>¥2,110</b>（想定$3.4〜6より大幅高）・425個</td><td><span class="chip maybe">非常用</span> 価格優位が消えた+100:1固定</td></tr>
+      <tr><td class="item">MAX7491CEE+（3.3V版）</td><td>現行</td><td>QSOP-16</td><td>¥1,430・255個</td><td><span class="chip no">主音路には非推奨</span> ヘッドルーム±1.65V</td></tr>
+      <tr><td class="item">MF10CCWM/NOPB</td><td>製造終了・ラストバイ</td><td>SOIC-20</td><td>¥4,850・468個</td><td><span class="chip no">割高</span></td></tr>
+      <tr><td class="item">LMF100（全型番）</td><td><b>廃番</b></td><td>—</td><td>在庫0</td><td><span class="chip no">入手不可</span></td></tr>
+    </table></div>
+    <details><summary>LTC1060の要点スペック</summary>
+      <ul>
+        <li>クロック比 100:1 / 50:1 ピン選択（モード1: f0=fclk/100・Q=R3/R2＝数式どおり・校正不要）</li>
+        <li>電源 ±2.37〜±8V（5V単電源可・<b>±5V両電源推奨</b>）・f0上限30kHz（要件のf0=300Hz〜8kHzは余裕）</li>
+        <li>⚠️ fclk絶対上限の電源電圧依存はデータシートのグラフで最終確認（analog.comは自動取得拒否→ブラウザで）</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">✅</span><h2>ML63Q2557のPWM検証結果（ROHM公式マニュアル511p精読）</h2></div>
+  <div class="card">
+    <p><b>結論: SCFクロック30kHz〜800kHzの独立3ch出力は仕様上可能。</b>3バンドノッチの前提が立った。</p>
+    <ul class="clean">
+      <li>元クロック: PLL最大48MHz（Cortex-M0+）</li>
+      <li><b>NTMS（3相PWM）= 16bit×3ch・各chが独自の周期レジスタ＝3ch独立周波数OK</b>・動作中の周期更新対応</li>
+      <li>FTM = 16bit×2ch（1〜64分周選択可・TMOUT0〜7へルーティング）→ 合計最大5系統</li>
+      <li>分解能: fclk=800kHz時で隣接ステップ約1.7%（f0で約130Hz@8kHz）— 高域はやや粗い（PLL設定で調整可）</li>
+      <li>⚠️ キット到着後の確認: ①PWM端子が評価ボードのピンヘッダに出ているか ②SDKからタイマレジスタを直接叩けるか ③ジッタ実測</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">⛔</span><h2>着手条件（decisions/0005に明文化する契約）</h2></div>
+  <div class="card">
+    <p><a href="hardware-verdict.html">最適解検証</a>の判定: STEP3は審査価値に対して工数が見合わない（審査員は1msと0msを耳で区別できない・「真アナログ」の物語はSTEP1が既に持っている）。よって——</p>
+    <ul class="clean">
+      <li>着手は「STEP1+STEP2+予兆学習+外装+3分動画+実測データが<b>全部終わってから</b>」</li>
+      <li>部品（約¥9,000）は在庫リスク回避のため今週押さえる — オプション代として安い</li>
+      <li>9月に「あと1週あるからSCFやろう」が最も危険な誘惑 — このページを見返すこと</li>
+    </ul>
+  </div>
+  <p class="src">出典・全詳細: リポジトリ research/sakimimi-step3-parts.md</p>
+</section>
+
+<footer>サキミミ購入パーティー資料 ③真アナログ版 ／ 2026-07-30</footer>
+</div>
+</body>
+</html>

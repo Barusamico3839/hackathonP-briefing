@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>この構成はハードの最適解か？— 敵対的検証</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  pre.think { background:#26211c; color:#f2ece2; border-radius:12px; padding:16px 18px; font-family:var(--font-mono); font-size:12px; overflow-x:auto; line-height:1.75; white-space:pre-wrap; }
+  @media (prefers-color-scheme: dark) { pre.think { background:#141110; } }
+  blockquote { border-left:4px solid var(--accent); margin:12px 0; padding:10px 16px; background:color-mix(in srgb, var(--accent) 6%, var(--surface)); border-radius:0 10px 10px 0; font-size:14.5px; }
+</style>
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <a href="sakimimi-specs.html">📐 要件と設計</a>
+  <span class="here">／ ⚖️ 最適解検証</span>
+</nav>
+
+<header class="hero">
+  <span class="kicker">ADVERSARIAL HARDWARE REVIEW</span>
+  <h1>この構成はハードの最適解か？</h1>
+  <p class="sub">けいとの宿題「ハードの最適解か分からない」への答え合わせ。<b>現行案を落とすつもりで</b>対抗7案と本気比較したレッドチームレビュー。</p>
+  <p class="meta-note">2026-07-30（7/31 再検証を追記） ／ 全文（出典論文PDF直読み・フォーラム実測込み）: research/sakimimi-hardware-verdict.md</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-head"><span class="n">🔁</span><h2>7/31 再検証 — ②一本化＋新要件でも最適解か？</h2></div>
+  <div class="card">
+    <p><b>結論: ②（SSM2019自作プリ + ADAU1701/APM2 + ML63Q2557のI2C連携）は、7/30夜MTCの新要件をすべて満たし、最適解のまま変更不要。</b>増えた宿題は「USB→±9V電源設計」「保険ボード確保」の2点だけ。</p>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>7/30夜MTGの新要件</th><th>現行②構成での成立性</th><th>判定</th></tr>
+      <tr><td class="item">①廃止・②一本化（見守り+ブースト両対応の本番機）</td><td>見守り=リレーでアナログ直結バイパス／ブースト=ノッチ挿入。回路トポロジー変更なし。ただし②が単一障害点に→保険ボードを「推奨」に格上げ（R8）</td><td><span class="chip ok">○</span></td></tr>
+      <tr><td class="item"><b>ノッチ10〜20本・可変式（ほぼ連続）</b></td><td>biquad 1本≈5命令×20本≈100命令 ≪ 1024命令/サンプル。周波数・Q・深さは係数=連続可変。<b>部品構成の変更ゼロ</b>。20本全書換もDSP側0.42ms・I2C側20ms級で分析路の判定周期と整合</td><td><span class="chip ok">◎</span></td></tr>
+      <tr><td class="item">電源は外部電源・電池NG（<b>7/31更新: ひかる指示で「専用電源 or エフェクター用9V DCバレル」もOK</b>）</td><td><b>9V DCバレル入力（センターマイナス=ペダル標準）を本命に</b>: +9V=入力直・−9Vのみチャージポンプ生成（秋月NJW4191M ¥110・要データシート確認）・APM2用5Vは降圧。USB昇圧案より設計が楽になり「ペダルボードのサプライに挿さる」物語も増えた。開発は006PでOK（8月W2までに確定・R9）</td><td><span class="chip ok">○</span></td></tr>
+      <tr><td class="item">ダイナミックマイクのみ</td><td>SSM2019 +30dB前提のまま。ファントム回路不要で構成はむしろ軽い</td><td><span class="chip ok">◎</span></td></tr>
+      <tr><td class="item">I2C分担（ひかる送信／けいと受信）</td><td>APM2のJ11にI2C露出・safeload書換は前例多数。結合面が既製I2C 1本で済む</td><td><span class="chip ok">◎</span></td></tr>
+      <tr><td class="item">低遅延（ひかる体感で7msは大）</td><td>アナログ入力段0ms + ADAU1701実測1.07ms</td><td><span class="chip ok">◎</span></td></tr>
+      <tr><td class="item">商品性・大量生産視野</td><td>ADAU1701は量産採用実績のある現行IC。「量産時はボードが自社基板実装に変わるだけ」の答弁が立つ</td><td><span class="chip ok">◎</span></td></tr>
+    </table></div>
+    <div class="callout"><b>けいとの疑問「SCFバンドパス⇔デジポットMCP41010は本当に繋がるのか」（③用・参考）:</b> 電気的には成立する — デジポットは「デジタルで抵抗値を変えられる<b>アナログ抵抗</b>」で、信号はアナログのままワイパーを通る。ただし図の1本線には (1)Vcc/2バイアス (2)zipperノイズ対策（ゼロクロス無し=検証用品質） (3)抵抗誤差±20% の設計が省略されている。<b>「直結では動かない」というけいとの直感も「やり方はある」というひかるの直感も両方正しい</b>。③は見送り中につき対応不要。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">⚖️</span><h2>結論（1分で）<span style="font-size:12px;font-weight:normal">（7/30初版）</span></h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>対象</th><th>判定</th><th>ひとこと</th></tr>
+      <tr><td class="item">STEP1（アナログ+PGA2311）</td><td><span class="chip ok">現行案が最適・変更不要</span></td><td>主音路0ms・故障しても音が通るのは全案中これだけ。プリはどの対抗案でも結局必要</td></tr>
+      <tr><td class="item">STEP2（ADAU1701）</td><td><span class="chip ok">現行案が最適（僅差・条件付き）</span></td><td>決め手はレイテンシではなく「チーム時間を審査の本丸（予兆学習）に回せること」</td></tr>
+      <tr><td class="item">STEP3（SCF真アナログ）</td><td><span class="chip maybe">降格を提案</span></td><td>審査員は1msと0msを耳で区別できない。「全部終わってからのご褒美」枠へ</td></tr>
+      <tr><td class="item">詰まったときの保険</td><td><span class="chip ok">SCF→Teensy/Daisyに差し替え</span></td><td>不得意領域（アナログ）を保険と呼ぶのは間違い。得意領域（ソフト）に保険を置く</td></tr>
+    </table></div>
+    <div class="callout"><b>誠実な訂正を1つ:</b> 7/29チャットの「全デジタルはレイテンシやばいから却下」は<b>事実に反していた</b>（Teensyは設定次第で実測1.7ms）。却下理由を「チーム時間の配分」と「生音主義の物語」に立て直した上で、結論は変わらず現行案が勝つ。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">📏</span><h2>判断基準（優先順）と動かせない前提</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li><b>K1: 60日で2人（アナログ未経験・プログラミング得意）が確実にデモ到達できるか</b> — 動かないアーキテクチャに価値はゼロ</li>
+      <li><b>K2: 審査3基準への寄与</b> — 主音路は手段。本丸は予兆学習・なで矯正・デモ精度</li>
+      <li><b>K3: レイテンシ&lt;10ms（ボーカル・ウェッジのGood閾値）・箱単体≦5ms目標</b></li>
+      <li><b>K4: 介入が耳障りでない</b>（ジッパー/クリックなし）</li>
+      <li><b>K5: 故障時も音が通る・審査での見え方</b></li>
+    </ul>
+    <details><summary>動かせない前提3つ</summary>
+      <ul>
+        <li>分析路はML63Q2557固定（審査基準「Solist-AI活用度」）→ 争点は主音路だけ</li>
+        <li>ML63Q2557自身に主音路は通せない（音声用DAC/I2Sなし）→「1チップで全部」は存在しない選択肢</li>
+        <li>マイクプリは全案で必要 → アナログ入力段のコストはどの案でも消えない</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🥊</span><h2>対抗7案の評価</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>案</th><th>レイテンシ（実測根拠）</th><th>部品代</th><th>判定</th></tr>
+      <tr><td class="item">a) Teensy 4.x + Audio Shield</td><td>デフォルト<b>6.4ms実測</b>／BLOCK=16で<b>1.7ms実測</b>（PJRCフォーラム）</td><td>約6.5〜7千円</td><td><span class="chip maybe">次点</span> 予備検証機・乗り換え先としては最有力</td></tr>
+      <tr><td class="item">b) ESP32-A1S / LyraT</td><td>原理上数ms可（公開実測なし）</td><td>2〜4千円</td><td><span class="chip no">却下</span> リビジョン混在・初期化地雷を60日で踏む余裕なし</td></tr>
+      <tr><td class="item">c) RasPi + USB IF</td><td>RPi4+良IFで3.9ms実測（要チューニング）</td><td>1万円超</td><td><span class="chip no">却下</span> xrun/SD破損/起動時間＋「Piが主役」に見える減点リスク</td></tr>
+      <tr><td class="item">d) ADAU1452/1467上位DSP</td><td>1701同等以下</td><td>1万円超+<b>コーデック外付け必須</b></td><td><span class="chip no">却下</span> 配線が増えるだけ。ノッチ3本は1701の数%で足りる</td></tr>
+      <tr><td class="item">e) THAT2180系VCA</td><td>0ms</td><td>1.5〜2.5千円</td><td><span class="chip no">却下</span> 低ノイズCV生成回路の自作＝難しさがアナログ側に残る。PGA2311は難しさをデジタルに寄せられる</td></tr>
+      <tr><td class="item">f) Vactrol/LDR</td><td>0ms（だが減衰18〜180ms・個体差6倍）</td><td>数百円</td><td><span class="chip no">即却下</span> 遅い・ばらつく・較正不能の三重苦</td></tr>
+      <tr><td class="item">g) Daisy Seed／FV-1／既製品改造</td><td>Daisy≈1ms／—／—</td><td>5〜6.5千円／2千円／中古5千〜</td><td><span class="chip no">見送り</span> Daisyは国内在庫薄（乗り換え先第2候補として記憶）。FV-1は制御性欠陥。既製品改造は「組み合わせただけ」批判を事実にする最悪手</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🧠</span><h2>思考過程（なぜこの結論か）</h2></div>
+  <div class="card">
+<pre class="think">Q0. 争点はどこか
+ → 分析路はSolist-AI固定・プリは全案共通。争点は「プリ以降の主音路」のみ
+
+Q1. レイテンシは全ソフト案を殺すか
+ → 殺さない（Teensy 1.7〜6.4ms・Daisy約1ms・Good閾値10ms）
+   7/29の「全デジタル却下」の理由付けは誤りだったと認める
+   ∴ 決め手は「チーム適合・物語・時間配分」に変わる
+
+Q2. ではソフト案(Teensy/Daisy)に乗り換えるべきか
+ → No。(1)「音は触らない・アナログ素通し」という製品コンセプトの核が折れる
+       (2) 主音路(手段)にチーム時間を吸われる。本丸は予兆学習(目的)
+       (3) アナログ入力段はどのみち自作する → 主音路0msが最小追加コストで手に入る
+   ただしソフト案は「乗り換え先の保険」として最有力（SCFより遥かに現実的）
+
+Q3. ゲイン制御素子は？ → PGA2311
+   基準は「難しさをアナログからデジタルに寄せられるか」
+   THAT2180は難しさがアナログ側(CV回路)に残る。Vactrolは要件未達
+
+Q4. ノッチは？ → ADAU1701
+   サンプル逐次=レイテンシ保証・GUI設計=コード0行・I2C書換の前例多数
+   SCFは工数対審査価値が見合わない →「全部終わったら触ってよいおもちゃ」に降格
+
+Q5. 60日・2人で3経路は多すぎないか → 多すぎる
+   実行計画はSTEP1→STEP2の2経路+予兆学習に絞る。SCF部品だけ安いうちに確保</pre>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🔬</span><h2>レイテンシの科学（一次論文を直読）</h2></div>
+  <div class="card">
+    <p><b>Lester &amp; Boley 2007（AES）Table 1 の正確な数値</b>: ボーカル×ウェッジモニタのGood閾値=<b>10ms</b>・IEMは1ms。DAGA 2012も素のIEMで<b>7msまでゼロ遅延と有意差なし</b>。既存調査の要約は正確だった。</p>
+    <ul class="clean">
+      <li>ただし10msは「系全体の予算」。デジタル卓(1〜2ms)+ワイヤレス(3ms)が同居する現場を考え、<b>箱単体は5ms以下を設計目標に</b>（ADAU1701の1ms未満は余裕・Teensyデフォルト6.4msは圏外）</li>
+      <li>閾値は楽器依存（SaxはウェッジでもGood=1.5ms）。<b>「ボーカル/スピーチ用だから10ms枠」という限定を審査答弁でも言えるように</b></li>
+      <li>収穫: ハウリング成長速度 = 超過ゲイン÷ループ遅延（Rane Note 158）。<b>+0.5dB超過で毎秒+50dB成長</b> → ①予兆段階の数十ms介入で発振到達を防げる根拠 ②既存事後型が音を巻き添えにする理由の説明。プレゼンの理論武装に使う</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">💬</span><h2>けいと提案「マイコン試作→専用DSP」の評価</h2></div>
+  <div class="card">
+    <p><b>半分正しく、半分は工程の錯覚</b>という判定。</p>
+    <ul class="clean">
+      <li><b>正しい部分（強く支持）</b>: 安い環境で技術リスクを先に潰す原則。ただし最安環境はマイコンではなく<b>PC+所持済みオーディオIF（0円）</b>。最大リスクは主音路ではなく「予兆はELMで学習可能か」（実験①）で、Pythonで今日から検証できる</li>
+      <li><b>錯覚の部分</b>: ADAU1701に関しては順序が逆。SigmaStudioはGUIで描いて書き込むだけで、マイコンからI2SコーデックをDMA込みで叩くより簡単。マイコン試作はADAU1701のリスクを何も減らさない</li>
+      <li><b>折衷案</b>: どうしても「マイコンで音を通す」検証をしたいなら、Pico2+I2Sモジュール（約3千円）より<b>Teensy 4.0（¥4,587・スイッチサイエンス在庫13）を1台</b>のほうが良い。ライブラリ完備で半日でノッチ付きパススルーが動き、そのまま「ADAU1701崩壊時の乗り換え先」の保険実体になる</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🛡️</span><h2>「既製品の組み合わせに見えないか」への回答</h2></div>
+  <div class="card">
+    <p><b>事実確認: REHC/前身ROHCの審査に「回路の自作度」という軸は存在しない。</b>歴代最優秀賞は全部「市販センサ+市販MCU」の組み合わせ。恐れるべきは「この作品固有の判断・設計・学習がどこにも見えない状態」だけ。</p>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>対策</th><th>費用対効果</th></tr>
+      <tr><td class="item">① 学習可視化UI（スペクトログラム+予兆ヒート+なでた瞬間に判定境界が動く画面）</td><td><span class="chip ok">最優先</span> 「この箱は考えて育っている」を目で見せる。批判はここで消滅。工数のみ＝2人の最も安い武器</td></tr>
+      <tr><td class="item">② 実測データ（リードタイム・矯正前後の誤検知率・+何dB・中古Sharkとの同条件比較）</td><td><span class="chip ok">強い</span> 「既製品にできないこと」の定量証明</td></tr>
+      <tr><td class="item">③ アナログ段の自作PCB化（KiCad→JLCPCB・8月中旬発注で間に合う）</td><td><span class="chip ok">推奨</span> 「自作基板の上にモジュールが乗る」構図は写真1枚で語る。⚠️ブレッドボード実証が終わってから</td></tr>
+      <tr><td class="item">④ ケース加工・外装（なでられる外装）</td><td><span class="chip ok">審査項目そのもの</span> ハム対策と外装が同じ作業なのはこの構成の得</td></tr>
+      <tr><td class="item">⑤ 自作性のためにSCFをやる</td><td><span class="chip no">やらない</span> 費用対効果最悪</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🎤</span><h2>審査員向け回答草稿「なぜこの構成？」</h2></div>
+  <div class="card">
+    <blockquote>「音の道」と「考える道」を分けています。考える道はSolist-AIで、HW-FFTで常時スペクトルを見張り、この現場の鳴きグセの予兆をELMでその場学習します。音の道は、見守りモードでは完全アナログで遅延ゼロ・AIはゲインのツマミにしか触りません。ブーストモードのときだけ1ミリ秒未満の低遅延DSPを挿し、鳴く周波数だけノッチして声を上げます。マイコンで全部ソフト処理する案も検討し、実測レイテンシ的には可能でしたが、<b>「AIは音を加工せず、判断だけする」という製品思想を回路の形そのもので実現したくて</b>この構成にしました。</blockquote>
+    <details><summary>深掘り質疑用の追加カード4枚</summary>
+      <ul>
+        <li>「レイテンシの根拠は？」→ AES論文でボーカル・ウェッジのGood閾値10ms。うちは見守り0ms・ブースト1ms未満=マイクから34cm離れた程度</li>
+        <li>「鳴ってから消せば十分では？」→ +0.5dB超過で毎秒50dB成長（Rane Note 158）。鳴ってからでは巻き添えで削るしかない。予兆段階なら2〜3dBそっと下げるだけ</li>
+        <li>「既製品の組み合わせでは？」→ プリからAD分岐までは自作基板。本体は回路ではなく「現場の鳴きグセを学習し、なでて矯正できる」こと。市販サプレッサーは何年使っても賢くならない（→可視化UIでその場デモ）</li>
+        <li>「Solist-AIだけでやれば？」→ 判断（数十msでよい）と音（1ms級）は要件が違う。要件の違う仕事を1チップに背負わせないのが設計方針（ML63Q2557は音声用DACも持たない）</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">⚠️</span><h2>残リスク（上位3つ）</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li>🔴 <b>Solist-AIキット未発注が全工程の律速のまま</b> → 今日見積電話（Tier 0）</li>
+      <li>🔴 予兆特徴量がELMで学習不能と判明する可能性 → PC実験①を8月W1までに。ダメなら「スピーチ特化」に絞る撤退線を事前定義</li>
+      <li>🟡 SigmaStudio環境の初期障壁 → APM2+書込機を今週発注・詰まったらTeensy/Daisyへ乗り換え</li>
+    </ul>
+    <p class="src">全リスク表（R1〜R7）・対抗案の詳細・出典論文/実測スレッドのURL約40本: research/sakimimi-hardware-verdict.md</p>
+  </div>
+</section>
+
+<footer>サキミミ ハード最適解の敵対的検証 ／ 2026-07-30</footer>
+</div>
+</body>
+</html>

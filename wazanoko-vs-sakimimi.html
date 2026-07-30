@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ワザノコ vs サキミミ — アイデア決めMTG資料 — REHC 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .plan-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+  .plan-h .tag{font-family:var(--font-display);font-weight:900;font-size:15px;color:#fff;background:var(--accent);border-radius:10px;padding:4px 14px;white-space:nowrap}
+  .plan-h.s .tag{background:var(--gold)}
+  svg.arch{display:block;width:100%;height:auto;margin:14px 0 4px}
+  svg.arch text{font:700 13px var(--font-body);fill:var(--ink)}
+  svg.arch .comp{fill:var(--surface-2);stroke:var(--fur-deep);stroke-width:1.5;rx:10}
+  svg.arch .comp.ai{fill:color-mix(in srgb, var(--accent) 14%, var(--surface));stroke:var(--accent);stroke-width:2}
+  svg.arch .complbl{font:700 12.5px var(--font-body);fill:var(--ink)}
+  svg.arch .sub{font:500 10.5px var(--font-body);fill:var(--ink-soft)}
+  svg.arch .wire{fill:none;stroke:var(--ink-soft);stroke-width:2;opacity:.6}
+  svg.arch .wire.bad{stroke:var(--no);stroke-dasharray:5 4;opacity:.8}
+  svg.arch .wire.good{stroke:var(--ok);opacity:.9}
+  svg.arch .arrow{fill:var(--ink-soft);opacity:.6}
+  svg.arch .badge{fill:var(--accent)}
+  svg.arch .badgetxt{font:800 12px var(--font-body);fill:#fff}
+  .imgcap{font-size:12px;color:var(--ink-soft);text-align:center;margin:2px 0 0}
+  .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:720px){.vs-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="crumb"><a href="index.html">🐕‍🦺 チーム基地</a><span class="here">／ ⚖️ ワザノコ vs サキミミ</span><a class="sim-link" href="ideas.html">💡 131案ランキング</a></nav>
+
+<header class="hero">
+  <div class="paw">🛠️🆚🦻</div>
+  <span class="kicker">アイデア決めMTG資料 ・ 2026-07-27</span>
+  <h1>ワザノコ vs サキミミ、<br>どっちを作る？</h1>
+  <p class="sub"><b>ワザノコ</b>（けいと発案）= 人の「言葉にできないコツ」を道具に宿して受け継ぐAIペット。<b>サキミミ</b>（ひかる発案）= ハウリングを「鳴る前に」止める、現場で育つ音響番人。実は<b>同じ核を持つ兄弟</b>——だからこの会議は「どっちが正しいか」ではなく「<b>どっちを第1弾にするか</b>」の相談。</p>
+  <div class="countdown">
+    <b>63</b><span class="lbl">日で応募締切<br>9/28（月）／ 内部目標 9/21</span>
+  </div>
+  <p class="meta-note">原本: <a href="https://github.com/Barusamico3839/hackathonP/blob/main/ideas/0003-wazanoko-skill-transfer.md">ideas/0003 ワザノコ</a> ／ <a href="https://github.com/Barusamico3839/hackathonP/blob/main/notes/idea-sakimimi-howling-guard.md">notes/サキミミ</a>（リポジトリ）</p>
+</header>
+
+<nav class="toc">
+  <a href="#vs">30秒比較</a>
+  <a href="#core">共通の核</a>
+  <a href="#waza">🛠️ ワザノコ</a>
+  <a href="#saki">🦻 サキミミ</a>
+  <a href="#rivals">競合・差別化</a>
+  <a href="#judge">審査基準</a>
+  <a href="#exp">検証実験</a>
+  <a href="#decide">決め方</a>
+</nav>
+
+<div class="wrap">
+
+  <section id="vs">
+    <div class="sec-head"><span class="n">⚡</span><h2>30秒でわかる比較</h2></div>
+    <p class="lead">どちらも「なでて教える・その場で育つ」。違いは<b>何を聴くか（動き vs 音）</b>と<b>誰の課題か（技能継承 vs 現場の音響）</b>。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx" style="min-width:720px">
+        <tr><th>観点</th><th>🛠️ ワザノコ（けいと発案）</th><th>🦻 サキミミ（ひかる発案）</th></tr>
+        <tr><td class="item">一言で</td><td>技を、道具に宿す。</td><td>ハウリングを、鳴る前に止める。</td></tr>
+        <tr><td class="item">第1弾ターゲット</td><td>泡立て器（料理のコツ継承）</td><td>PAのいない現場（教会・学校・小さなライブ）</td></tr>
+        <tr><td class="item">センサ</td><td>6軸IMU + タッチ（なで）</td><td>マイク音声（+なでタッチ）</td></tr>
+        <tr><td class="item">Solist-AIが学習するもの</td><td>その人の動きのクセ（正解/不正解の2クラスから）</td><td>この現場の「鳴きグセ」= 予兆周波数パターン</td></tr>
+        <tr><td class="item">ブース体験（30秒で伝わる？）</td><td><span class="chip ok">✅ 教えて→判定を来場者が体験</span></td><td><span class="chip ok">✅ 鳴る寸前で止まる劇場型デモ</span></td></tr>
+        <tr><td class="item">誰もが知る「痛み」</td><td>△ 技の継承（共感には説明が要る）</td><td>◎ ハウリングの不快さは全人類が体験済み</td></tr>
+        <tr><td class="item">情緒・物語</td><td>◎「おばあちゃんの動きを残す」系の最強格</td><td>○ 教会・現場のノウハウ継承（ミミウツシ拡張で◎）</td></tr>
+        <tr><td class="item">技術の主リスク</td><td>「熟練者らしさ」判定の妥当性・取付位置ばらつき</td><td>予兆検知の成立性（鳴る前に捕まえられるか）</td></tr>
+        <tr><td class="item">ハード工作</td><td>取付クリップ+外装（ぬいぐるみ工作）</td><td>XLR入出力の箱+ゲイン制御（電子工作寄り）</td></tr>
+        <tr><td class="item">実測データの絵</td><td>初心者の上達曲線・熟練者との距離</td><td>検知リードタイム・誤検知率のbefore/after</td></tr>
+        <tr><td class="item">確定仕様4点（7/25合意）</td><td colspan="2" style="text-align:center">両方とも全部○ — 家庭用小型 ／ クラウド非接続 ／ Solist-AI学習 ／ 教師あり「なでる」</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="core">
+    <div class="sec-head"><span class="n">🧬</span><h2>共通の核 — この2案は兄弟</h2></div>
+    <p class="lead">どちらを選んでも、もう片方は「将来展開」として語れる。技術パイプラインもほぼ共通。</p>
+    <div class="card">
+      <ul class="clean">
+        <li><b>センサ → 特徴量抽出 → Solist-AI（ELM）分類 → フィードバック</b>のパイプラインが共通。elmkit（<a href="https://github.com/Barusamico3839/hackathonP/tree/main/src/elmkit">src/elmkit</a>）の資産と「WAV→特徴量CSV」計画（ADR-0003）がどちらでも心臓部になる</li>
+        <li><b>なでて教えるUI</b>（頭なで=正解・尻尾なで=不正解・リングバッファで直前区間にラベル）はワザノコ提案の発明。サキミミはそれを誤検知矯正に使う=<b>ワザノコの音響版</b></li>
+        <li><b>「汎用の正解」ではなく「この人/この現場の正解」を覚える</b>——クラウドAIで代用できない理由の型が同じ（審査の生命線）</li>
+        <li>サキミミには<b>サキヨミ（ideas/0002）の先読みDNA</b>も入っている: 起きてから反応ではなく、予兆を学習して先回りする</li>
+      </ul>
+      <div class="callout gold" style="margin-bottom:0"><b>つまり:</b> 8月第1週の検証実験（特徴量→ELM分類の精度確認）は<b>どちらに転んでもほぼ同じ作業</b>。今日決めきれなくても、実験①を回しながら並走できる余地がある（ただし8月中旬までにどちらかへ全振り推奨）。</div>
+    </div>
+  </section>
+
+  <section id="waza">
+    <div class="sec-head"><span class="n">🛠️</span><h2>ワザノコ — 詳細検討</h2></div>
+    <p class="lead">けいとの提案書（ideas/0003）はデモ構成・弱点対策まで完成度が高い。ここでは技術実現性と競合の視点を足す。</p>
+
+    <div class="card">
+      <div class="plan-h"><span class="tag">体験</span><h3>教える→判定するループ</h3></div>
+      <p style="font-size:14.5px">熟練者が道具を普段どおり使い、うまくできた瞬間に頭をなでる（直前2〜3秒がリングバッファから正解として学習される）。失敗例は尻尾なでで登録。初心者が使うと、熟練者の動きへの近さをペットの感情（光・喉鳴らし振動）で返す。<b>数字の採点ではなく「ペットが喜ぶ動きを探す」体験</b>にするのが提案の肝。</p>
+      <svg class="arch" viewBox="0 0 720 200" role="img" aria-label="ワザノコのアーキテクチャ図">
+        <rect class="comp" x="10" y="60" width="150" height="80" rx="10"/>
+        <text class="complbl" x="85" y="92" text-anchor="middle">道具 + ワザノコ</text>
+        <text class="sub" x="85" y="110" text-anchor="middle">6軸IMU / タッチ / 振動 / LED</text>
+        <rect class="comp" x="220" y="60" width="150" height="80" rx="10"/>
+        <text class="complbl" x="295" y="86" text-anchor="middle">特徴量抽出</text>
+        <text class="sub" x="295" y="104" text-anchor="middle">1〜2秒窓・30〜60次元</text>
+        <text class="sub" x="295" y="119" text-anchor="middle">周期・振幅・傾き・FFT帯域</text>
+        <rect class="comp ai" x="430" y="60" width="150" height="80" rx="10"/>
+        <text class="complbl" x="505" y="86" text-anchor="middle">Solist-AI（ELM）</text>
+        <text class="sub" x="505" y="104" text-anchor="middle">2クラス: この人の技か否か</text>
+        <text class="sub" x="505" y="119" text-anchor="middle">なでラベルでその場追加学習</text>
+        <rect class="comp" x="620" y="60" width="90" height="80" rx="10"/>
+        <text class="complbl" x="665" y="92" text-anchor="middle">感情</text>
+        <text class="sub" x="665" y="110" text-anchor="middle">光・振動・表情</text>
+        <path class="wire" d="M160 100 H215"/><polygon class="arrow" points="215,95 224,100 215,105"/>
+        <path class="wire" d="M370 100 H425"/><polygon class="arrow" points="425,95 434,100 425,105"/>
+        <path class="wire" d="M580 100 H615"/><polygon class="arrow" points="615,95 624,100 615,105"/>
+        <path class="wire good" d="M85 60 C 85 20, 505 20, 505 55"/>
+        <text class="sub" x="295" y="34" text-anchor="middle" style="fill:var(--ok)">🖐️ なでる = 直前区間に教師ラベル（頭=正解／尻尾=不正解）</text>
+      </svg>
+      <p class="imgcap">音もクラウドも使わない。学習・推論は道具の上で完結（推論100〜200ms周期・直近5回中4回一致で反応）</p>
+    </div>
+
+    <div class="card">
+      <div class="plan-h"><span class="tag">技術</span><h3>技術的に可能か（調査結果）</h3></div>
+      <div class="callout"><b>総合判定: 条件付きで実現可能</b>（ハッカソン規模で作れる。成否は精度ではなく「何を測っているか」の設計で決まる）。<b>道具埋め込み加速度センサで調理動作11種を82.9%識別</b>した先行研究（<a href="https://link.springer.com/chapter/10.1007/978-3-642-05408-2_4">Slice&Dice, 2009</a>）、IMUで熟練者/初心者を平均80.0%で2値分類（<a href="https://www.frontiersin.org/journals/bioengineering-and-biotechnology/articles/10.3389/fbioe.2020.00814/full">542名研究</a>）があり、泡立て器の周期運動なら判別は先行研究の射程内。</div>
+      <ul class="clean">
+        <li><b>Solist-AIの正体はOS-ELM系と特定</b>: ROHM公式資料が慶應・松谷研の論文（ONLAD）を引用。公表構成は<b>入力96・中間12・出力96の教師なしオートエンコーダ</b>（3軸加速度400Hz・学習約1秒）。同系統はスマホHAR 56次元特徴量で<b>異常検知AUC 0.929</b>の実績（<a href="https://arxiv.org/pdf/1907.10147">ONLAD論文</a>）</li>
+        <li><b>「なで10〜20回で学習」は数学的に成立</b>: OS-ELMの初期学習条件は「サンプル数＞隠れノード数」だけ。中間12ノードなら13ストロークで学習開始でき、以後は1件1ミリ秒未満の逐次追加学習</li>
+        <li><b>設計上の大発見</b>: 主判定は教師あり2クラスではなく<b>教師なしオートエンコーダの復元誤差</b>にすべき——「熟練者の良い動きだけ」を学習すれば負例（わざと下手に演じたデータ=カリカチュア問題）が不要になり、スコアが連続値なので<b>ペットの喜び具合をアナログに表現できる</b>（0/1より圧倒的に生き物らしい）。教師あり分類は「速すぎ/傾き」の原因説明の補助レイヤーに</li>
+        <li><b>サンプリングは100Hzで十分</b>（泡立ての基本波2〜6Hz）。窓1.28秒・スライド0.25〜0.5秒が現実解。個人適応の価値も外部実証あり（マイコン上の少数ショット適応で最大+17ポイント改善の実測研究）</li>
+      </ul>
+      <details><summary>⚠️ 4大交絡と対策 — ここを潰さないと「精度は出たが何の数字か不明」になる（クリックで展開）</summary>
+        <ul>
+          <li><b>①速さだけ真似ると高スコア</b>: 平均・RMS・主周波数は速度でほぼ決まる。対策=ストロークを等分32点にリサンプルした「速度正規化形状」を主特徴に。反証実験「熟練の形×速度変更／初心者の形×熟練と同速」の4条件を必ず測る</li>
+          <li><b>②技ではなく人物を識別してしまう</b>: 加速度データは個人識別性が高い（歩容認証EER 5.7%）。対策=負例も同一人物から取る（人内対比）+「熟練者本人がわざと下手にやると低スコア」を最強の反証デモにする</li>
+          <li><b>③評価数値の水増し</b>: 窓オーバーラップ+ランダム分割はリークで精度が跳ね上がる（LOSO 76% vs k-fold 89%の実例）。対策=セッション単位で分割し、分割方法をProtoPediaに明記（数字は控えめでも分割が正しい方が強い）</li>
+          <li><b>④泡の粘度変化との交絡</b>: 進行で信号が変わる。対策=学習と判定のフェーズを揃える。逆用すれば「そろそろ角が立つよ」通知という第2の見せ場になる</li>
+        </ul>
+        <ul>
+          <li><b>その他</b>: 逐次学習の忘却設計（忘却なしはAUC 0.781→0.558に崩壊する実測あり→展示では「学習ロック」モード+スナップショット復帰を用意）／取付ズレは重力座標変換+専用クリップで対処（対処法は文献で確立済み）／触覚フィードバックの学習効果は断定しない（系統的レビューでコンセンサスなし→主張は外部指標の実測のみで）</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <section id="saki">
+    <div class="sec-head"><span class="n">🦻</span><h2>サキミミ — 詳細検討</h2></div>
+    <p class="lead">マイクとミキサーの間に挟むだけの箱。音は素通し、AIはゲインのツマミだけを触る。</p>
+
+    <div class="card">
+      <div class="plan-h s"><span class="tag">体験</span><h3>鳴る前に止める、を見せる</h3></div>
+      <p style="font-size:14.5px">ハウリングは突然鳴くのではなく、<b>特定周波数がリンギング（鳴き始め）する予兆</b>がある。その周波数は部屋×マイク×スピーカーの組み合わせごとに固有——サキミミは設置後の数分でこの現場の「鳴きグセ」を学習し、予兆を捕まえたら<b>ゲインを数dBだけ先回りで下げて</b>ミキサーに流す。誤検知したら頭をなでて「今のは違う」と教える。</p>
+      <svg class="arch" viewBox="0 0 720 240" role="img" aria-label="サキミミの信号フロー図">
+        <rect class="comp" x="10" y="80" width="100" height="70" rx="10"/>
+        <text class="complbl" x="60" y="110" text-anchor="middle">マイク</text>
+        <text class="sub" x="60" y="128" text-anchor="middle">XLR</text>
+        <rect class="comp ai" x="170" y="60" width="220" height="110" rx="10"/>
+        <text class="complbl" x="280" y="86" text-anchor="middle">サキミミ</text>
+        <text class="sub" x="280" y="105" text-anchor="middle">音声はスルー（劣化ゼロ）</text>
+        <text class="sub" x="280" y="122" text-anchor="middle">分析: スペクトル特徴量 → Solist-AI</text>
+        <text class="sub" x="280" y="139" text-anchor="middle">予兆検知 → ゲインだけ制御</text>
+        <text class="sub" x="280" y="156" text-anchor="middle">🖐️ なでて誤検知を矯正</text>
+        <rect class="comp" x="450" y="80" width="110" height="70" rx="10"/>
+        <text class="complbl" x="505" y="110" text-anchor="middle">ミキサー</text>
+        <rect class="comp" x="620" y="80" width="90" height="70" rx="10"/>
+        <text class="complbl" x="665" y="110" text-anchor="middle">スピーカー</text>
+        <path class="wire" d="M110 115 H165"/><polygon class="arrow" points="165,110 174,115 165,120"/>
+        <path class="wire" d="M390 115 H445"/><polygon class="arrow" points="445,110 454,115 445,120"/>
+        <path class="wire" d="M560 115 H615"/><polygon class="arrow" points="615,110 624,115 615,120"/>
+        <path class="wire bad" d="M665 155 C 665 225, 60 225, 60 155"/>
+        <text class="sub" x="362" y="215" text-anchor="middle" style="fill:var(--no)">部屋を回ってマイクに戻る音（フィードバックループ）＝ここの「鳴き始め」を予兆として学習</text>
+        <circle class="badge" cx="280" cy="42" r="0"/>
+        <text class="sub" x="280" y="46" text-anchor="middle" style="fill:var(--accent);font-weight:800">⚡ 鳴る前に、数dBだけ下げる</text>
+      </svg>
+      <p class="imgcap">既存サプレッサーは「鳴ってから」ノッチを刺す汎用品。サキミミは「この現場の予兆」をその場学習して鳴かせない</p>
+    </div>
+
+    <div class="card">
+      <div class="plan-h s"><span class="tag">技術</span><h3>技術的に可能か（調査結果）</h3></div>
+      <div class="callout"><b>総合判定: 条件付きで実現可能。</b>「鳴る前に止める」は妄想ではない——予兆（リンギング）検知は<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11950036/">2025年の査読論文</a>と<a href="https://patents.google.com/patent/US8103019">Polycom/ClearOne系の特許（2008〜）</a>の両方に前例があり、科学的土台は堅い。条件は3つ: ①持続純音（オルガン・フルート）との誤検知分離 ②第1形態は<b>ラインレベル挿入（ミキサー→パワードスピーカー間）</b>にする（マイクレベルXLRはファンタム電源対応が重い。ループ内ならどこで下げても効果は同じ） ③「周波数の暗記」でなく特徴量ベースで学習しマイク移動に耐える。</div>
+      <ul class="clean">
+        <li><b>検知手法は教科書レベルで確立</b>: ハウリングは「倍音を持たない・狭帯域・持続・指数成長する正弦波」。PHPR/PNPR/IPMP等のスペクトル・時間基準が定番（<a href="https://ftp.esat.kuleuven.be/pub/stadius/vanwaterschoot/downloads/presentations/oldenburg_20110201.pdf">KU Leuvenレビュー</a>）</li>
+        <li><b>可聴前の早期検知は最新研究が存在</b>: スパース性尺度による早期ハウリング検知（2025年）は音声でPR-AUC 0.82と従来法を大幅に上回る。ただし<b>音楽では0.53に落ちる</b>=持続純音が最大の敵という証拠でもある</li>
+        <li><b>既製品の実力線は「鳴ってから0.2〜0.4秒」</b>（Behringer FBQ2496・Sabine FBX）。「学習済みの現場で予兆段階に介入」はこの土俵の外側に立てる</li>
+        <li><b>ELMで足りるタスク</b>: 狭帯域ピークの持続・成長・非調波性という少数の物理特徴で分離しやすい2〜3クラス分類。キットのHW-FFT（256点・16kHzサンプリングで帯域は十分）でCPU負荷ほぼゼロの特徴量抽出が可能=<b>検知系はSolist-AI単独で完結し得る</b></li>
+        <li><b>ゲイン制御は1チップで成立</b>: TI PGA2311（デジタル制御アナログ音量IC・ゼロクロスでクリックなし・0.5dBステップ）。音声経路はアナログ素通しでAD/DA遅延ゼロ、電源断リレーバイパス付き——「挟んでも音を汚さない」を構造的に保証</li>
+        <li><b>コールドスタートの妙案</b>: 設置時に本体が自分でゲインを上げてリンギングを誘発する「自動リングアウト」→自己ラベル付きデータで初期学習（人手の教師データ収集が不要になる）。運用中の誤検知は「なでて矯正」で出力層のみ逐次学習</li>
+      </ul>
+      <details><summary>主要リスクと対策（クリックで展開）</summary>
+        <ul>
+          <li><b>持続純音との誤検知（最大リスク）</b>: オルガン・フルートはリンギングと物理的に似る。対策=倍音構造+成長傾きを特徴量に入れる／誤検知をなでて負例学習／初期ターゲットは「スピーチ主体の現場（説教・朝礼・集会）」と明示／介入は-3dBから浅く（誤っても被害が小さいフェイルソフト）</li>
+          <li><b>急峻なハウリング</b>: マイクをスピーカーに向けた等の急変では予兆段階が数百ms以下。対策=「緩やかな予兆は先回り・急変は最速追従（保険パス）」の2層制御。16msフレームで100ms級の反応=既製品の0.2〜0.4sより速い土俵</li>
+          <li><b>ゲイン制御のポンピング感</b>: ノッチと違い全体音量が下がる。対策=浅く速く下げて（-3dB/50ms）ゆっくり戻す＋段階エスカレーション＋LEDで「今守った」を可視化（デモ映えにも直結）</li>
+          <li><b>RAM 16KB制約</b>: 特徴量を数十次元に絞る（トップKピーク相対特徴+帯域エネルギー+持続/傾き）。elmkitで次元/隠れ層をスイープして膝を探す</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <section id="rivals">
+    <div class="sec-head"><span class="n">🔍</span><h2>競合・代替品と差別化（Web調査）</h2></div>
+    <p class="lead">審査員の「それ、既にあるよね？」「アプリ/既製品でよくない？」に耐えられるかのチェック。</p>
+
+    <div class="card">
+      <h3>🛠️ ワザノコの競合・代替品</h3>
+      <div class="tbl-scroll">
+      <table class="mx" style="min-width:720px">
+        <tr><th>競合</th><th>何者か</th><th>近さ</th><th>決定的な違い</th></tr>
+        <tr><td class="item"><a href="https://smartsports.sony.net/tennis/JP/ja/support/news/20200831.html">Sony スマートテニスセンサー</a></td><td>ラケット装着IMUでスイング解析（約2万円）</td><td class="v"><span class="chip no">高</span></td><td>判定基準は万人共通の統計指標。個人の技の学習・継承なし。<b>2020年サーバー停止で文鎮化</b></td></tr>
+        <tr><td class="item"><a href="https://golfpgachampionship.com/what-happened-to-zepp-golf-app-2/">Zepp（Golf/Baseball/Tennis）</a></td><td>道具装着IMUの代表格（約2万円）</td><td class="v"><span class="chip no">高</span></td><td>汎用指標の計測・可視化型。<b>2021〜23年アプリ終了で文鎮化</b></td></tr>
+        <tr><td class="item"><a href="https://jpn.mizuno.com/baseball/products/BLAST">Blast Motion（ミズノ）</a></td><td>バット装着センサー・MLB採用の業界標準（2万円+年8,250円）</td><td class="v"><span class="chip no">高</span></td><td>「計測と数値化」が目的。師匠のデータを正解にその場学習する機能なし。クラウド+サブスク前提</td></tr>
+        <tr><td class="item"><a href="https://www.si.com/golf/gear/new-wearable-tech-dewiz-unlocks-swing-issues-instant-feedback">deWiz</a></td><td>ゴルフ用手首ウェアラブル。レンジ外の瞬間に振動/電気刺激（$455〜）</td><td class="v"><span class="chip no">高</span></td><td>「リアルタイム体性感覚で覚えさせる」最接近の先行例。だが手首装着・ゴルフ専用・数値閾値基準。<b>2025年6月破産</b></td></tr>
+        <tr><td class="item"><a href="https://www.acuity-inc.co.jp/case/20240404/case_3607/">モーションキャプチャ技能伝承（アキュイティー等）</a></td><td>熟練者の研磨動作を数値化する製造業向けサービス</td><td class="v"><span class="chip maybe">中</span></td><td>目的（個人の技の伝承）は同じだが、専門家による計測プロジェクト。現場に置くデバイスではなく個人・家庭には届かない</td></tr>
+        <tr><td class="item"><a href="https://www.softbank.jp/mobile/service/ai_smartcoach/">ソフトバンク AIスマートコーチ</a></td><td>スマホ動画の骨格推定でお手本と比較（基本無料）</td><td class="v"><span class="chip maybe">中</span></td><td>カメラの事後解析。道具先端の角速度・手首の返しは映像に写らず、手がふさがる作業中に画面は見られない</td></tr>
+        <tr><td class="item"><a href="https://aifriends.jp/casio-moflin-ai-pet-robot/">Moflin（カシオ）</a></td><td>なで方で性格が変わるオンデバイス学習AIペット（59,400円）</td><td class="v"><span class="chip ok">低</span></td><td>「なでて教える」UXの語彙は重なるが癒し専用。<b>ペットUX×技能継承を接合した製品は市場に存在しない</b></td></tr>
+        <tr><td class="item"><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12567667/">歯科ハンドピース研究</a></td><td>道具内蔵IMU+MLで技能評価（研究プロトタイプ）</td><td class="v"><span class="chip no">高</span></td><td>コンセプト同一だが<b>学術研究止まり=製品空白の証拠</b>。オフライン学習でその場教示なし</td></tr>
+      </table>
+      </div>
+      <details><summary>安価な代替手段でよくない？への回答（クリックで展開）</summary>
+        <ul>
+          <li><b>スマホ+センサーアプリ</b>: 200gのスマホを泡立て器に付けたら動作自体が変わる。リアルタイム判定・触覚FB・その場追加学習は不可</li>
+          <li><b>スマートウォッチ+自作ML</b>: 手首の動きと道具自体の動き（グリップ内の返し・先端軌道）は別物。なでた瞬間に判定器が更新される体験は母艦再学習では成立しない</li>
+          <li><b>動画+スロー再生</b>: 事後確認のみ。映像には角速度・力の入れ方が写らず「言葉にできないコツ」ほど見比べでは分からない</li>
+          <li><b>M5StickC等でDIY</b>: ハードは数千円で組めるが「なでた瞬間に学習更新」は完全オンデバイス学習=Solist-AIの中核機能でしか成立しない（審査への回答線）</li>
+        </ul>
+      </details>
+      <div class="callout" style="margin-bottom:0"><b>判定: 差別化できている。</b>市場は「汎用フォーム矯正の量産品」と「企業向け大規模システム」に二極化しており、<b>『後付け小型デバイス×特定個人の技のその場学習×ペット型情緒』の中間地帯は日英どちらの検索でも空白</b>。しかも近縁競合（Sony/Zepp/Blast/deWiz）が<b>クラウド依存を一因にことごとく文鎮化・破産</b>している事実は、完全オンデバイスというワザノコの設計思想を裏付ける強い物語になる。⚠️弱点: 「動きが似ている=うまく泡立つ」の証明（泡の量など外部指標との相関データが必須）／「模倣は上達か」というHCI系審査員の問い（→フォーム矯正ではなく「消えゆく技の保存・継承」と課題を切り分けて語る）</div>
+    </div>
+
+    <div class="card">
+      <h3>🦻 サキミミの競合・代替品</h3>
+      <div class="tbl-scroll">
+      <table class="mx" style="min-width:720px">
+        <tr><th>競合</th><th>何者か</th><th>近さ</th><th>決定的な違い</th></tr>
+        <tr><td class="item"><a href="https://www.soundhouse.co.jp/products/detail/item/203244/">dbx AFS2</a></td><td>ハウリングサプレッサーの定番ラック機（実売¥54,800）</td><td class="v"><span class="chip no">高</span></td><td>「鳴ってから検知して1/80octノッチで削る」事後型。現場学習・なでて矯正なし。⚠️ただしマーケ文言に「開始前に予期」とあり、<b>差を実測データで示す必要あり（最重要マーク対象）</b></td></tr>
+        <tr><td class="item"><a href="https://kakaku.com/item/K0001220752/">Behringer FBQ2496</a></td><td>「世界最速0.2秒」の自動デストロイヤー（実売¥2.4万）</td><td class="v"><span class="chip no">高</span></td><td>最速でも「鳴ってから」=<b>最初の一鳴きは必ず客に聞こえる</b>。¥2.4万で買える現実解なので「これで十分では？」の最有力反論元</td></tr>
+        <tr><td class="item"><a href="https://www.behringer.com/en/products/0822-AAC">Behringer SHARK DSP110</a></td><td>XLR IN/OUTのインライン小型箱（当時$70）</td><td class="v"><span class="chip no">高</span></td><td><b>形はサキミミと最も酷似</b>。だが中身は20年前の事後ノッチ固定アルゴリズム。「同じ形で中身だけ2026年に進化させた」という比較デモの好素材</td></tr>
+        <tr><td class="item"><a href="https://www.bhphotovideo.com/c/product/494589-REG/Sabine_PMR_HH1_PMR_HH1_Phantom_Mic_Rider.html">Sabine Phantom Mic Rider</a></td><td>「学校・集会向け仮想音響エンジニア」を標榜したインライン機</td><td class="v"><span class="chip no">高</span></td><td>ターゲットとコンセプトは直接の先行者。だが汎用ヒューリスティックで現場学習なし。<b>会社は事実上市場から退場=ニーズはあるのに進化が止まった空白地帯の証拠</b></td></tr>
+        <tr><td class="item"><a href="https://www.waves.com/plugins/x-fdbk">Waves X-FDBK</a></td><td>リングアウト自動化プラグイン（$80〜）</td><td class="v"><span class="chip maybe">中</span></td><td>PC+IF+操作者が前提の「設営時ツール」。本番中に無人で守る番人ではない</td></tr>
+        <tr><td class="item"><a href="https://contents.toa.co.jp/products/po/dap/howling.htm">TOA（学校・会館PAの支配者）</a></td><td>ハウリング抑制内蔵のプロセッサー/ワイヤレスアンプ</td><td class="v"><span class="chip no">高</span></td><td>サキミミの想定顧客を現実に握るのはTOA。だが方式は事後型。<b>「既設TOA設備をそのまま賢くする後付けの箱」という補完の語り方が可能</b></td></tr>
+        <tr><td class="item"><a href="https://jp.yamaha.com/products/contents/proaudio/musicianspa/stagepas/index.html">Yamaha STAGEPAS</a></td><td>音響素人向けワンボタンPA（¥8〜15万）</td><td class="v"><span class="chip maybe">中</span></td><td>ユーザー像は完全に重なるが、PA一式の買い替えが必要。サキミミは手持ちのどんなPAにも挟むだけ</td></tr>
+        <tr><td class="item"><a href="https://www.alphalabsaudio.com/defeedback/">AlphaLabs De-Feedback（AI系新興）</a></td><td>深層学習でフィードバック除去を謳うライブ用プラグイン（$499+高性能PC）</td><td class="v"><span class="chip no">高</span></td><td>「AIでハウリングを殺す」物語の最接近競合。ただし<b>クラウド級の汎用巨大モデル=真逆のアプローチ</b>。「同じ課題を大規模AIで解くとこうなる」というSolist-AI必然性の対比材料になる</td></tr>
+        <tr><td class="item"><a href="https://patents.google.com/patent/US8103019B1/en">ClearOne/Biamp・Bose特許</a></td><td>リンギング（予兆）検知の特許群（2008〜、BoseはAI版2023）</td><td class="v"><span class="chip maybe">中</span></td><td>「予兆検知」の思想自体は特許化済み=<b>「世界初」と言ってはいけない</b>。実装先は数十万円級の施工型会議DSPで、現場学習×なで矯正×後付け箱は空白のまま（大手も狙う方向なのに製品がない、が主張材料）</td></tr>
+      </table>
+      </div>
+      <details><summary>安価な代替手段でよくない？への回答（クリックで展開）</summary>
+        <ul>
+          <li><b>手動リングアウト（GEQで事前に削る・プロの標準手順）</b>: 実行者に音響知識が要る=「PAがいない現場」では実行者が不在。しかも静的で、客入り・温度・マイク位置の変化に追従できない。サキミミはこの職人作業の自動化+常時追従</li>
+          <li><b>運用の工夫（音量控えめ・配置・単一指向性マイク）</b>: 知識が要る上に「音量を下げる」は拡声の目的と矛盾。司会が音量不足かハウリングかの二択に苦しむのが小規模現場の現実</li>
+          <li><b>測定ツール（Smaart/REW/NTi XL2）</b>: 完全にプロ用・設営時のみ。拡張構想オトチズは「この機能の民主化」と説明できる</li>
+          <li><b>音響業者を都度呼ぶ/施工時に固定調整</b>: 毎回は呼べない。固定設定は季節・人数で崩れる。<b>「業者が帰った後に鳴り出す」が現場の典型的な困りごと</b>=サキミミはまさにそこを埋める</li>
+        </ul>
+      </details>
+      <div class="callout" style="margin-bottom:0"><b>判定: 条件付きで差別化できている。</b>「鳴ってから削る事後ノッチ」が30年間の業界標準で、<b>①現場固有の鳴きグセをその場学習 ②鳴る前にゲインで先回り ③誤検知をなでて矯正——の3点セットを備えた市販品は日英どちらの調査でも見つからなかった</b>。ただし「予兆」という言葉はdbxのマーケ文言や2008年特許に既出なので、「初」を主張する場所は<b>「現場学習×教師あり矯正×挟むだけの後付け箱」</b>に正しく置くこと。最強の一言:「<b>既存機は毎回、客の前で一度鳴かせてから削る。サキミミはこの部屋の鳴きグセを覚えて、二度と鳴かせない。間違えたら、なでて教えれば直る</b>」。⚠️弱点: 学習前後の実測（発生回数・gain before feedbackの改善dB）を示せないとdbxとの差を言い負ける／予兆→本鳴きの猶予が短い急変ケースの存在は正直に認め「緩やかな予兆は先回り・急変は最速追従」の2層で語る</div>
+    </div>
+  </section>
+
+  <section id="judge">
+    <div class="sec-head"><span class="n">⚖️</span><h2>審査基準・勝ち筋との整合</h2></div>
+    <p class="lead">REHCの審査軸（独創性/完成度/Solist-AI活用度）+ 歴代講評の勝ち筋5点でスコアリング。</p>
+    <div class="card">
+      <div class="tbl-scroll">
+      <table class="mx" style="min-width:680px">
+        <tr><th>軸</th><th>🛠️ ワザノコ</th><th>🦻 サキミミ</th></tr>
+        <tr><td class="item">独創性</td><td>○〜◎「技能継承ペット」の情緒は新しい（フォーム判定自体は既存領域）</td><td>◎「鳴る前に止める×現場学習×なでて矯正」の組合せは既存に無い</td></tr>
+        <tr><td class="item">完成度（デモ精度）</td><td>○ 泡立て器特化で精度は出しやすい。「学習した感」の演出が課題</td><td>○ 劇場型デモは強いが、予兆検知の精度が生命線（実験①が全て）</td></tr>
+        <tr><td class="item">Solist-AI活用度</td><td>◎ 教師あり2クラス・その場追加学習のど真ん中</td><td>◎ 現場ごとの適応学習・オフライン必然性は全案中最強クラス</td></tr>
+        <tr><td class="item">実測データ（勝ち筋④）</td><td>◎ 初心者の上達推移・外部指標（泡の量）まで設計済み</td><td>◎ 検知リードタイム・誤検知率・学習曲線</td></tr>
+        <tr><td class="item">一般投票・動画（勝ち筋⑤）</td><td>◎ 家族の情緒ストーリーが撮れる</td><td>○〜◎ 全員が知る「キーン」の恐怖→解決のカタルシス。教会ロケも可能</td></tr>
+        <tr><td class="item">EdgeTech+ 展示（B2B来場者）</td><td>○ 製造業の技能継承文脈に接続可能</td><td>◎ 音響・設備業界の実需に直撃（会場運営者自身が顧客層）</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="exp">
+    <div class="sec-head"><span class="n">🧪</span><h2>最初の1週間の検証実験</h2></div>
+    <p class="lead">どちらも「本丸の不確実性」を最初の1週間で潰せる。しかも作業の型は同じ。</p>
+    <div class="vs-grid">
+      <div class="card">
+        <h3>🛠️ ワザノコ</h3>
+        <ol class="exp">
+          <li><span class="eh">泡立て動作の判別精度スイープ（本丸）</span><span class="em">スマホ加速度ラボ（100Hz化）で熟練風/初心者風を収録 → elmkitで教師あり2クラス＋オートエンコーダ復元誤差の両方を評価。目標AUC 0.85以上（先行研究の80%級超え）</span></li>
+          <li><span class="eh">交絡の反証実験</span><span class="em">「熟練の形×速度変更」「初心者の形×熟練と同速」の4条件で速度交絡を、同じ特徴量での人物当て分類で人物識別リークを検査（この誠実さ自体がアピール材料）</span></li>
+          <li><span class="eh">外部指標の設計</span><span class="em">AI非依存の証拠=「メレンゲの角が立つまでの秒数」を初心者3人×フィードバックあり/なしで計測（実測データ勝ち筋の核）</span></li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>🦻 サキミミ</h3>
+        <ol class="exp">
+          <li><span class="eh">ハウリング予兆の観測（本丸）</span><span class="em">手持ちマイク+スピーカー+IFでループを組み、ゲインを徐々に上げて録音 → 鳴く直前のスペクトル変化（特定周波数のリンギング成長）が特徴量として見えるか可視化</span></li>
+          <li><span class="eh">予兆→ELM分類の成立性</span><span class="em">「平常/予兆/ハウリング」の3状態をelmkitで分類 → 何ms前に捕まえられるか（リードタイム）を実測</span></li>
+          <li><span class="eh">ゲイン制御の工作方式</span><span class="em">デジタルスルー（IF経由・遅延数ms）vs アナログパス+電子ボリューム。まずはPC+IFで原理検証→箱化はけいとと設計</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="decide">
+    <div class="sec-head"><span class="n">🎯</span><h2>決め方 — 会議で答える3つの質問</h2></div>
+    <div class="card">
+      <ol class="agenda">
+        <li><span class="ah">Q1. どっちの「痛み」で戦う？</span><span class="am">技の継承（情緒で勝つ・説明が要る）vs ハウリング（全人類が知る不快・0.5秒で伝わる）。3分動画の冒頭30秒でどちらが強いか、で考えるのがおすすめ</span></li>
+        <li><span class="ah">Q2. 本丸リスクをどっちに張る？</span><span class="am">ワザノコ=「熟練者らしさ判定の説得力」／サキミミ=「予兆検知の成立性」。どちらも実験1週間で白黒つく → <b>今日仮決め→8/3までに実験→8月第1週に本決定</b>の二段構えもアリ</span></li>
+        <li><span class="ah">Q3. 役割分担はどうなる？</span><span class="am">ワザノコ: けいと=外装・取付機構、ひかる=ML・特徴量。サキミミ: けいと=箱・ゲイン制御ハード、ひかる=音響・DSP・ML。どちらも2人の得意が噛み合う</span></li>
+      </ol>
+      <div class="callout" style="margin-bottom:0"><b>忘れないで:</b> 決まったら decisions/0005 にADRを書く（Claudeに「決まったよ」と言えば記録される）。負けた方のアイデアは死なない——同じ技術基盤の「将来展開」として提案書・ProtoPediaページに載せられる。</div>
+    </div>
+  </section>
+
+  <footer>
+    REHC 2026 チーム基地 ／ 生成: 2026-07-27 ひかる & Claude（調査はWeb並列調査エージェント4本）／ 原本はGitHubリポジトリ
+  </footer>
+</div>
+</body>
+</html>

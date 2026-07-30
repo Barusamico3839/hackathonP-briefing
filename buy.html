@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サキミミ購入パーティー — 見て、ポチるだけ</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html" aria-current="page">🛒 購入パーティー</a>
+  <a href="sakimimi-specs.html">📐 要件と設計</a>
+  <a href="hardware-verdict.html">⚖️ 最適解検証</a>
+</nav>
+
+<header class="hero">
+  <span class="kicker">SAKIMIMI BUYING PARTY — 2026-07-30</span>
+  <h1>🛒 購入パーティー<br>見て、ポチるだけ。</h1>
+  <p class="sub">3つの作成物に必要なもの全部。カートごとに上から順にポチれば終わるように並べてある。部品の詳細（スペック・寸法・メリデメ）は各サブページへ。</p>
+  <p class="meta-note">応募締切まで残り60日 ／ 価格・在庫は7/30調査（✅=当日実確認）／ 変動大の部品から先にポチる</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-head"><span class="n">🚨</span><h2>まず今日の重大ニュース（7/29計画からの変更点）</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li><b>🆕 7/31: けいと宿題「互換品のバリエーション」への回答が納品 → <a href="parts-alternatives.html">互換・代替部品カタログ</a>。発注前にここでカートを最終確定する。</b>3大発見: ①<b>秋月がSSM2019BNZを¥730で在庫販売中 → DigiKeyカート丸ごと不要（▲送料¥2,000）</b> ②<b>ICP1はAliExpressのWondom公式ストアが¥3,312・送料無料で最安</b>（互換品より正規が安い）+ ESP32書込機化OSSの0円保険 ③APM2は維持・<b>保険に同便でもう1枚（計2枚）が新推奨</b>（②一本化で単一障害点化）。<a href="hardware-verdict.html">最適解の再検証（7/31追記）</a>も完了 — ADAU1701構成は最適のまま。<b>7/31ひかる指示で本番電源は「専用電源 or エフェクター用9V DCバレル」に変更</b>（USB第一候補から。+9V直+−9Vチャージポンプ生成で設計はむしろ軽く。開発は006Pで進行可・8月W2までに確定）</li>
+      <li><b>🔄🔄 7/30通話（これが今夜の正）: 作成物①は作らない方向に → 買い物は「②本番機を作るためのもの」だけに絞る。</b>③用部品（LTC1060・秋月のSCF系）も今回は見送り（着手条件が元々「全完了後」なので買い急ぐ理由なし）。<b>必須合計 約21,000〜24,000円</b>（ICP1スキップなら約18,000〜20,000円）</li>
+      <li><b>🔄 7/30夜・ひかるの設計変更: 作成物①の主音路を「PC+オーディオIF（所持済み）」に変更</b> → <s>①は追加購入ほぼゼロで着手</s> → <b>上記の通り①自体を作らない方向に</b>。PC+IF環境は「実験①（予兆観測のGo/No-Go）」のリグとして変わらず使う。<b>PGA2311・LM1972M・±5V電源ICの購入不要（約▲6,000円）は確定のまま</b> → <a href="sakimimi-specs.html">設計</a></li>
+      <li><b>INA217AIP（プリ旧本命）が流通末期</b>（DigiKey生産中止・在庫0）→ ピン互換の<b>SSM2019BNZ</b>に交代（設計変更なし）→ <a href="buy-step1.html">詳細①</a></li>
+      <li><s><b>PGA2311PAは共立終売・DigiKey在庫47個</b> → 今夜ポチるべき筆頭</s> → <b>7/30夜 ①のPC化で購入不要に</b>（在庫焦りも消滅）</li>
+      <li><b>LMF100（SCF旧本命）は全型番廃番</b> → 現行品<b>LTC1060</b>に交代。しかもDIP版あり=ハンダ最大リスク消滅 → <a href="buy-step3.html">詳細③</a></li>
+      <li><b>最適解検証の提案: STEP3は「全部終わってからのご褒美」に降格・詰まったときの保険はSCFではなくTeensyに</b> → <a href="hardware-verdict.html">検証ページ</a></li>
+      <li>ML63Q2557のPWMは<b>3ch独立出力OK</b>とROHM公式マニュアルで確認（3バンドノッチの前提成立）</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">💰</span><h2>総額サマリ</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>区分</th><th>金額目安</th></tr>
+      <tr><td class="item">必須カート（<b>②本番機用のみ</b>・7/31再編で4つ: 秋月/Amazon/AliExpress/サウンドハウス）</td><td><b>約20,000〜22,000円</b>（<s>33,000〜37,000</s>→<s>27,000〜31,000</s>→<s>21,000〜24,000</s> 7/31 互換調査でDigiKey¥4,700が消滅しさらに減額。ICP1は¥3,312確定・保険APM2 2枚目+¥5,181は推奨・任意加算）</td></tr>
+      <tr><td class="item">Solist-AIキット DT-EBML63Q2557（見積待ち）</td><td>推定 12,000円前後</td></tr>
+      <tr><td class="item">任意: Teensy保険（+¥4,587）・Shark中古（+約¥4,000）・自宅実験環境（+約¥29,000）</td><td>お好みで</td></tr>
+    </table></div>
+    <p class="src">7/29時点の見積（1.7〜2.4万）から増えた主因: 小物・XLR類を完全網羅した＋プリ/SCFが廃番騒動で現行品価格に置き換わったため。それでも総額は賞金の1割以下。</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">🛒</span><h2>今夜のポチり順（カート別・上から順に）</h2></div>
+  <p class="lead">在庫が薄い順・締切がある順に並べた。各行のリンクを開いてカートに入れていくだけ。</p>
+
+  <div class="card">
+    <h3><s>カート① DigiKey日本 — 約4,700円</s> → <b>7/31 丸ごと不要に！秋月へ集約</b>（▲約¥4,700 → 実質▲¥2,750の純減）</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>品</th><th>旧（DigiKey）</th><th>新（秋月カート④に相乗り）</th></tr>
+      <tr><td class="item"><b>②マイクプリ SSM2019BNZ</b></td><td><s>¥1,238×2 + 送料¥2,000</s></td><td><b><a href="https://akizukidenshi.com/catalog/g/g113301/">秋月 113301 ¥730</a> ×2（1予備）</b>✅7/31在庫あり実査（けいとの読み「秋月に売ってる」が正解！）</td></tr>
+      <tr><td class="item"><b>②分析路バッファ</b></td><td><s>MCP6002-I/P ×2</s></td><td><b><a href="https://akizukidenshi.com/catalog/g/g116187/">MCP6022-I/P ¥220</a> ×2</b>（在庫1,433・3.3V系そのまま差し替え可。MCP6002は入荷未定継続）</td></tr>
+      <tr><td class="item">LTC1060CN#PBF（③SCF用）</td><td colspan="2">7/30通話で見送りのまま（送料無料化の意味も消えたので買う理由なし）</td></tr>
+    </table></div>
+    <p class="src">互換・代替の全比較（THAT1512聴き比べ枠・2段差動¥130保険・XLR廉価版含む）→ <a href="parts-alternatives.html">互換カタログ③</a></p>
+  </div>
+
+  <div class="card">
+    <h3>カート② Amazon — APM2（DSPボード）約5,200円 ×<b>2枚</b>（7/31 保険1枚を推奨に格上げ）</h3>
+    <p><a href="https://www.amazon.co.jp/dp/B07HHNQ74B">Wondom APM2</a> <b>¥5,181（7/31価格トラッカー実測）・着8/8(土)〜8/11(火)目安</b>（出品者Amazon US・プライム翌日ではない点に注意）。カートで在庫・配達日を再確認してポチる。<b>7/31推奨: 同便で2枚</b>（①中止で②が単一障害点に。追加納期ゼロの最確実な保険。代替ルートは軒並み在庫消滅 → <a href="parts-alternatives.html">互換カタログ②</a>）→ <a href="buy-step2.html">詳細②</a></p>
+  </div>
+
+  <div class="card">
+    <h3>カート③ <s>Sure直販</s> → <b>AliExpress Wondom公式ストア</b> — ICP1書込機 <b>¥3,312・送料無料</b>（7/31 互換品調査で乗り換え）</h3>
+    <p><b>正規ICP1が全選択肢中で最安</b>: <a href="https://ja.aliexpress.com/item/1005003221109697.html">AliExpressのWondom公式ストア ¥3,312・送料無料・着8/6〜8/14表示</a>（7/31実ページ確認）。けいと懸念「Sureでしか買えない？納期1〜2週？」への答え = <b>公式ルートが他にあり、しかも互換品（¥4,561〜）より安い</b>。Amazonの互換USBi（¥7,699〜）は価格2倍で納期メリットなし・非推奨。<b>0円保険: ESP32をSigmaStudio書込機化するOSS</b>（<a href="https://github.com/rarranzb/ADAU1701-TCPi-ESP32">ADAU1701-TCPi-ESP32</a>・GUIリアルタイム調整+EEPROM書込まで可）で到着前から開発開始できる → <a href="parts-alternatives.html">互換カタログ①</a></p>
+  </div>
+
+  <div class="card">
+    <h3>カート④ 秋月電子通販 — ②用の電源・受動部品・小物・ケース<b>＋IC類（7/31 DigiKey分を集約）</b> 約8,000〜10,000円＋送料¥550</h3>
+    <p><b>7/31追加: SSM2019BNZ ¥730×2・MCP6022-I/P ¥220×2・（保険）NJM2122D ¥70+NJM4580DD ¥60 を同カートに</b>。中身: <a href="buy-step1.html">②用アナログ入力段のケース・電源・受動部品</a>＋<a href="buy-tools.html">小物チェックリスト18点</a>。<s><a href="buy-step3.html">③の秋月分（NJU72343V等・約¥2,500）</a></s>は7/30通話で見送り。<b>出荷2〜7営業日・土日出荷なし→着8/1(土)〜8/6(木)</b>。</p>
+    <details><summary>秋月カートの主要品（通販コード付き・クリック用）</summary>
+      <ul>
+        <li>ケース <a href="https://akizukidenshi.com/catalog/g/g109535/">YM15-4-10 ¥1,350</a>（余裕重視なら<a href="https://akizukidenshi.com/catalog/g/g113357/">YM18-4-13 ¥1,550</a>）— ②の箱として購入継続</li>
+        <li><s>LM1972M ¥300（PGA2311の保険）</s> 7/30夜不要に・<a href="https://akizukidenshi.com/catalog/g/g100069/">NJM4580DD ¥60</a>×4</li>
+        <li><s>NJU72343V ×2 + SSOP32変換 ×2・NJM2732D ×3・BAT43（③SCF用・約¥2,500）</s> — 7/30通話で見送り</li>
+        <li>電源: LP2950L-33（3.3V）¥30・006Pスナップ×3（<s>78L05/79L05の±5V</s>はPGA2311専用だったので不要に。②のプリは006P×2の±9V直で動く）。<b>7/31追加（本番電源の先行部品・任意）: DCジャック MJ-179PH ¥40（在庫59,464）</b>・負電圧チャージポンプ NJW4191M ¥110（在庫1,133・入力範囲/パッケージは発注前にデータシート確認）— 本番機は9V DCバレル入力に変更のため</li>
+        <li><b>電解47µF 63V ¥15×6（ファンタム事故対策・必須）</b>・フィルム0.1µF 250V ¥60・金属皮膜抵抗100本袋×5種</li>
+        <li><a href="https://akizukidenshi.com/catalog/g/g100315/">ブレッドボードEIC-801 ¥450</a>×2・ユニバーサル基板C/B各2・ICソケット・スイッチ・VR(A10k)・LED・スペーサー…（全リスト→<a href="buy-tools.html">小物ページ</a>）</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>カート⑤ サウンドハウス — XLR類 約3,000円（¥3,000以上で送料無料）</h3>
+    <p><a href="https://www.soundhouse.co.jp/products/detail/item/113728/">NC3FD-LX ¥450</a> + <a href="https://www.soundhouse.co.jp/products/detail/item/113754/">NC3MD-LX ¥390</a> + XLRケーブル<a href="https://www.soundhouse.co.jp/products/detail/item/25560/">MIX030 ¥800</a>×2 + <a href="https://www.soundhouse.co.jp/products/detail/item/25597/">マイクスタンドMSB ¥1,780</a>（任意）。15時までカード払いなら当日出荷=今夜の注文は<b>8/1(土)頃着</b>。</p>
+  </div>
+
+  <div class="card">
+    <h3>任意カート（お好みで）</h3>
+    <ul class="clean">
+      <li><b>Teensy 4.0 ¥4,587</b>（<a href="https://www.switch-science.com/products/5877">スイッチサイエンス・在庫13</a>）— 最適解検証の推奨保険。「ADAU1701で詰まったときの乗り換え先」の実体。<b>7/30通話で①中止=②一本勝負に近づいたぶん、この保険の価値は上がった</b>（それでも任意のまま）→ <a href="hardware-verdict.html">理由</a></li>
+      <li><b>Behringer Shark中古</b> — メルカリで「DSP110」通知登録・<b>¥4,500以下なら即決</b>（比較研究用・相場は想定より安い¥3,500〜4,500）→ <a href="buy-tools.html">詳細</a></li>
+      <li>自宅実験環境（ミキサー502S ¥10,800 + スピーカーMS16 約¥17,000）— スタジオ実験派なら不要 → <a href="buy-tools.html">判断材料</a></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">📞</span><h2>ポチる以外の今日のアクション（Tier 0）</h2></div>
+  <div class="card">
+    <ul class="clean">
+      <li><b>Solist-AIキットの見積電話（全工程の律速！）</b>: データ・テクノ 075-313-3275（平日9:00-17:30）。今日かけ損ねたら明日金曜の朝イチに。聞くことリスト: <a href="kit-and-handson.html">キットページ</a></li>
+      <li>REHCフォーム問い合わせ → ✅送信済み（7/30・Discord参加+優待入手の2点）</li>
+      <li>SigmaStudio 4.7のダウンロード開始（無料・Windows・数GB）→ <a href="buy-step2.html">手順②</a></li>
+      <li>PC実験①（ハウリング予兆の観測）の日程決め — <b>部品到着前の今週末にできる0円のGo/No-Go。7/30夜からは「新・作成物①」の土台そのもの</b>（同じPC+IF環境にゲイン制御ソフトを足せば①が完成する）→ <a href="sakimimi-specs.html">要件ページ</a></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="n">📚</span><h2>詳細サブページ（判断に迷ったら開く）</h2></div>
+  <div class="pubs">
+    <a class="pub wide hot" href="parts-alternatives.html"><span class="emoji">🔩🔁</span><h3>互換・代替部品カタログ（7/31・けいと宿題への回答）</h3><p>同じ働きをする別パーツ大全。ICP1の代替・秋月SSM2019発見・発注先集約シナリオ3案。<b>発注前の最終確認はここ。</b></p><span class="go">開く →</span></a>
+    <a class="pub" href="buy-step1.html"><span class="emoji">🎙️</span><h3>②用アナログ入力段の部品（旧①）</h3><p>7/30夜 ①はPC+IF化。プリIC騒動の顛末・ケース寸法・電源設計はそのまま②の自作部分に適用。<b>7/31: プリはDigiKeyでなく秋月¥730へ</b></p><span class="go">開く →</span></a>
+    <a class="pub" href="buy-step2.html"><span class="emoji">🎛️</span><h3>② DSP版ブースト機の部品</h3><p>APM2の詳細スペック・書込機比較・SigmaStudio 5ステップ</p><span class="go">開く →</span></a>
+    <a class="pub" href="buy-step3.html"><span class="emoji">🧪</span><h3>③ 真アナログ版の部品（7/30通話: 今回は買わない）</h3><p>LMF100廃番→LTC1060への交代劇・PWM 3ch検証・着手条件。買い物を②に絞ったため見送り（資料として保存）</p><span class="go">開く →</span></a>
+    <a class="pub" href="buy-tools.html"><span class="emoji">🧾</span><h3>小物・実験環境・買い方</h3><p>買い忘れ18点・店別納期・秋葉原ルート・Shark中古相場</p><span class="go">開く →</span></a>
+    <a class="pub wide" href="hardware-verdict.html"><span class="emoji">⚖️</span><h3>この構成はハードの最適解か？（敵対的検証）</h3><p>対抗7案と本気比較した結論と思考過程・審査員向け回答草稿・けいと提案の評価</p><span class="go">開く →</span></a>
+  </div>
+</section>
+
+<footer>サキミミ購入パーティー ／ ひかる & けいと ／ 2026-07-30</footer>
+</div>
+</body>
+</html>

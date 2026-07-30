@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サキミミ 要件と設計 — 3つの作成物</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  pre.chain { background:#26211c; color:#f2ece2; border-radius:12px; padding:16px 18px; font-family:var(--font-mono); font-size:12.5px; overflow-x:auto; line-height:1.7; }
+  pre.chain .hot { color:#ffb46b; font-weight:700; }
+  pre.chain .dim { color:#a89a8a; }
+  @media (prefers-color-scheme: dark) { pre.chain { background:#141110; } }
+  .dod li::before { content:"✅" !important; }
+  .step-badge { display:inline-block; font-family:var(--font-mono); font-weight:600; font-size:12px; background:var(--accent); color:#fff; border-radius:8px; padding:2px 10px; margin-right:8px; }
+</style>
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="index.html">🏠 基地</a>
+  <a href="buy.html">🛒 購入パーティー</a>
+  <a href="sakimimi-specs.html" aria-current="page">📐 要件と設計</a>
+  <a href="hardware-verdict.html">⚖️ 最適解検証</a>
+</nav>
+
+<header class="hero">
+  <span class="kicker">SAKIMIMI — REQUIREMENTS & DESIGN</span>
+  <h1>サキミミ 要件と設計<br>3つの作成物</h1>
+  <p class="sub">「途中で詰まってもデモが成立する」3段ロケット。各作成物の要件・設計図・完成条件（DoD）・テスト計画をここに固定する。</p>
+  <p class="meta-note">2026-07-30 ／ 応募締切まで残り60日（内部目標9/21まで53日）／ 原本: research/sakimimi-two-circuit-feasibility.md</p>
+</header>
+
+<div class="wrap">
+
+<section id="common">
+  <div class="sec-head"><span class="n">0</span><h2>共通要件 — サキミミとは何か</h2></div>
+  <p class="lead">マイクとミキサーの間にXLRで挟むだけの小さな箱。現場の「ハウリングの鳴きグセ」をその場で学習し、鳴る前の予兆で先回りする。</p>
+
+  <div class="card">
+    <h3>🎯 2つのモード（=製品の物語）</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th></th><th>🛡️ 見守りモード</th><th>🔥 ブーストモード</th></tr>
+      <tr><td class="item">使う場面</td><td>校長先生の朝礼・礼拝・集会所</td><td>バンド練習・小さいライブハウス</td></tr>
+      <tr><td class="item">音への介入</td><td>基本は素通し。予兆時だけゲインをスッと下げる</td><td>鳴きグセの周波数だけ<b>高Qナローノッチ</b>（狭い範囲だけ深く絞る。幅広EQではない）で削り、そのぶんボーカルを上げる</td></tr>
+      <tr><td class="item">価値</td><td>「キーン」が二度と鳴らない安心</td><td>ボーカルが通常のハウリング限界を超えて<b>+8dB級</b>で立ち上がる</td></tr>
+      <tr><td class="item">対応する作成物</td><td>作成物②（<s>①PC開発機</s> 7/30通話で①中止 → 実験①のPCリグで検証後、②で実装）</td><td>作成物②（確実ルート・提出デモ）・<s>作成物③（挑戦ルート）</s>（部品購入見送り）</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>📋 機能要件（FR）と非機能要件（NFR）</h3>
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>ID</th><th>要件</th><th>目標値・備考</th></tr>
+      <tr><td class="item">FR-1</td><td>ハウリング予兆の検知</td><td>鳴き始め（リンギング成長）を可聴レベル到達の前に検知。リードタイムは実験①で実測し目標値を確定（まず200ms以上を仮目標）</td></tr>
+      <tr><td class="item">FR-2</td><td>ゲイン制御</td><td>0〜-12dB。0.5dBステップを数十msでランプ（クリック/ジッパーノイズなし）。「介入したのに耳障り」はコンセプトの自殺</td></tr>
+      <tr><td class="item">FR-3</td><td>その場学習</td><td>ハウリング波形=自動ラベルの教師あり学習＋<b>ボタンによる誤検知矯正</b>（<s>なで</s> 7/30なでUI廃止）。会場ごとの鳴きやすい周波数を記憶</td></tr>
+      <tr><td class="item">FR-4</td><td>高Qナローノッチ（ブースト）</td><td><b>Q≈10〜100（1/10〜1/60オクターブ幅）</b>の狭帯域ノッチ×1〜3から開始・<b>拡張上限の目標はバンク化で10〜20本・可変式（7/30夜MTGでひかるの理想を確認。<s>4〜8本</s>から引き上げ。ADAU1701なら部品変更ゼロ・7/31資源計算で検証済み→<a href="hardware-verdict.html">再検証</a>）</b>・周波数可変（300Hz〜6kHz目安）・深さ0〜-18dB可変・動作中書換。<s>1〜3バンドEQ</s>（7/30修正: 幅広EQでは声ごと削れてブーストの余地が出ない。狭く深く絞るから声が無傷のまま限界ゲインが上がる）</td></tr>
+      <tr><td class="item">FR-5</td><td>フェイルセーフ</td><td>電源断=物理直結で音は通る（リレーバイパス。②で搭載）</td></tr>
+      <tr><td class="item">FR-6</td><td>教示UI</td><td>誤検知→<b>「今のは違う」ボタン/スイッチ</b>を押して矯正（<s>頭をなでる</s> 7/30廃止・タッチセンサ不要に）。外装・キャラ設計はけいと領分</td></tr>
+      <tr><td class="item">NFR-1</td><td>主音路レイテンシ</td><td>①往復10ms以下（PC・WASAPI排他/ASIO小バッファ・実測必須。<s>0msアナログ</s> 7/30 PC化）／②2ms以下（DSP実測）／③0ms（アナログ）。根拠: ウェッジモニタ10msまで知覚OK（Lester & Boley 2007）</td></tr>
+      <tr><td class="item">NFR-2</td><td>ノイズ・ハム（②の箱）</td><td>金属ケース・Pin1最短シャーシ落とし・電池駆動でグラウンドループ物理排除・スター接地（①はIFの品質に乗るので対象外）</td></tr>
+      <tr><td class="item">NFR-3</td><td>電源（②の箱）</td><td>006P 9V×2（±9V）+3.3V系。デモ2時間連続動作以上（①はPC/USB給電・電池要件なし）</td></tr>
+      <tr><td class="item">NFR-4</td><td>安全</td><td>ミキサーのファンタム+48V流入に耐える（出力カップリング63V耐圧+ブリード抵抗）</td></tr>
+      <tr><td class="item">NFR-5</td><td>入出力</td><td>入力: ダイナミックマイク（XLRバランス・v1はファンタム非対応）／出力: ライン +4dBu級（インピーダンスバランス）</td></tr>
+    </table></div>
+    <details><summary>v1で「やらない」と決めたこと（スコープ外）</summary>
+      <ul>
+        <li>コンデンサマイク対応（ファンタム電源供給）— 学校のワイヤレス・SM58系・カラオケマイクは全部ダイナミックなのでv1不要</li>
+        <li>音質の追求 — ハッカソンでは追わない（突っ込まれたら「製品化ではADC/DAC構成を検討」と回答）</li>
+        <li>完全ディスクリートの可変アナログノッチ — 3調査一致で「商用でも高級品の領域・DIY完走例なし」。やらない</li>
+        <li>複数マイク同時（マルチチャンネル）— 物語としては語るが実装は1ch</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="callout"><b>共通の土台=2回路構成。</b>音が通る「主音路」と、音を聴いて判断する「分析路」を分ける。分析路（ML63Q2557: 12bit ADC→HW-FFT→ELM学習）は3つの作成物で共通・作り直しなし。進化するのは主音路だけ。</div>
+</section>
+
+<section id="p1">
+  <div class="sec-head"><span class="n">①</span><h2><s>作成物① 見守りモード機（PC+オーディオIF版）</s> <span class="chip maybe">7/30通話: 作らない方向に</span></h2></div>
+  <p class="lead"><b>🔄 7/30通話（ひかる×けいと）: 作成物①は「作らなくてもいい」となり、買い物も②用のみに絞った。</b>ただしこのセクションのPC+IF環境は消えない——<b>実験①（ハウリング予兆の観測=本当のGo/No-Go）のリグ、およびML63Q2557連携の開発環境としてそのまま使う</b>。「作成物」として仕上げないだけで、下記の設計メモ・着手順序は実験リグの手順として有効。</p>
+  <p class="lead" style="opacity:.75">（記録: 7/30夜時点の旧計画 = 主音路を自作アナログ（INA217+PGA2311）→ 手持ちのオーディオIF+PCソフトに変更し、①単体で劇場型デモを成立させる案だった）</p>
+
+  <div class="card">
+    <h3>ブロック図（7/30改・主音路=PC）</h3>
+<pre class="chain">  ダイナミックマイク（手持ち）
+       │ XLR
+       ▼
+  [<span class="hot">オーディオIF（所持済み）</span>: 内蔵マイクプリ + AD] ── USB ──┐
+                                                        ▼
+  [<span class="hot">PC: パススルー+ゲイン制御ソフト</span>（Python/sounddevice等・自作）]
+       │ 出力ch1/2（処理後）              │ 余り出力（ヘッドホンout等・ドライ信号のコピー）
+       ▼                    ▲            ▼
+  IF出力 → ミキサーへ        │      [分圧+1.65V中点+LPF]
+                            │            ▼
+        USBシリアル「予兆→-3dB」   [<span class="hot">ML63Q2557</span>: 12bit ADC@16kHz → HW-FFT → ELM]
+       <span class="dim">判断は全部Solist-AI側。PCはゲインのツマミを回すだけの実行器</span></pre>
+    <details><summary>設計メモ（レベル合わせ・レイテンシ・ソフト）</summary>
+      <ul>
+        <li><b>ゲイン制御はソフトで実装</b>: 0.5dB刻みを数十msでランプ（クリック/ジッパーノイズなし）。FR-2の要件は変わらず実装先がPGA2311→コードに変わっただけ</li>
+        <li><b>分析路への給音</b>: PCがドライ信号（介入前）のコピーをIFの余り出力（ヘッドホンout可）へ常時出す → 抵抗分圧で±1V級→1.65V中点バイアス→直列100Ω〜1kΩ保護→3.3V系ADC。受動部品数点（秋月の抵抗袋でカバー）+手持ちIFの端子に合うプラグ1個だけ</li>
+        <li><b>レイテンシ</b>: WASAPI排他/ASIO・小バッファで往復5〜10msが相場。ボーカル/ウェッジのGood閾値10ms以内を実測で確認（NFR-1）。スピーチ用途デモなら十分</li>
+        <li><b>ML63Q2557→PC</b>: キットのUART/USBシリアル経由でゲイン指示（プロトコルは「周波数・dB量」のテキスト1行で十分。②でそのままI2C safeloadに置き換わる）</li>
+        <li><b>審査上の位置づけ</b>: ①は「最速で全体を動かす開発機」。提出デモ・展示は②（専用ハード）で行い、①は開発過程として見せる（PCを主役に見せるとSolist-AI活用度の物語が薄まるため）</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>✅ 完成条件（DoD）と受け入れテスト</h3>
+    <ul class="clean dod">
+      <li>マイク→IF→PC→ミキサーのパススルーが安定動作（音切れ/xrunなし・往復レイテンシ実測10ms以下）</li>
+      <li>ML63Q2557からのシリアル指示で-3dB → クリック音なしでスッと下がる（録音して波形確認）</li>
+      <li>分析路（IF余り出力→分圧→ML63Q2557）でFFTスペクトルが取れて、スイープ音のピーク周波数を正しく追える</li>
+      <li>ゲインを上げてわざとハウらせ→予兆検知→自動で-3dB→鳴かない、のE2Eデモが1回成功する</li>
+    </ul>
+    <details><summary>着手順序（推奨・買い物の到着を待たない）</summary>
+      <ul>
+        <li>1. PCパススルー+ソフトゲイン制御を動かす（sounddevice・手持ちIF）→ レイテンシ実測</li>
+        <li>2. 同じ環境で予兆観測実験①（ゲイン漸増→鳴く直前のスペクトル録音→elmkitでELM学習可能性判定）＝<b>本当のGo/No-Go</b></li>
+        <li>3. キット到着後: ML63Q2557に分析路を移植（分圧+バイアスだけブレッドボード）→ シリアル連携でE2E</li>
+        <li>旧①のアナログ入力段（プリ+ケース）は②の部品として8月W2から着工</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<section id="p2">
+  <div class="sec-head"><span class="n">②</span><h2>作成物② 本番機・ルートA（低遅延DSP） <span class="chip ok">確実寄り・提出デモはこれ</span></h2></div>
+  <p class="lead">①のPC主音路を<b>専用ハード（自作マイクプリ + ADAU1701 DSPボード）</b>に置き換えて箱に収める（7/30改: ①がPC化したので、<b>見守りモードのゲイン制御もブーストの高Qナローノッチも②が1台で担当</b>）。係数はML63Q2557からI2Cで動作中に書き換える。Qは係数のパラメータにすぎないので、狭帯域化しても部品・構成は変わらない。遅延は約1ms=マイクから34cm離れたのと同じ。</p>
+
+  <div class="card">
+    <h3>ブロック図（①からの差分）</h3>
+<pre class="chain">  [マイクプリ <span class="hot">SSM2019BNZ</span> +30dB]（自作・旧①用に選定済みの部品をここで使う）
+       │
+       ├──────────────────────────────────┐
+       │ <span class="hot">主音路（PC→専用DSPに変わる・約1ms）</span> │ 分析路（①と同一・変更なし）
+       ▼                                  ▼
+  [<span class="hot">ADAU1701ボード</span>: AD→高Qノッチ×3+ゲイン→DA]   [ML63Q2557]
+       │                ▲                      │
+       │                └──── I2C(safeload) ───┘
+       ▼                 <span class="dim">「2.1kHzだけQ30で-12dB」を動作中書換</span>
+  [リレー物理バイパス] → ミキサーへ
+   <span class="dim">電源OFF=リレーが直結側に落ちる（壊れても音は通る）</span></pre>
+    <details><summary>開発フロー（SigmaStudio）</summary>
+      <ul>
+        <li>1. SigmaStudio（無料・Windows）で高Qノッチ×3+ゲインのブロック図を描く（300Hz未満の高QはダブルプレシジョンbiquadブロックでOK）</li>
+        <li>2. 書込機でボードのEEPROMへ書き込み（セルフブート化）</li>
+        <li>3. ML63Q2557からI2C safeloadでbiquad係数を動作中に書き換え（Arduino向けライブラリの前例あり: MCUdude/SigmaDSP）</li>
+        <li>4. ノッチの本数・周波数・Q・深さ・メイクアップゲインは係数書換だけで自由</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>✅ 完成条件（DoD）</h3>
+    <ul class="clean dod">
+      <li>ピンクノイズを通してRTA（スマホアプリ可）でノッチが指定周波数に出ることを確認（高Qで幅が狭いのでRTAは高分解能設定 or サインスイープで測る）</li>
+      <li>動作中にI2Cでノッチ周波数を移動してもノイズ・音切れが出ない</li>
+      <li>ループバック実測でレイテンシ2ms以下</li>
+      <li>🔥ブーストデモ: わざとハウリングループを組み、ノッチ+メイクアップでボーカルが従来限界+6dB以上まで上げられる（実測値を記録=審査の実測データ）</li>
+      <li>電源断でリレーが落ちて音が素通しになる</li>
+    </ul>
+  </div>
+</section>
+
+<section id="p3">
+  <div class="sec-head"><span class="n">③</span><h2>作成物③ ブースト機・ルートB（真アナログ維持） <span class="chip maybe">挑戦</span></h2></div>
+  <p class="lead">主音路をアナログに戻し、ノッチは横道（サイドチェーン）で作って「引き算」する。原音はオペアンプ1〜2段しか通らない。<b>業務用がほぼ全デジタルの中で「主音路は真アナログ」は審査上の差別化になる。</b>時間が余ったらの勲章枠。</p>
+
+  <div class="card">
+    <h3>ブロック図（②からの差分）</h3>
+<pre class="chain">  [マイクプリ INA217 +30dB]
+       │
+       ├──────────────┬───────────────────┐
+       │ <span class="hot">主音路(アナログ)</span> │ <span class="hot">サイドチェーン</span>       │ 分析路（①と同一）
+       │              ▼                   ▼
+       │      [<span class="hot">SCFバンドパス</span> LMF100/MAX7490]  [ML63Q2557]
+       │       f0 = クロック÷100 ◄─ PWM ──────┤ <span class="dim">周波数指示・校正不要</span>
+       │              ▼                   │
+       │      [深さk = デジポット MCP41010] ◄─ SPI ─┤
+       ▼              │                   │
+  [<span class="hot">反転加算器: 原音 − k×BP</span>] ◄┘          │ <span class="dim">-5dB ⇔ k≈0.44</span>
+       ▼                                  │
+  [PGA2311（①のまま復活）] ◄─── SPI ──────┘
+       ▼
+  [出力バッファ] → ミキサーへ</pre>
+    <details><summary>SCF実装の注意（先人の踏んだ穴）</summary>
+      <ul>
+        <li>クロックフィードスルー対策: f0下限300Hz（fclk≥30kHz）・サイドチェーン入力に固定LPF(10kHz)1段</li>
+        <li>LMF100のMode1ノッチ直取りは深さ固定 → BP出力+反転加算の構成を採る（深さ可変・深さ0で完全素通し）</li>
+        <li>SOICパッケージのハンダ（変換基板）・単電源バイアスが初心者ポイント</li>
+        <li>⚠️ ML63Q2557のPWM元クロック・独立ch数は未確認 → キット到着後最初に確認（3バンド化の前提）</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>✅ 完成条件（DoD）</h3>
+    <ul class="clean dod">
+      <li>PWMクロックでノッチ中心周波数が数式どおり（f0=fclk/100）に動く（RTAで確認）</li>
+      <li>デジポットで深さ0（完全素通し）〜-12dBが連続可変</li>
+      <li>クロックノイズが聴感で気にならない（300Hz以上運用+LPFで）</li>
+      <li>②と同じブーストデモがアナログ主音路で再現できる</li>
+    </ul>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="sec-head"><span class="n">📅</span><h2>スケジュールとリスク</h2></div>
+  <div class="card">
+    <div class="tbl-scroll"><table class="mx">
+      <tr><th>週</th><th>やること</th><th>マイルストーン</th></tr>
+      <tr><td class="item">8月W1-2</td><td>発注着弾・ブレッドボードでプリ→PGA2311疎通・実験①（予兆観測@スタジオ）</td><td>音が通る＋予兆データ初収集</td></tr>
+      <tr><td class="item">8月W3</td><td>分析路接続・Solist-AI ADC取込→HW-FFT疎通</td><td>作成物①のE2E</td></tr>
+      <tr><td class="item">8月W4</td><td>基板化・ケース収納・ハム退治／SigmaStudio試作開始</td><td>作成物①完成（DoD全達成）</td></tr>
+      <tr><td class="item">9月W1-2</td><td>予兆学習と結合・作成物②ブースト実装・実測データ取り（余裕あれば③）</td><td>作成物②完成+実測グラフ</td></tr>
+      <tr><td class="item">9月W3</td><td>外装仕上げ・3分動画・ProtoPedia</td><td>9/21 提出物一式</td></tr>
+    </table></div>
+    <details><summary>リスク表（発生したらどうするか）</summary>
+      <ul>
+        <li>Solist-AIキットが届かない → <b>全工程の律速。見積電話が最優先</b>。届くまでは分析路をPC+オーディオIF（所持）で代替開発</li>
+        <li>予兆が学習可能な特徴量にならない → 「鳴ってから0.1秒で止める」に軸足を移す（それでも既存品より速い+現場学習は残る）</li>
+        <li>ハム・ノイズが取れない → 電池駆動徹底・ケース/接地見直し。最悪デモはノイズの少ない構成に絞る</li>
+        <li>②で詰まる → ①だけで劇場型デモは成立（3段ロケットの保険が効く）</li>
+        <li>③で詰まる → ②で提出。③は「挑戦した過程」をProtoPediaの物語に</li>
+      </ul>
+    </details>
+  </div>
+  <div class="callout gold"><b>実験①（ハウリング予兆の観測）が全ての起点。</b>マイク+スピーカー+オーディオIF（全部所持済み）でループを組み、ゲインを徐々に上げながら録音→鳴く直前のスペクトル変化を可視化。部品が届く前の今週末にもできる。</div>
+</section>
+
+<footer>
+  サキミミ 要件と設計 ／ 原本: research/sakimimi-two-circuit-feasibility.md・notes/idea-sakimimi-howling-guard.md ／ 2026-07-30
+</footer>
+</div>
+</body>
+</html>
